@@ -1,8 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'me.tatarka.retrolambda'
+
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.0"
     defaultConfig {
         applicationId "com.hymane.materialhome"
         minSdkVersion 15
@@ -11,20 +13,52 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        //使用JAVA8语法解析
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+retrolambda {
+    //指定将源码编译的级别，使用下列代码，会将代码编译到兼容1.6的字节码格式
+    javaVersion JavaVersion.VERSION_1_6
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.0.0'
-    compile 'com.android.support:design:23.0.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha2'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    // Android support library
+    compile 'com.android.support:support-v4:24.0.0'
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.android.support:design:24.0.0'
+    compile 'com.android.support:cardview-v7:24.0.0'
+    //Butter Knife
     compile 'com.jakewharton:butterknife:8.0.1'
     apt 'com.jakewharton:butterknife-compiler:8.0.1'
+    //RxJava & RxAndroid
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.1.6'
+    //okhttp3 & okio
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.squareup.okio:okio:1.9.0'
+    //retrofit2
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    //Glide
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
+    //gson
+    compile 'com.google.code.gson:gson:2.7'
     testCompile 'junit:junit:4.12'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support:support-annotations:24.0.0'
 }
