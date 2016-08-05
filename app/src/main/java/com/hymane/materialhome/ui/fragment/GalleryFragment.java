@@ -22,26 +22,34 @@ import butterknife.ButterKnife;
  */
 
 public class GalleryFragment extends BaseFragment {
-    private View mRootView;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.fab)
     FloatingActionButton mFab;
     public static GalleryFragment mInstance;
 
-    public static GalleryFragment getInstance() {
-        if (mInstance == null) {
-            mInstance = new GalleryFragment();
-        }
-        return mInstance;
+    public static GalleryFragment newInstance() {
+        
+        Bundle args = new Bundle();
+        
+        GalleryFragment fragment = new GalleryFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    protected void initRootView(LayoutInflater inflater, ViewGroup container) {
         mRootView = inflater.inflate(R.layout.gallery_fragment, container, false);
-        ButterKnife.bind(this, mRootView);
-        return mRootView;
+    }
+
+    @Override
+    protected void initEvents() {
+
+    }
+
+    @Override
+    protected void initData() {
+
     }
 
     @Override

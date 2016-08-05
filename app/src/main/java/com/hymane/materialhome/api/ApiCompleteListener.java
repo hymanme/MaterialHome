@@ -1,13 +1,15 @@
 package com.hymane.materialhome.api;
 
+import com.hymane.materialhome.bean.http.BaseResponse;
+
 /**
  * Author   :hymanme
  * Email    :hymanme@163.com
- * Create at 2016/1/10
+ * Create at 2016/8/5
  * Description: 网络请求回调接口
  */
 public interface ApiCompleteListener {
     void onComplected(Object result);
 
-    void onFailed(String msg);
+    void onFailed(BaseResponse msg);
 }

@@ -13,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.ui.fragment.BaseFragment;
@@ -40,7 +39,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             fragmentManager = getSupportFragmentManager();
         }
         if (savedInstanceState == null) {
-            currentFragment = ImportFragment.getInstance();
+            currentFragment = ImportFragment.newInstance();
             FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.replace(R.id.fl_content, currentFragment).commit();
         }
@@ -106,6 +105,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         invalidateOptionsMenu();
     }
 
+    public void showFloatingBar() {
+//        mFab.show();
+    }
+
+    public void hideFloatingBar() {
+//        mFab.hide();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -129,9 +136,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-            switchContent(currentFragment, ImportFragment.getInstance());
+            switchContent(currentFragment, ImportFragment.newInstance());
         } else if (id == R.id.nav_gallery) {
-            switchContent(currentFragment, GalleryFragment.getInstance());
+            switchContent(currentFragment, GalleryFragment.newInstance());
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {

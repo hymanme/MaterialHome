@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- grid -->
+    <dimen name="activity_horizontal_margin">48dp</dimen>
+    <dimen name="fab_margin">48dp</dimen>
+    <dimen name="login_margin_horizontal">64dp</dimen>
+    <integer name="home_span_count">2</integer>
+
+</resources>

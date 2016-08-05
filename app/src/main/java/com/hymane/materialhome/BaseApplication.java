@@ -12,7 +12,6 @@ public class BaseApplication extends Application {
     public final static String TAG = "BaseApplication";
     public final static boolean DEBUG = true;
     private static BaseApplication application;
-    private static Handler handler;
     private static int mainTid;
 
 //    static {
@@ -24,7 +23,6 @@ public class BaseApplication extends Application {
         super.onCreate();
         application = this;
         mainTid = android.os.Process.myTid();
-        handler = new Handler();
     }
 
     /**
@@ -43,15 +41,6 @@ public class BaseApplication extends Application {
      */
     public static int getMainTid() {
         return mainTid;
-    }
-
-    /**
-     * 主handle
-     *
-     * @return
-     */
-    public static Handler getHandler() {
-        return handler;
     }
 
     /**
