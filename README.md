@@ -1,5 +1,8 @@
 # MaterialHome
 An Android Material Demo
-![image](https://github.com/Hymanme/MaterialHome/raw/master/screenshots/img1.png)
-![image](https://github.com/Hymanme/MaterialHome/raw/master/screenshots/img2.png)
-![image](https://github.com/Hymanme/MaterialHome/raw/master/screenshots/img3.png)
+
+![book item](http://ww3.sinaimg.cn/mw690/005X6W83gw1f6p032la2tj30dw04vq4g.jpg)
+
+最终效果图：
+
+![demo](http://ww4.sinaimg.cn/mw690/005X6W83gw1f6p0339jkbj30c00lcn3f.jpg)
