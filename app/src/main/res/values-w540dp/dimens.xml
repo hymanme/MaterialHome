@@ -6,5 +6,5 @@
     <dimen name="fab_margin">48dp</dimen>
     <dimen name="login_margin_horizontal">64dp</dimen>
     <integer name="home_span_count">2</integer>
-
+    <integer name="gallery_span_count">3</integer>
 </resources>

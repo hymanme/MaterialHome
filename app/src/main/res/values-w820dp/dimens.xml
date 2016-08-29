@@ -5,4 +5,5 @@
     <dimen name="activity_horizontal_margin">64dp</dimen>
 
     <integer name="home_span_count">3</integer>
+    <integer name="gallery_span_count">3</integer>
 </resources>

@@ -8,4 +8,5 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <integer name="home_span_count">1</integer>
+    <integer name="gallery_span_count">2</integer>
 </resources>

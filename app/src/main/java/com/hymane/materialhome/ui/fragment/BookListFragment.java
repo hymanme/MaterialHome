@@ -1,7 +1,6 @@
 package com.hymane.materialhome.ui.fragment;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.hymane.materialhome.BaseApplication;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.api.presenter.impl.BookListPresenterImpl;
 import com.hymane.materialhome.api.view.IBookListView;
@@ -37,7 +35,7 @@ import butterknife.BindView;
 public class BookListFragment extends BaseFragment implements IBookListView, SwipeRefreshLayout.OnRefreshListener {
     //接口调用参数 tag：标签，q：搜索关键词，fields：过滤词，count：一次返回数据数，
     // page：当前已经加载的页数，PS:tag,q只存在其中一个，另一个置空
-    private static String tag = "hot";
+    private String tag = "hot";
     private static final String fields = "id,title,subtitle,origin_title,rating,author,translator,publisher,pubdate,summary,images,pages,price,binding,isbn13,series";
     private static int count = 20;
     private static int page = 0;
