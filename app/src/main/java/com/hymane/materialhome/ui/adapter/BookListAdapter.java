@@ -3,8 +3,6 @@ package com.hymane.materialhome.ui.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -15,11 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.bean.http.BookInfoResponse;
+import com.hymane.materialhome.ui.activity.BaseActivity;
+import com.hymane.materialhome.ui.activity.BookDetailActivity;
+import com.hymane.materialhome.utils.UIUtils;
 
 import java.util.List;
 
@@ -86,7 +87,29 @@ public class BookListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ((BookListHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext, "click", Toast.LENGTH_SHORT).show();
+                    Bundle b = new Bundle();
+                    b.putSerializable(BookInfoResponse.serialVersionName, bookInfo);
+                    Bitmap bitmap;
+//                    if (((BookListHolder) holder).iv_book_img.getDrawable() instanceof AsyncDrawable) {
+//                        final Drawable baseDrawable = ((AsyncDrawable) ((BookListHolder) holder).iv_book_img.getDrawable()).getBaseDrawable();
+//                        bitmap = ((BitmapDrawable) baseDrawable).getBitmap();
+//                    } else {
+                    bitmap = ((GlideBitmapDrawable) ((BookListHolder) holder).iv_book_img.getDrawable()).getBitmap();
+//                    }
+                    b.putParcelable("book_img", bitmap);
+                    Intent intent = new Intent(UIUtils.getContext(), BookDetailActivity.class);
+                    intent.putExtras(b);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        if (BaseActivity.activity == null) {
+                            UIUtils.startActivity(intent);
+                            return;
+                        }
+                        ActivityOptionsCompat options = ActivityOptionsCompat.
+                                makeSceneTransitionAnimation(BaseActivity.activity, ((BookListHolder) holder).iv_book_img, "book_img");
+                        BaseActivity.activity.startActivity(intent, options.toBundle());
+                    } else {
+                        UIUtils.startActivity(intent);
+                    }
                 }
             });
         }

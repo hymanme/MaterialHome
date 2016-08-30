@@ -1,0 +1,15 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_action_find">
+    <target
+        android:name="toe1"
+        android:animation="@anim/anim_path_translate1"/>
+    <target
+        android:name="toe2"
+        android:animation="@anim/anim_path_translate2"/>
+    <target
+        android:name="toe3"
+        android:animation="@anim/anim_path_translate3"/>
+    <target
+        android:name="toe4"
+        android:animation="@anim/anim_path_translate4"/>
+</animated-vector>

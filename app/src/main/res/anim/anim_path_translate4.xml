@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:ordering="sequentially"
+    android:shareInterpolator="true">
+
+    <objectAnimator
+        android:duration="450"
+        android:propertyName="pathData"
+        android:repeatCount="-1"
+        android:repeatMode="reverse"
+        android:startOffset="300"
+        android:valueFrom="M 19.5 7 C 20.8807118746 7 22 8.11928812542 22 9.5 C 22 10.8807118746 20.8807118746 12 19.5 12 C 18.1192881254 12 17 10.8807118746 17 9.5 C 17 8.11928812542 18.1192881254 7 19.5 7 Z"
+        android:valueTo="M 19.5 9 C 20.8807118746 9 22 10.1192881254 22 11.5 C 22 12.8807118746 20.8807118746 14 19.5 14 C 18.1192881254 14 17 12.8807118746 17 11.5 C 17 10.1192881254 18.1192881254 9 19.5 9 Z"
+        android:valueType="pathType" />
+
+    <objectAnimator
+        android:duration="900"
+        android:propertyName="pathData"
+        android:repeatCount="-1"
+        android:repeatMode="reverse"
+        android:valueFrom="M 19.5 7 C 20.8807118746 7 22 8.11928812542 22 9.5 C 22 10.8807118746 20.8807118746 12 19.5 12 C 18.1192881254 12 17 10.8807118746 17 9.5 C 17 8.11928812542 18.1192881254 7 19.5 7 Z"
+        android:valueTo="M 19.5 4 C 20.8807118746 4 22 5.11928812542 22 6.5 C 22 7.88071187458 20.8807118746 9 19.5 9 C 18.1192881254 9 17 7.88071187458 17 6.5 C 17 5.11928812542 18.1192881254 4 19.5 4 Z"
+        android:valueType="pathType" />
+
+    <objectAnimator
+        android:duration="450"
+        android:propertyName="pathData"
+        android:repeatCount="-1"
+        android:repeatMode="reverse"
+        android:valueFrom="M 19.5 4 C 20.8807118746 4 22 5.11928812542 22 6.5 C 22 7.88071187458 20.8807118746 9 19.5 9 C 18.1192881254 9 17 7.88071187458 17 6.5 C 17 5.11928812542 18.1192881254 4 19.5 4 Z"
+        android:valueTo="M 19.5 7 C 20.8807118746 7 22 8.11928812542 22 9.5 C 22 10.8807118746 20.8807118746 12 19.5 12 C 18.1192881254 12 17 10.8807118746 17 9.5 C 17 8.11928812542 18.1192881254 7 19.5 7 Z"
+        android:valueType="pathType" />
+
+</set>

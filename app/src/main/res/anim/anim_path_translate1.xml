@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:ordering="sequentially">
+
+    <objectAnimator
+        android:duration="420"
+        android:propertyName="pathData"
+        android:repeatCount="-1"
+        android:repeatMode="reverse"
+        android:valueFrom="M 4.5 7 C 5.88071187458 7 7 8.11928812542 7 9.5 C 7 10.8807118746 5.88071187458 12 4.5 12 C 3.11928812542 12 2 10.8807118746 2 9.5 C 2 8.11928812542 3.11928812542 7 4.5 7 Z"
+        android:valueTo="M 4.5 9 C 5.88071187458 9 7 10.1192881254 7 11.5 C 7 12.8807118746 5.88071187458 14 4.5 14 C 3.11928812542 14 2 12.8807118746 2 11.5 C 2 10.1192881254 3.11928812542 9 4.5 9 Z"
+        android:valueType="pathType" />
+
+    <objectAnimator
+        android:duration="840"
+        android:propertyName="pathData"
+        android:repeatCount="-1"
+        android:repeatMode="reverse"
+        android:valueFrom="M 4.5 9 C 5.88071187458 9 7 10.1192881254 7 11.5 C 7 12.8807118746 5.88071187458 14 4.5 14 C 3.11928812542 14 2 12.8807118746 2 11.5 C 2 10.1192881254 3.11928812542 9 4.5 9 Z"
+        android:valueTo="M 4.5 4 C 5.88071187458 4 7 5.11928812542 7 6.5 C 7 7.88071187458 5.88071187458 9 4.5 9 C 3.11928812542 9 2 7.88071187458 2 6.5 C 2 5.11928812542 3.11928812542 4 4.5 4 Z"
+        android:valueType="pathType" />
+
+    <objectAnimator
+        android:duration="420"
+        android:propertyName="pathData"
+        android:repeatCount="-1"
+        android:repeatMode="reverse"
+        android:valueFrom="M 4.5 4 C 5.88071187458 4 7 5.11928812542 7 6.5 C 7 7.88071187458 5.88071187458 9 4.5 9 C 3.11928812542 9 2 7.88071187458 2 6.5 C 2 5.11928812542 3.11928812542 4 4.5 4 Z"
+        android:valueTo="M 4.5 7 C 5.88071187458 7 7 8.11928812542 7 9.5 C 7 10.8807118746 5.88071187458 12 4.5 12 C 3.11928812542 12 2 10.8807118746 2 9.5 C 2 8.11928812542 3.11928812542 7 4.5 7 Z"
+        android:valueType="pathType" />
+</set>

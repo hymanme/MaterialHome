@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:ordering="sequentially"
+    android:shareInterpolator="true">
+
+    <objectAnimator
+        android:duration="420"
+        android:propertyName="pathData"
+        android:repeatCount="-1"
+        android:repeatMode="reverse"
+        android:startOffset="200"
+        android:valueFrom="M 15 3 C 16.3807118746 3 17.5 4.11928812542 17.5 5.5 C 17.5 6.88071187458 16.3807118746 8 15 8 C 13.6192881254 8 12.5 6.88071187458 12.5 5.5 C 12.5 4.11928812542 13.6192881254 3 15 3 Z"
+        android:valueTo="M 15 5 C 16.3807118746 5 17.5 6.11928812542 17.5 7.5 C 17.5 8.88071187458 16.3807118746 10 15 10 C 13.6192881254 10 12.5 8.88071187458 12.5 7.5 C 12.5 6.11928812542 13.6192881254 5 15 5 Z"
+        android:valueType="pathType" />
+
+    <objectAnimator
+        android:duration="840"
+        android:propertyName="pathData"
+        android:repeatCount="-1"
+        android:repeatMode="reverse"
+        android:valueFrom="M 15 5 C 16.3807118746 5 17.5 6.11928812542 17.5 7.5 C 17.5 8.88071187458 16.3807118746 10 15 10 C 13.6192881254 10 12.5 8.88071187458 12.5 7.5 C 12.5 6.11928812542 13.6192881254 5 15 5 Z"
+        android:valueTo="M 15 0 C 16.3807118746 0 17.5 1.11928812542 17.5 2.5 C 17.5 3.88071187458 16.3807118746 5 15 5 C 13.6192881254 5 12.5 3.88071187458 12.5 2.5 C 12.5 1.11928812542 13.6192881254 0 15 0 Z"
+        android:valueType="pathType" />
+
+    <objectAnimator
+        android:duration="420"
+        android:propertyName="pathData"
+        android:repeatCount="-1"
+        android:repeatMode="reverse"
+        android:valueFrom="M 15 0 C 16.3807118746 0 17.5 1.11928812542 17.5 2.5 C 17.5 3.88071187458 16.3807118746 5 15 5 C 13.6192881254 5 12.5 3.88071187458 12.5 2.5 C 12.5 1.11928812542 13.6192881254 0 15 0 Z"
+        android:valueTo="M 15 3 C 16.3807118746 3 17.5 4.11928812542 17.5 5.5 C 17.5 6.88071187458 16.3807118746 8 15 8 C 13.6192881254 8 12.5 6.88071187458 12.5 5.5 C 12.5 4.11928812542 13.6192881254 3 15 3 Z"
+        android:valueType="pathType" />
+
+</set>

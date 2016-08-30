@@ -63,7 +63,7 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
     @Override
     protected void initRootView(LayoutInflater inflater, ViewGroup container) {
         bookListPresenter = new BookListPresenterImpl(this);
-        mRootView = inflater.inflate(R.layout.recycler_view, null);
+        mRootView = inflater.inflate(R.layout.recycler_content, null);
         String result = getArguments().getString("tag");
         if (!TextUtils.isEmpty(result)) {
             tag = result;

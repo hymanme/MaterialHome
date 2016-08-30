@@ -15,4 +15,9 @@
     <color name="recycler_color2">#edd36a</color>
     <color name="recycler_color3">#82c1f9</color>
     <color name="recycler_color4">#68d661</color>
+
+    <color name="book_title_mask">#80000000</color>
+    <color name="publish_info_bg">#6ef2f2f2</color>
+    <color name="dividers">#1f000000</color>
+    <color name="grass_green">#46C01C</color>
 </resources>

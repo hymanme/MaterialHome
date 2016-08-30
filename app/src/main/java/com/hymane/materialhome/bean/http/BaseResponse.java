@@ -7,6 +7,9 @@ public class BaseResponse {
     private int code;
     private String msg;
 
+    public BaseResponse() {
+    }
+
     public BaseResponse(int code, String msg) {
         this.code = code;
         this.msg = msg;

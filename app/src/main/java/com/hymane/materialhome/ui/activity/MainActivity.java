@@ -23,12 +23,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private static final int EXIT_APP_DELAY = 1000;
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private BaseFragment currentFragment;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
+    private long lastTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +48,32 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
+    protected void initEvents() {
+
+    }
+
+    @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (currentFragment == null) {
+                currentFragment = ImportFragment.newInstance();
+            }
+            if (!(currentFragment instanceof ImportFragment)) {
+                switchContent(currentFragment, ImportFragment.newInstance());
+                return;
+            }
+            if ((System.currentTimeMillis() - lastTime) > EXIT_APP_DELAY) {
+                Snackbar.make(drawer, getString(R.string.press_twice_exit), Snackbar.LENGTH_SHORT)
+                        .setAction(R.string.exit_directly, v -> {
+                            MainActivity.super.onBackPressed();
+                        })
+                        .show();
+                lastTime = System.currentTimeMillis();
+            } else {
+                moveTaskToBack(true);
+            }
         }
     }
 

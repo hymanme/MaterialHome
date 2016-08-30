@@ -6,6 +6,7 @@ import com.hymane.materialhome.BaseApplication;
 import com.hymane.materialhome.utils.NetworkUtils;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
 import okhttp3.CacheControl;
@@ -49,8 +50,13 @@ public class ServiceFactory {
     private static final Interceptor CACHED_INTERCEPTOR = chain -> {
         Request request = chain.request();
         if (!NetworkUtils.isConnected(BaseApplication.getApplication())) {
+            int maxStale = 60 * 60 * 24 * 28; // 离线时缓存保存4周,单位:秒
+            CacheControl tempCacheControl = new CacheControl.Builder()
+                    .onlyIfCached()
+                    .maxStale(maxStale, TimeUnit.SECONDS)
+                    .build();
             request = request.newBuilder()
-                    .cacheControl(CacheControl.FORCE_CACHE)
+                    .cacheControl(tempCacheControl)
                     .build();
         }
         Response response = chain.proceed(request);

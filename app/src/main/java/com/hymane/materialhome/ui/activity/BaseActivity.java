@@ -1,13 +1,22 @@
 package com.hymane.materialhome.ui.activity;
 
-import android.content.Context;
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.AttributeSet;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
+import com.hymane.materialhome.BaseApplication;
 import com.hymane.materialhome.R;
+import com.hymane.materialhome.utils.SystemBarTintManager;
+import com.hymane.materialhome.utils.UIUtils;
 
 /**
  * Author   :hymanme
@@ -16,12 +25,104 @@ import com.hymane.materialhome.R;
  * Description:
  */
 
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
     protected final String TAG = getClass().getSimpleName();
+    public static BaseActivity activity;
+    protected Toolbar mToolbar;
 
     @Override
-    public View onCreateView(String name, Context context, AttributeSet attrs) {
-        return super.onCreateView(name, context, attrs);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        activity = this;
+        ((BaseApplication) UIUtils.getContext()).addActivity(this);
+        init();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        activity = this;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        activity = null;
+    }
+
+    private void init() {
+        initData();
+        initEvents();
+        initSystemBar(this);
+    }
+
+    /***
+     * 初始化事件（监听事件等事件绑定）
+     */
+    protected abstract void initEvents();
+
+    /**
+     * 绑定数据
+     */
+    protected void initData() {
+
+    }
+
+    /**
+     * 获取toolbar
+     *
+     * @return
+     */
+    public Toolbar getToolbar() {
+        return mToolbar;
+    }
+
+    private void initSystemBar(Activity activity) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                setTranslucentStatus(activity, true);
+            }
+            SystemBarTintManager tintManager = new SystemBarTintManager(activity);
+            tintManager.setStatusBarTintEnabled(true);
+            // 使用颜色资源
+            tintManager.setStatusBarTintResource(getStatusColor());
+        }
+    }
+
+    @Override
+    public void setContentView(@LayoutRes int layoutResID) {
+        super.setContentView(layoutResID);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (null != mToolbar) {
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+    }
+
+    /**
+     * 状态栏的颜色
+     * 子类可以通过复写这个方法来修改状态栏颜色
+     *
+     * @return ID
+     */
+    protected int getStatusColor() {
+        return R.color.colorPrimaryDark;
+    }
+
+    @TargetApi(19)
+    protected void setTranslucentStatus(Activity activity, boolean on) {
+        Window win = activity.getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+
+        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        win.setAttributes(winParams);
     }
 
     /**
@@ -57,5 +158,23 @@ public class BaseActivity extends AppCompatActivity {
      */
     protected int getMenuID() {
         return R.menu.menu_empty;
+    }
+
+    /**
+     * 是否显示菜单  默认显示
+     *
+     * @return
+     */
+    protected boolean showMenu() {
+        return true;
+    }
+
+    /**
+     * activity退出时将activity移出栈
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ((BaseApplication) UIUtils.getContext()).removeActivity(this);
     }
 }
