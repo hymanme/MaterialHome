@@ -5,4 +5,6 @@ An Android Material Demo
 
 最终效果图：
 
-![demo](http://ww4.sinaimg.cn/mw690/005X6W83gw1f6p0339jkbj30c00lcn3f.jpg)
+![list](http://ww4.sinaimg.cn/mw690/005X6W83gw1f6p0339jkbj30c00lcn3f.jpg)
+
+![detail](http://ww2.sinaimg.cn/mw690/005X6W83gw1f7cn5w0s1zj30c00lcq57.jpg)
