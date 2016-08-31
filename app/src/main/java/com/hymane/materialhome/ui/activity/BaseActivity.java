@@ -22,7 +22,7 @@ import com.hymane.materialhome.utils.UIUtils;
  * Author   :hymanme
  * Email    :hymanme@163.com
  * Create at 2016/7/14
- * Description:
+ * Description:所有activity的基类，处理activity的共性内容和逻辑
  */
 
 public abstract class BaseActivity extends AppCompatActivity {

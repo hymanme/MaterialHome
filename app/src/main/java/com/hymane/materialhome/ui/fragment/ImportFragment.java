@@ -81,6 +81,7 @@ public class ImportFragment extends BaseFragment {
         mViewPager.setOffscreenPageLimit(5);
         mViewPager.setCurrentItem(2);
         mTabLayout.setupWithViewPager(mViewPager);
+        mTabLayout.setSelectedTabIndicatorColor(getContext().getResources().getColor(R.color.white));
     }
 
     static class MainAdapter extends FragmentStatePagerAdapter {
