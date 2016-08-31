@@ -28,7 +28,8 @@ public class ServiceFactory {
     private volatile static OkHttpClient okHttpClient;
     private static final int DEFAULT_CACHE_SIZE = 1024 * 1024 * 20;
     private static final int DEFAULT_MAX_AGE = 60 * 60;
-    private static final int DEFAULT_MAX_STALE = DEFAULT_MAX_AGE * 24 * 7;
+    private static final int DEFAULT_MAX_STALE_ONLINE = DEFAULT_MAX_AGE * 24;
+    private static final int DEFAULT_MAX_STALE_OFFLINE = DEFAULT_MAX_AGE * 24 * 7;
 
     public static OkHttpClient getOkHttpClient() {
         if (okHttpClient == null) {
@@ -38,7 +39,8 @@ public class ServiceFactory {
                     Cache cache = new Cache(cacheFile, DEFAULT_CACHE_SIZE);
                     okHttpClient = new OkHttpClient.Builder()
                             .cache(cache)
-                            .addInterceptor(CACHED_INTERCEPTOR)
+                            .addInterceptor(REQUEST_INTERCEPTOR)
+                            .addNetworkInterceptor(RESPONSE_INTERCEPTOR)
                             .addInterceptor(LoggingInterceptor)
                             .build();
                 }
@@ -47,10 +49,10 @@ public class ServiceFactory {
         return okHttpClient;
     }
 
-    private static final Interceptor CACHED_INTERCEPTOR = chain -> {
+    private static final Interceptor REQUEST_INTERCEPTOR = chain -> {
         Request request = chain.request();
         if (!NetworkUtils.isConnected(BaseApplication.getApplication())) {
-            int maxStale = 60 * 60 * 24 * 28; // 离线时缓存保存4周,单位:秒
+            int maxStale = DEFAULT_MAX_STALE_OFFLINE; // 离线时缓存保存7天,单位:秒
             CacheControl tempCacheControl = new CacheControl.Builder()
                     .onlyIfCached()
                     .maxStale(maxStale, TimeUnit.SECONDS)
@@ -59,27 +61,18 @@ public class ServiceFactory {
                     .cacheControl(tempCacheControl)
                     .build();
         }
-        Response response = chain.proceed(request);
-        if (NetworkUtils.isConnected(BaseApplication.getApplication())) {
-            int maxAge = DEFAULT_MAX_AGE;
-            // 有网络时 设置缓存超时时间1个小时
-            response.newBuilder()
-                    .removeHeader("Cache-Control")
-                    .removeHeader("Expires")
-                    .removeHeader("Pragma")// 清除头信息，因为服务器如果不支持，会返回一些干扰信息，不清除下面无法生效
-                    .header("Cache-Control", "public, max-age=" + maxAge)
-                    .build();
-        } else {
-            // 无网络时，设置超时为1周
-            int maxStale = DEFAULT_MAX_STALE;
-            response.newBuilder()
-                    .removeHeader("Cache-Control")
-                    .removeHeader("Pragma")
-                    .removeHeader("Expires")
-                    .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
-                    .build();
-        }
-        return response;
+        return chain.proceed(request);
+    };
+
+    private static final Interceptor RESPONSE_INTERCEPTOR = chain -> {
+        Request request = chain.request();
+        Response originalResponse = chain.proceed(request);
+        int maxAge = DEFAULT_MAX_STALE_ONLINE; // 在线缓存在特定时间内可读取 单位:秒
+        return originalResponse.newBuilder()
+                .removeHeader("Pragma")// 清除头信息，因为服务器如果不支持，会返回一些干扰信息，不清除下面无法生效
+                .removeHeader("Cache-Control")
+                .header("Cache-Control", "public, max-age=" + maxAge)
+                .build();
     };
 
     private static final Interceptor LoggingInterceptor = chain -> {
