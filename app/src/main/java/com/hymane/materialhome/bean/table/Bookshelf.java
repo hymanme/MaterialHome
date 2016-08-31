@@ -7,10 +7,20 @@ package com.hymane.materialhome.bean.table;
  * Description:
  */
 public class Bookshelf {
+    private int index;//adapter中位置
     private int id;
     private int bookCount;
     private String title;
     private String remark;
+    private String createTime;
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
     public int getId() {
         return id;
@@ -42,5 +52,13 @@ public class Bookshelf {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

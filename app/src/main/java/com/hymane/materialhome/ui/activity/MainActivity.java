@@ -16,8 +16,8 @@ import android.view.View;
 
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.ui.fragment.BaseFragment;
-import com.hymane.materialhome.ui.fragment.GalleryFragment;
-import com.hymane.materialhome.ui.fragment.ImportFragment;
+import com.hymane.materialhome.ui.fragment.BookshelfFragment;
+import com.hymane.materialhome.ui.fragment.HomeFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,7 +41,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             fragmentManager = getSupportFragmentManager();
         }
         if (savedInstanceState == null) {
-            currentFragment = ImportFragment.newInstance();
+            currentFragment = HomeFragment.newInstance();
             FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.replace(R.id.fl_content, currentFragment).commit();
         }
@@ -58,10 +58,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             drawer.closeDrawer(GravityCompat.START);
         } else {
             if (currentFragment == null) {
-                currentFragment = ImportFragment.newInstance();
+                currentFragment = HomeFragment.newInstance();
             }
-            if (!(currentFragment instanceof ImportFragment)) {
-                switchContent(currentFragment, ImportFragment.newInstance());
+            if (!(currentFragment instanceof HomeFragment)) {
+                switchContent(currentFragment, HomeFragment.newInstance());
                 return;
             }
             if ((System.currentTimeMillis() - lastTime) > EXIT_APP_DELAY) {
@@ -156,11 +156,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_home) {
             // Handle the camera action
-            switchContent(currentFragment, ImportFragment.newInstance());
-        } else if (id == R.id.nav_gallery) {
-            switchContent(currentFragment, GalleryFragment.newInstance());
+            switchContent(currentFragment, HomeFragment.newInstance());
+        } else if (id == R.id.nav_bookshelf) {
+            switchContent(currentFragment, BookshelfFragment.newInstance());
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {

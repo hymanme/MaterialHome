@@ -63,6 +63,8 @@ dependencies {
     compile 'com.squareup.sqlbrite:sqlbrite:0.7.0'
     //ExpandTextView
     compile 'com.hymane.expandtextview:library:1.0.0'
+    //FlycoLabelView
+    compile 'com.flyco.labelview:FlycoLabelView_Lib:1.0.2@aar'
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
     androidTestCompile 'com.android.support.test:runner:0.5'

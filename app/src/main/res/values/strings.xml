@@ -23,4 +23,12 @@
     <string name="comment_of_book">的评论</string>
     <string name="press_twice_exit">再次按返回键退出</string>
     <string name="exit_directly">直接退出</string>
+    <string name="bookshelf_name">书架名称</string>
+    <string name="remark">备注</string>
+    <string name="edit_bookshelf">修改书架</string>
+    <string name="bookshelf_name_is_empty">书架名称不能为空</string>
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="repeal">撤销</string>
+    <string name="delete_bookshelf_success">删除书架成功</string>
 </resources>

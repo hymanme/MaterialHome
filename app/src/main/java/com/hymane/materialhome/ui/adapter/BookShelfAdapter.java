@@ -1,18 +1,30 @@
 package com.hymane.materialhome.ui.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatRatingBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.flyco.labelview.LabelView;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.bean.table.Bookshelf;
+import com.hymane.materialhome.holder.BookShelfEditorHolder;
+import com.hymane.materialhome.ui.activity.BaseActivity;
+import com.hymane.materialhome.utils.DensityUtils;
+import com.hymane.materialhome.utils.UIUtils;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Author   :hymanme
@@ -36,8 +48,8 @@ public class BookShelfAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         if (viewType == TYPE_DEFAULT) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_book_list, parent, false);
-            return new BookListHolder(view);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_book_shelf, parent, false);
+            return new BookShelfHolder(view);
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_empty, parent, false);
             return new EmptyHolder(view);
@@ -64,9 +76,45 @@ public class BookShelfAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof BookListHolder) {
-            final Bookshelf bookInfo = bookshelfs.get(position);
-
+        if (holder instanceof BookShelfHolder) {
+            final Bookshelf bookshelf = bookshelfs.get(position);
+            Random random = new Random();   //创建随机颜色
+            int red = random.nextInt(200) + 22;
+            int green = random.nextInt(200) + 22;
+            int blue = random.nextInt(200) + 22;
+            int color = Color.rgb(red, green, blue);
+            ((BookShelfHolder) holder).rl_content.setBackgroundColor(color);
+            ((BookShelfHolder) holder).labelView.setText("0本");
+            ((BookShelfHolder) holder).tv_bookshelf_name.setText(bookshelf.getTitle());
+            ((BookShelfHolder) holder).tv_remark.setText(bookshelf.getRemark());
+            ((BookShelfHolder) holder).tv_create_time.setText(bookshelf.getCreateTime());
+            ((BookShelfHolder) holder).itemView.setOnClickListener(v -> Toast.makeText(mContext, "click", Toast.LENGTH_SHORT).show());
+//            ((BookShelfHolder) holder).itemView.setOnLongClickListener(v -> {
+//                final BookShelfEditorHolder bookShelfHolder = new BookShelfEditorHolder(mContext, bookshelfs.get(position).getTitle(), bookshelfs.get(position).getRemark());
+//                final int space = DensityUtils.dp2px(UIUtils.getContext(), 16);
+//                final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+//                builder.setCancelable(false)
+//                        .setView(bookShelfHolder.getContentView(), space, space, space, space)
+//                        .setTitle(UIUtils.getContext().getString(R.string.edit_bookshelf))
+//                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.dismiss();
+//                            }
+//                        })
+//                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                if (!bookShelfHolder.check()) {
+//                                    Snackbar.make(BaseActivity.activity.getToolbar(), R.string.bookshelf_name_is_empty, Snackbar.LENGTH_SHORT).show();
+//                                    return;
+//                                } else {
+//
+//                                }
+//                            }
+//                        }).create().show();
+//                return true;
+//            });
         }
     }
 
@@ -78,23 +126,20 @@ public class BookShelfAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return bookshelfs.size();
     }
 
-    class BookListHolder extends RecyclerView.ViewHolder {
+    class BookShelfHolder extends RecyclerView.ViewHolder {
+        private RelativeLayout rl_content;
+        private LabelView labelView;
+        private TextView tv_bookshelf_name;
+        private TextView tv_remark;
+        private TextView tv_create_time;
 
-        private final ImageView iv_book_img;
-        private final TextView tv_book_title;
-        private final AppCompatRatingBar ratingBar_hots;
-        private final TextView tv_hots_num;
-        private final TextView tv_book_info;
-        private final TextView tv_book_description;
-
-        public BookListHolder(View itemView) {
+        public BookShelfHolder(View itemView) {
             super(itemView);
-            iv_book_img = (ImageView) itemView.findViewById(R.id.iv_book_img);
-            tv_book_title = (TextView) itemView.findViewById(R.id.tv_book_title);
-            ratingBar_hots = (AppCompatRatingBar) itemView.findViewById(R.id.ratingBar_hots);
-            tv_hots_num = (TextView) itemView.findViewById(R.id.tv_hots_num);
-            tv_book_info = (TextView) itemView.findViewById(R.id.tv_book_info);
-            tv_book_description = (TextView) itemView.findViewById(R.id.tv_book_description);
+            rl_content = (RelativeLayout) itemView.findViewById(R.id.rl_content);
+            labelView = (LabelView) itemView.findViewById(R.id.label_layout);
+            tv_bookshelf_name = (TextView) itemView.findViewById(R.id.tv_bookshelf_name);
+            tv_remark = (TextView) itemView.findViewById(R.id.tv_remark);
+            tv_create_time = (TextView) itemView.findViewById(R.id.tv_create_time);
         }
     }
 

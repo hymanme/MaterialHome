@@ -7,6 +7,7 @@
     <color name="colorAccent">#00BCD4</color>
     <color name="primary_text">#de000000</color>
     <color name="secondary_text">#8a000000</color>
+    <color name="primary_text_dark">#deffffff</color>
 
     <!--common color-->
     <color name="white">#FFFFFF</color>
@@ -21,4 +22,6 @@
     <color name="publish_info_bg">#6ef2f2f2</color>
     <color name="dividers">#1f000000</color>
     <color name="grass_green">#46C01C</color>
+    <color name="bookshelf_tag_mask">#66ffffff</color>
+
 </resources>

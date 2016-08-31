@@ -27,7 +27,7 @@ import butterknife.BindView;
  * Description:
  */
 
-public class ImportFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.viewPager)
@@ -38,20 +38,20 @@ public class ImportFragment extends BaseFragment {
     FloatingActionButton mFab;
     private List<BaseFragment> fragments;
     private String[] titles;
-    public static ImportFragment mInstance;
+    public static HomeFragment mInstance;
 
-    public static ImportFragment newInstance() {
+    public static HomeFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        ImportFragment fragment = new ImportFragment();
+        HomeFragment fragment = new HomeFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     protected void initRootView(LayoutInflater inflater, ViewGroup container) {
-        mRootView = inflater.inflate(R.layout.import_fragment, container, false);
+        mRootView = inflater.inflate(R.layout.home_fragment, container, false);
     }
 
     @Override
