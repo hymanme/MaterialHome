@@ -51,23 +51,29 @@ public class ServiceFactory {
 
     private static final Interceptor REQUEST_INTERCEPTOR = chain -> {
         Request request = chain.request();
-        if (!NetworkUtils.isConnected(BaseApplication.getApplication())) {
-            int maxStale = DEFAULT_MAX_STALE_OFFLINE; // 离线时缓存保存7天,单位:秒
-            CacheControl tempCacheControl = new CacheControl.Builder()
-                    .onlyIfCached()
-                    .maxStale(maxStale, TimeUnit.SECONDS)
-                    .build();
-            request = request.newBuilder()
-                    .cacheControl(tempCacheControl)
-                    .build();
-        }
+        int maxStale = DEFAULT_MAX_STALE_ONLINE;
+        //向服务期请求数据缓存1个小时
+        CacheControl tempCacheControl = new CacheControl.Builder()
+//                .onlyIfCached()
+                .maxStale(5, TimeUnit.SECONDS)
+                .build();
+        request = request.newBuilder()
+                .cacheControl(tempCacheControl)
+                .build();
         return chain.proceed(request);
     };
 
     private static final Interceptor RESPONSE_INTERCEPTOR = chain -> {
+        //针对那些服务器不支持缓存策略的情况下，使用强制修改响应头，达到缓存的效果
         Request request = chain.request();
         Response originalResponse = chain.proceed(request);
-        int maxAge = DEFAULT_MAX_STALE_ONLINE; // 在线缓存在特定时间内可读取 单位:秒
+        int maxAge;
+        // 缓存的数据
+        if (!NetworkUtils.isConnected(BaseApplication.getApplication())) {
+            maxAge = DEFAULT_MAX_STALE_OFFLINE;
+        } else {
+            maxAge = DEFAULT_MAX_STALE_ONLINE;
+        }
         return originalResponse.newBuilder()
                 .removeHeader("Pragma")// 清除头信息，因为服务器如果不支持，会返回一些干扰信息，不清除下面无法生效
                 .removeHeader("Cache-Control")

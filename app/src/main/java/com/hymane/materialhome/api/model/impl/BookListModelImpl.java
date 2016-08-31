@@ -8,6 +8,8 @@ import com.hymane.materialhome.bean.http.BaseResponse;
 import com.hymane.materialhome.bean.http.BookListResponse;
 import com.hymane.materialhome.common.URL;
 
+import java.net.UnknownHostException;
+
 import retrofit2.Response;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -38,6 +40,9 @@ public class BookListModelImpl implements IBookListModel {
 
                     @Override
                     public void onError(Throwable e) {
+                        if (e instanceof UnknownHostException) {
+                            return;
+                        }
                         listener.onFailed(new BaseResponse(404, e.getMessage()));
                     }
 
