@@ -41,6 +41,7 @@ public class BookListModelImpl implements IBookListModel {
                     @Override
                     public void onError(Throwable e) {
                         if (e instanceof UnknownHostException) {
+                            listener.onFailed(null);
                             return;
                         }
                         listener.onFailed(new BaseResponse(404, e.getMessage()));

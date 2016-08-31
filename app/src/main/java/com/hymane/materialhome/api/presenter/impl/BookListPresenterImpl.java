@@ -71,6 +71,9 @@ public class BookListPresenterImpl implements IBookListPresenter, ApiCompleteLis
     @Override
     public void onFailed(BaseResponse msg) {
         mBookListView.hideProgress();
+        if (msg == null) {
+            return;
+        }
         mBookListView.showMessage(msg.getMsg());
     }
 }
