@@ -173,11 +173,6 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
         if (result instanceof List) {
             mBookshelfs.clear();
             mBookshelfs.addAll((List<Bookshelf>) result);
-//            if (mBookshelfs.isEmpty()) {
-//                mLayoutManager.setSpanCount(1);
-//            } else {
-//                mLayoutManager.setSpanCount(spanCount);
-//            }
             mbookshelfAdapter.notifyDataSetChanged();
         }
     }
@@ -245,7 +240,6 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
             mbookshelfAdapter.notifyItemMoved(fromPosition, toPosition);
             //返回true表示执行拖动
             return true;
-//            return false;
         }
 
         @Override
@@ -258,9 +252,6 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
             bookshelf.setIndex(position);
             queue.add(bookshelf);
             mBookshelfs.remove(position);
-//            if (mBookshelfs.isEmpty()) {
-//                mLayoutManager.setSpanCount(1);
-//            }
             mbookshelfAdapter.notifyItemRemoved(position);
         }
 
@@ -287,7 +278,6 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
                     final Bookshelf bookshelf = (Bookshelf) queue.remove();
                     mbookshelfAdapter.notifyItemInserted(bookshelf.getIndex());
                     mBookshelfs.add(bookshelf.getIndex(), bookshelf);
-//                    mLayoutManager.setSpanCount(spanCount);
                     if (bookshelf.getIndex() == 0) {
                         mRecyclerView.smoothScrollToPosition(0);
                     }
