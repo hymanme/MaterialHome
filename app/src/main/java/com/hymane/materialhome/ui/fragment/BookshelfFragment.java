@@ -6,14 +6,14 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -21,11 +21,13 @@ import com.hymane.materialhome.R;
 import com.hymane.materialhome.api.presenter.impl.BookshelfPresenterImpl;
 import com.hymane.materialhome.api.view.IBookListView;
 import com.hymane.materialhome.bean.table.Bookshelf;
+import com.hymane.materialhome.holder.BookShelfEditorHolder;
 import com.hymane.materialhome.ui.activity.BaseActivity;
 import com.hymane.materialhome.ui.activity.MainActivity;
 import com.hymane.materialhome.ui.adapter.BookShelfAdapter;
 import com.hymane.materialhome.ui.widget.RecyclerViewDecoration.StaggeredGridDecoration;
 import com.hymane.materialhome.utils.DensityUtils;
+import com.hymane.materialhome.utils.TimeUtils;
 import com.hymane.materialhome.utils.UIUtils;
 
 import java.util.ArrayList;
@@ -52,7 +54,7 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
     RecyclerView mRecyclerView;
     @BindView(R.id.swipe_refresh_widget)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    private StaggeredGridLayoutManager mLayoutManager;
+    private GridLayoutManager mLayoutManager;
     private BookShelfAdapter mbookshelfAdapter;
     private List<Bookshelf> mBookshelfs;
     private BookshelfPresenterImpl mBookshelfPresenter;
@@ -84,8 +86,13 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
                 R.color.recycler_color3, R.color.recycler_color4);
 
         //设置布局管理器
-        mLayoutManager = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
-        mLayoutManager.setSpanCount(spanCount);
+        mLayoutManager = new GridLayoutManager(getActivity(), spanCount);
+        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return mbookshelfAdapter.getItemColumnSpan(position);
+            }
+        });
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
@@ -100,7 +107,22 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
         mRecyclerView.addItemDecoration(new StaggeredGridDecoration(space, space, space, space));
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mFab.setOnClickListener(v -> {
-            mBookshelfPresenter.addBookshelf("title", "remark");
+            final BookShelfEditorHolder bookShelfHolder = new BookShelfEditorHolder(getActivity(), "", "");
+            final int inputSpace = DensityUtils.dp2px(getActivity(), 16);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setCancelable(false)
+                    .setView(bookShelfHolder.getContentView(), inputSpace, inputSpace, inputSpace, inputSpace)
+                    .setTitle(UIUtils.getContext().getString(R.string.edit_bookshelf))
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .setPositiveButton(R.string.ok, (dialog, which) -> {
+                        if (!bookShelfHolder.check()) {
+                            Snackbar.make(BaseActivity.activity.getToolbar(), R.string.bookshelf_name_is_empty, Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            mBookshelfPresenter.addBookshelf(bookShelfHolder.getName(), bookShelfHolder.getRemark(), TimeUtils.getCurrentTime());
+                        }
+                    }).create().show();
         });
         ItemTouchHelper touchHelper = new ItemTouchHelper(new SimpleItemTouchHelperCallback(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT));
         touchHelper.attachToRecyclerView(mRecyclerView);
@@ -151,6 +173,11 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
         if (result instanceof List) {
             mBookshelfs.clear();
             mBookshelfs.addAll((List<Bookshelf>) result);
+//            if (mBookshelfs.isEmpty()) {
+//                mLayoutManager.setSpanCount(1);
+//            } else {
+//                mLayoutManager.setSpanCount(spanCount);
+//            }
             mbookshelfAdapter.notifyDataSetChanged();
         }
     }
@@ -160,44 +187,14 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
 
     }
 
-//    class RecyclerViewScrollDetector extends RecyclerView.OnScrollListener {
-//        private int lastVisibleItem;
-//        private int mScrollThreshold = DensityUtils.dp2px(getActivity(), 1);
-//
-//        @Override
-//        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//            super.onScrollStateChanged(recyclerView, newState);
-//            if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == mbookshelfAdapter.getItemCount()) {
-//                onLoadMore();
-//            }
-//        }
-//
-//        @Override
-//        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//            super.onScrolled(recyclerView, dx, dy);
-//            boolean isSignificantDelta = Math.abs(dy) > mScrollThreshold;
-//
-//            if (isSignificantDelta) {
-//                if (dy > 0) {
-//                    mFab.hide();
-//                } else {
-//                    mFab.show();
-//                }
-//            }
-//
-//            lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
-//        }
-//    }
-
     class RecyclerViewScrollDetector extends RecyclerView.OnScrollListener {
-        private int[] lastVisibleItem = {0, 0};
+        private int lastVisibleItem;
         private int mScrollThreshold = DensityUtils.dp2px(UIUtils.getContext(), 1);
 
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
-            if (newState == RecyclerView.SCROLL_STATE_IDLE &&
-                    (lastVisibleItem[0] + mLayoutManager.getSpanCount() >= mbookshelfAdapter.getItemCount())) {
+            if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == mbookshelfAdapter.getItemCount()) {
                 onLoadMore();
             }
         }
@@ -214,7 +211,7 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
                     mFab.show();
                 }
             }
-            lastVisibleItem = mLayoutManager.findLastCompletelyVisibleItemPositions(null);
+            lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
         }
     }
 
@@ -228,6 +225,9 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
 
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            if (mBookshelfs.isEmpty()) {
+                return false;
+            }
             //得到拖动ViewHolder的position
             int fromPosition = viewHolder.getAdapterPosition();
             //得到目标ViewHolder的position
@@ -250,16 +250,25 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
 
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            if (mBookshelfs.isEmpty()) {
+                return;
+            }
             int position = viewHolder.getAdapterPosition();
             final Bookshelf bookshelf = mBookshelfs.get(position);
             bookshelf.setIndex(position);
             queue.add(bookshelf);
             mBookshelfs.remove(position);
+//            if (mBookshelfs.isEmpty()) {
+//                mLayoutManager.setSpanCount(1);
+//            }
             mbookshelfAdapter.notifyItemRemoved(position);
         }
 
         @Override
         public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+            if (mBookshelfs.isEmpty()) {
+                return;
+            }
             if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
                 //滑动时改变Item的透明度
                 final float alpha = 1 - Math.abs(dX) / (float) viewHolder.itemView.getWidth();
@@ -278,6 +287,7 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
                     final Bookshelf bookshelf = (Bookshelf) queue.remove();
                     mbookshelfAdapter.notifyItemInserted(bookshelf.getIndex());
                     mBookshelfs.add(bookshelf.getIndex(), bookshelf);
+//                    mLayoutManager.setSpanCount(spanCount);
                     if (bookshelf.getIndex() == 0) {
                         mRecyclerView.smoothScrollToPosition(0);
                     }

@@ -31,9 +31,9 @@ public class BookshelfPresenterImpl implements IBookshelfPresenter, ApiCompleteL
     }
 
     @Override
-    public void addBookshelf(String title, String remark) {
+    public void addBookshelf(String title, String remark, String createAt) {
         mBookListView.showProgress();
-        mBookshelfModel.addBookshelf(title, remark, this);
+        mBookshelfModel.addBookshelf(title, remark, createAt, this);
     }
 
     @Override

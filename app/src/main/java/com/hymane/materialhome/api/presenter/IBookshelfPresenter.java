@@ -15,10 +15,11 @@ public interface IBookshelfPresenter {
     /**
      * 添加一个书架
      *
-     * @param title  书架名称
-     * @param remark 备注
+     * @param title    书架名称
+     * @param remark   备注
+     * @param createAt 创建时间
      */
-    void addBookshelf(String title, String remark);
+    void addBookshelf(String title, String remark, String createAt);
 
     /**
      * 修改一个书架

@@ -26,6 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ServiceFactory {
     private volatile static OkHttpClient okHttpClient;
+    private volatile static Retrofit mRetrofit;
     private static final int DEFAULT_CACHE_SIZE = 1024 * 1024 * 20;
     private static final int DEFAULT_MAX_AGE = 60 * 60;
     private static final int DEFAULT_MAX_STALE_ONLINE = DEFAULT_MAX_AGE * 24;
@@ -47,6 +48,22 @@ public class ServiceFactory {
             }
         }
         return okHttpClient;
+    }
+
+    public static Retrofit getRetrofit(String baseUrl) {
+        if (mRetrofit == null) {
+            synchronized (Retrofit.class) {
+                if (mRetrofit == null) {
+                    mRetrofit = new Retrofit.Builder()
+                            .client(getOkHttpClient())
+                            .baseUrl(baseUrl)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                            .build();
+                }
+            }
+        }
+        return mRetrofit;
     }
 
     private static final Interceptor REQUEST_INTERCEPTOR = chain -> {

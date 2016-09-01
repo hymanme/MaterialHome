@@ -21,9 +21,10 @@ public interface IBookshelfModel {
      *
      * @param title    书架名称
      * @param remark   备注
+     * @param createAt 创建时间
      * @param listener 回调
      */
-    void addBookshelf(String title, String remark, ApiCompleteListener listener);
+    void addBookshelf(String title, String remark, String createAt, ApiCompleteListener listener);
 
     /**
      * 修改一个书架

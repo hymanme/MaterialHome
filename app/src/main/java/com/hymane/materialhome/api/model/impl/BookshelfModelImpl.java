@@ -12,6 +12,7 @@ import com.hymane.materialhome.utils.UIUtils;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class BookshelfModelImpl implements IBookshelfModel {
                         bookshelfBean.setBookCount(cursor.getInt(cursor.getColumnIndex("bookCount")));
                         bookshelfBean.setTitle(cursor.getString(cursor.getColumnIndex("title")));
                         bookshelfBean.setRemark(cursor.getString(cursor.getColumnIndex("remark")));
+                        bookshelfBean.setCreateTime(cursor.getString(cursor.getColumnIndex("create_at")));
                         bookshelfs.add(bookshelfBean);
                     }
                     listener.onComplected(bookshelfs);
@@ -61,11 +63,12 @@ public class BookshelfModelImpl implements IBookshelfModel {
     }
 
     @Override
-    public void addBookshelf(String title, String remark, ApiCompleteListener listener) {
+    public void addBookshelf(String title, String remark, String createAt, ApiCompleteListener listener) {
         if (db != null) {
             ContentValues values = new ContentValues();
             values.put("title", title);
             values.put("remark", remark);
+            values.put("create_at", createAt);
             db.insert("bookshelf", values);
         } else {
             listener.onFailed(new BaseResponse(500, "db error : add"));

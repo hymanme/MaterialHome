@@ -8,7 +8,7 @@
     <RelativeLayout
         android:id="@+id/rl_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/grass_green">
 
         <TextView
@@ -33,9 +33,9 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/tv_remark"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="8dp"
             android:layout_marginBottom="4dp"
-            android:text=""
+            android:layout_marginRight="8dp"
+            android:text="--"
             android:textColor="@color/primary_text_dark"
             android:textSize="12sp" />
 
@@ -48,7 +48,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:paddingBottom="6dp"
-            android:text="-"
+            android:text="---"
             android:textColor="@color/primary_text_dark"
             android:textSize="12sp" />
 

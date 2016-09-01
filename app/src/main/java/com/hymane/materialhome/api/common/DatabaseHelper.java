@@ -36,7 +36,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + "id integer primary key,"
                 + "bookCount integer,"
                 + "title varchar not null,"
-                + "remark varchar)");
+                + "remark varchar,"
+                + "create_at varchar not null)");
     }
 
     @Override
