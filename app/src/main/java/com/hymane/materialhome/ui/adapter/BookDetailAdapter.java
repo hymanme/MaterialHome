@@ -1,17 +1,17 @@
 package com.hymane.materialhome.ui.adapter;
 
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.AppCompatRatingBar;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +19,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.hymane.expandtextview.ExpandTextView;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.bean.http.BookInfoResponse;
@@ -26,9 +28,7 @@ import com.hymane.materialhome.bean.http.BookReviewResponse;
 import com.hymane.materialhome.bean.http.BookReviewsListResponse;
 import com.hymane.materialhome.bean.http.BookSeriesListResponse;
 import com.hymane.materialhome.holder.BookSeriesCeilHolder;
-import com.hymane.materialhome.ui.activity.BaseActivity;
 import com.hymane.materialhome.ui.activity.BookReviewsActivity;
-import com.hymane.materialhome.utils.DensityUtils;
 import com.hymane.materialhome.utils.UIUtils;
 
 import java.util.List;
@@ -163,12 +163,19 @@ public class BookDetailAdapter extends RecyclerView.Adapter {
                     }
                 });
             }
-
-//            x.image().bind(((BookCommentHolder) holder).iv_avatar,
-//                    reviews.get(position - HEADER_COUNT).getAuthor().getAvatar(),
-//                    imageOptions
-////                    new CustomBitmapLoadCallBack(holder)
-//            );
+            Glide.with(UIUtils.getContext())
+                    .load(reviews.get(position - HEADER_COUNT).getAuthor().getAvatar())
+                    .asBitmap()
+                    .centerCrop()
+                    .into(new BitmapImageViewTarget(((BookCommentHolder) holder).iv_avatar) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(UIUtils.getContext().getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            ((BookCommentHolder) holder).iv_avatar.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
             ((BookCommentHolder) holder).tv_user_name.setText(reviews.get(position - HEADER_COUNT).getAuthor().getName());
             if (reviews.get(position - HEADER_COUNT).getRating() != null) {
                 ((BookCommentHolder) holder).ratingBar_hots.setRating(Float.valueOf(reviews.get(position - HEADER_COUNT).getRating().getValue()));

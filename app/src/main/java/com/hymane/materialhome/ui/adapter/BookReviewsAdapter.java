@@ -1,5 +1,8 @@
 package com.hymane.materialhome.ui.adapter;
 
+import android.graphics.Bitmap;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.AppCompatRatingBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.bean.http.BookReviewResponse;
 import com.hymane.materialhome.bean.http.BookReviewsListResponse;
@@ -62,7 +66,17 @@ public class BookReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
             Glide.with(UIUtils.getContext())
                     .load(reviews.get(position).getAuthor().getAvatar())
-                    .into(((BookCommentHolder) holder).iv_avatar);
+                    .asBitmap()
+                    .centerCrop()
+                    .into(new BitmapImageViewTarget(((BookCommentHolder) holder).iv_avatar) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(UIUtils.getContext().getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            ((BookCommentHolder) holder).iv_avatar.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
             ((BookCommentHolder) holder).tv_user_name.setText(reviews.get(position).getAuthor().getName());
             if (reviews.get(position).getRating() != null) {
                 ((BookCommentHolder) holder).ratingBar_hots.setRating(Float.valueOf(reviews.get(position).getRating().getValue()));

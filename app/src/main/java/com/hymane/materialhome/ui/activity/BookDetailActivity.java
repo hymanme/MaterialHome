@@ -127,7 +127,7 @@ public class BookDetailActivity extends BaseActivity implements IBookDetailView 
             }
         } else {
             //低于5.0，显示其他动画
-            showMessage(getString(R.string.loading));
+//            showMessage(getString(R.string.loading));
         }
     }
 
@@ -157,23 +157,6 @@ public class BookDetailActivity extends BaseActivity implements IBookDetailView 
             mSeriesListResponse.setTotal(response.getTotal());
             mSeriesListResponse.getBooks().addAll(response.getBooks());
             mDetailAdapter.notifyDataSetChanged();
-        } else if (result instanceof List) {
-//            List<AhutBookOrderListResponse> bookOrderResponse = (List<AhutBookOrderListResponse>) result;
-//            if (bookOrderResponse != null && !bookOrderResponse.isEmpty()) {
-//                new BottomSheetDialogView(BookDetailActivity.this).sheet(getString(R.string.collection_info)).setAdapter(new BookOrderAdapter(BookDetailActivity.this, (List<AhutBookOrderListResponse>) result)).show();
-//            } else {
-//                Snackbar.make(mToolbar, R.string.no_collections, Snackbar.LENGTH_LONG)
-////                        .setAction(R.string.recommendation, new View.OnClickListener() {
-////                            @Override
-////                            public void onClick(View v) {
-////                                LogUtil.i(TAG + "-recommendation");
-////                            }
-////                        })
-//                        .show();
-//            }
-//        } else if (result instanceof StringResultResponse) {
-//            Toast.makeText(BookDetailActivity.this, ((StringResultResponse) result).getResult(), Toast.LENGTH_LONG).show();
-
         }
     }
 
