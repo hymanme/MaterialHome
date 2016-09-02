@@ -9,7 +9,7 @@ import java.util.List;
  * Create at 2016/2/23 0023
  * Description:
  */
-public class BookReviewsListResponse {
+public class BookReviewsListResponse extends BaseResponse {
     private int count;
     private int start;
     private int total;

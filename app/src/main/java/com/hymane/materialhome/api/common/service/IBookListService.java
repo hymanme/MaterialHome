@@ -13,7 +13,7 @@ import rx.Observable;
  * Create at 2016/8/5
  * Description:
  */
-public interface IBookService {
+public interface IBookListService {
     @GET("book/search")
     Observable<Response<BookListResponse>> getBookList(@Query("q") String q, @Query("tag") String tag, @Query("start") int start, @Query("count") int count, @Query("fields") String fields);
 }

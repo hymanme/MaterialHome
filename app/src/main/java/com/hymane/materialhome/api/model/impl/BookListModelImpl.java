@@ -2,7 +2,7 @@ package com.hymane.materialhome.api.model.impl;
 
 import com.hymane.materialhome.api.ApiCompleteListener;
 import com.hymane.materialhome.api.common.ServiceFactory;
-import com.hymane.materialhome.api.common.service.IBookService;
+import com.hymane.materialhome.api.common.service.IBookListService;
 import com.hymane.materialhome.api.model.IBookListModel;
 import com.hymane.materialhome.bean.http.BaseResponse;
 import com.hymane.materialhome.bean.http.BookListResponse;
@@ -28,8 +28,8 @@ public class BookListModelImpl implements IBookListModel {
      */
     @Override
     public void loadBookList(String q, final String tag, int start, int count, String fields, final ApiCompleteListener listener) {
-        IBookService iBookService = ServiceFactory.createService(URL.HOST_URL_DOUBAN, IBookService.class);
-        iBookService.getBookList(q, tag, start, count, fields)
+        IBookListService iBookListService = ServiceFactory.createService(URL.HOST_URL_DOUBAN, IBookListService.class);
+        iBookListService.getBookList(q, tag, start, count, fields)
                 .subscribeOn(Schedulers.newThread())    //请求在新的线程中执行
                 .observeOn(AndroidSchedulers.mainThread())//最后在主线程中执行
                 .subscribe(new Subscriber<Response<BookListResponse>>() {

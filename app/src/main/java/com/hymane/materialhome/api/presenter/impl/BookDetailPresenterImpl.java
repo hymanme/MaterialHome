@@ -31,7 +31,7 @@ public class BookDetailPresenterImpl implements IBookDetailPresenter, ApiComplet
             mBookDetailView.showMessage(UIUtils.getContext().getString(R.string.poor_network));
             mBookDetailView.hideProgress();
         }
-//        mBookDetailView.showProgress();
+        mBookDetailView.showProgress();
         mBookDetailModel.loadReviewsList(bookId, start, count, fields, this);
     }
 
