@@ -2,7 +2,6 @@ package com.hymane.materialhome.holder;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -13,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.bean.http.BookInfoResponse;
 import com.hymane.materialhome.ui.activity.BaseActivity;
@@ -54,27 +54,25 @@ public class BookSeriesCeilHolder {
         tv_title.setText(mBookInfoResponse.getTitle());
         ratingBar_hots.setRating(Float.valueOf(mBookInfoResponse.getRating().getAverage()) / 2);
         tv_hots_num.setText(mBookInfoResponse.getRating().getAverage());
-        mContentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(UIUtils.getContext(), BookDetailActivity.class);
-                Bundle b = new Bundle();
-                b.putSerializable(BookInfoResponse.serialVersionName, mBookInfoResponse);
-                Bitmap bitmap = ((BitmapDrawable) iv_book_img.getDrawable()).getBitmap();
-                b.putParcelable("book_img", bitmap);
-                intent.putExtras(b);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if (BaseActivity.activity == null) {
-                        UIUtils.startActivity(intent);
-                        return;
-                    }
-                    ActivityOptionsCompat options = ActivityOptionsCompat.
-                            makeSceneTransitionAnimation(BaseActivity.activity, iv_book_img, "book_img");
-                    BaseActivity.activity.startActivity(intent, options.toBundle());
-                } else {
+        mContentView.setOnClickListener(v -> {
+            Bundle b = new Bundle();
+            b.putSerializable(BookInfoResponse.serialVersionName, mBookInfoResponse);
+            Bitmap bitmap;
+
+            bitmap = ((GlideBitmapDrawable) (iv_book_img.getDrawable())).getBitmap();
+            b.putParcelable("book_img", bitmap);
+            Intent intent = new Intent(UIUtils.getContext(), BookDetailActivity.class);
+            intent.putExtras(b);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (BaseActivity.activity == null) {
                     UIUtils.startActivity(intent);
+                    return;
                 }
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation(BaseActivity.activity, iv_book_img, "book_img");
+                BaseActivity.activity.startActivity(intent, options.toBundle());
+            } else {
+                UIUtils.startActivity(intent);
             }
         });
     }

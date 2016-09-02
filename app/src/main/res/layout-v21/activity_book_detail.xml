@@ -49,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_gravity="bottom"
-                android:background="@color/book_title_mask"></FrameLayout>
+                android:background="@color/book_title_mask"/>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

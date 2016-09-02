@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -106,6 +107,7 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
         final int space = DensityUtils.dp2px(getActivity(), 4);
         mRecyclerView.addItemDecoration(new StaggeredGridDecoration(space, space, space, space));
         mSwipeRefreshLayout.setOnRefreshListener(this);
+//        mFab.setImageDrawable(AppCompatResources.getDrawable(getActivity(), R.drawable.ic_add_dark));
         mFab.setOnClickListener(v -> {
             final BookShelfEditorHolder bookShelfHolder = new BookShelfEditorHolder(getActivity(), "", "");
             final int inputSpace = DensityUtils.dp2px(getActivity(), 16);

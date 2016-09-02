@@ -1,5 +1,6 @@
 package com.hymane.materialhome.ui.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Animatable;
 import android.os.Build;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,8 +25,6 @@ import com.hymane.materialhome.bean.http.BookSeriesListResponse;
 import com.hymane.materialhome.ui.adapter.BookDetailAdapter;
 import com.hymane.materialhome.utils.Blur;
 import com.hymane.materialhome.utils.UIUtils;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,6 +64,7 @@ public class BookDetailActivity extends BaseActivity implements IBookDetailView 
         setContentView(R.layout.activity_book_detail);
         ButterKnife.bind(this);
         super.onCreate(savedInstanceState);
+        mToolbar.setNavigationIcon(AppCompatResources.getDrawable(this, R.drawable.ic_close_dark));
     }
 
     @Override
@@ -100,6 +101,9 @@ public class BookDetailActivity extends BaseActivity implements IBookDetailView 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
             case R.id.action_share:
                 StringBuilder sb = new StringBuilder();
                 sb.append(getString(R.string.your_friend));
