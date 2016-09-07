@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent" android:layout_height="wrap_content"
-              android:layout_margin="@dimen/activity_horizontal_margin"
-              android:background="@color/white"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/activity_horizontal_margin"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             android:max="10"
             android:numStars="5"
             android:progressDrawable="@drawable/rating_bar_bg"
-            android:rating="1"/>
+            android:rating="1" />
 
         <TextView
             android:id="@+id/tv_hots_num"
@@ -32,7 +32,7 @@
             android:layout_marginLeft="6dp"
             android:text="8.3"
             android:textColor="@color/secondary_text"
-            android:textSize="10sp"/>
+            android:textSize="10sp" />
 
         <TextView
             android:id="@+id/tv_comment_num"
@@ -42,7 +42,7 @@
             android:layout_marginLeft="6dp"
             android:text="214人评分"
             android:textColor="@color/secondary_text"
-            android:textSize="10sp"/>
+            android:textSize="10sp" />
     </LinearLayout>
 
     <RelativeLayout
@@ -62,7 +62,7 @@
             android:singleLine="true"
             android:text="[日]某某/某某出版社/2015-4[日]某某/某某出版社/2015-4[日]某某/某某出版社/2015-4"
             android:textColor="@color/secondary_text"
-            android:textSize="12sp"/>
+            android:textSize="12sp" />
 
         <ImageView
             android:id="@+id/iv_more_info"
@@ -70,8 +70,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_action_right_light"/>
+            android:src="@drawable/ic_action_right_light" />
     </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/ll_publish_info"
         android:layout_width="match_parent"
@@ -81,6 +82,7 @@
         android:orientation="vertical"
         android:padding="8dp"
         android:visibility="gone">
+
         <TextView
             android:id="@+id/tv_author"
             android:layout_width="match_parent"
@@ -88,7 +90,8 @@
             android:layout_marginBottom="2dp"
             android:text="作者:"
             android:textColor="@color/primary_text"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/tv_publisher"
             android:layout_width="match_parent"
@@ -96,7 +99,8 @@
             android:layout_marginBottom="2dp"
             android:text="出版社:xxx"
             android:textColor="@color/primary_text"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/tv_subtitle"
             android:layout_width="wrap_content"
@@ -107,7 +111,8 @@
             android:maxEms="18"
             android:text="副标题:xxx"
             android:textColor="@color/primary_text"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/tv_origin_title"
             android:layout_width="match_parent"
@@ -115,7 +120,8 @@
             android:layout_marginBottom="2dp"
             android:text="原作名:xxx"
             android:textColor="@color/primary_text"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/tv_translator"
             android:layout_width="match_parent"
@@ -123,7 +129,8 @@
             android:layout_marginBottom="2dp"
             android:text="译者:xxx"
             android:textColor="@color/primary_text"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/tv_publish_date"
             android:layout_width="match_parent"
@@ -131,7 +138,8 @@
             android:layout_marginBottom="2dp"
             android:text="出版年:2016-1"
             android:textColor="@color/primary_text"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/tv_pages"
             android:layout_width="match_parent"
@@ -139,7 +147,8 @@
             android:layout_marginBottom="2dp"
             android:text="页数:333"
             android:textColor="@color/primary_text"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/tv_price"
             android:layout_width="match_parent"
@@ -147,7 +156,8 @@
             android:layout_marginBottom="2dp"
             android:text="定价:36.00"
             android:textColor="@color/primary_text"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/tv_binding"
             android:layout_width="match_parent"
@@ -155,7 +165,8 @@
             android:layout_marginBottom="2dp"
             android:text="装帧:精装"
             android:textColor="@color/primary_text"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
+
         <TextView
             android:id="@+id/tv_isbn"
             android:layout_width="match_parent"
@@ -163,7 +174,7 @@
             android:layout_marginBottom="2dp"
             android:text="isbn:78921793717"
             android:textColor="@color/primary_text"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
     </LinearLayout>
 
     <FrameLayout
@@ -181,8 +192,7 @@
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
             android:layout_marginTop="2dp"
-            android:background="@color/dividers">
-        </View>
+            android:background="@color/dividers"></View>
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -192,7 +202,7 @@
             android:layout_gravity="center_vertical"
             android:indeterminate="true"
             android:max="100"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </FrameLayout>
 
 </LinearLayout>

@@ -9,6 +9,11 @@
     <color name="secondary_text">#8a000000</color>
     <color name="primary_text_dark">#deffffff</color>
 
+    <!--navigation header-->
+    <color name="startColor">#81C784</color>
+    <color name="centerColor">#4CAF50</color>
+    <color name="endColor">#2E7D32</color>
+
     <!--common color-->
     <color name="white">#FFFFFF</color>
 
