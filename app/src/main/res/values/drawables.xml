@@ -9,4 +9,5 @@
     <item name="ic_action_search" type="drawable">@drawable/ic_search_white_24dp</item>
     <item name="ic_menu_home" type="drawable">@drawable/ic_dashboard_white_24dp</item>
     <item name="ic_menu_bookshelf" type="drawable">@drawable/ic_library_books_white_24dp</item>
+    <item name="ic_menu_theme" type="drawable">@drawable/ic_color_lens_white_24dp</item>
 </resources>

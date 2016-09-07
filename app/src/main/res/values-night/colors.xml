@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--theme color-->
+    <color name="colorPrimary">#4CAF50</color>
+    <color name="colorPrimaryDark">#388E3C</color>
+    <color name="colorPrimaryLight">#C8E6C9</color>
+    <color name="colorAccent">#00BCD4</color>
+    <color name="primary_text">#de000000</color>
+    <color name="secondary_text">#8a000000</color>
+    <color name="primary_text_dark">#deffffff</color>
+
+    <!--night-->
+    <color name="colorPrimaryNight">#212121</color>
+    <color name="colorPrimaryDarkNight">#000000</color>
+    <color name="colorAccentNight">#787878</color>
+
+    <!--common color-->
+    <color name="white">#FFFFFF</color>
+
+    <!--swipeRefreshLayout color-->
+    <color name="recycler_color1">#bc9191</color>
+    <color name="recycler_color2">#edd36a</color>
+    <color name="recycler_color3">#82c1f9</color>
+    <color name="recycler_color4">#68d661</color>
+
+    <color name="book_title_mask">#80000000</color>
+    <color name="publish_info_bg">#6ef2f2f2</color>
+    <color name="dividers">#1f000000</color>
+    <color name="grass_green">#46C01C</color>
+    <color name="bookshelf_tag_mask">#66ffffff</color>
+
+</resources>

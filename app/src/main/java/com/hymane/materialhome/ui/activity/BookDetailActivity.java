@@ -86,9 +86,13 @@ public class BookDetailActivity extends BaseActivity implements IBookDetailView 
         mCollapsingLayout.setTitle(mBookInfoResponse.getTitle());
 
         Bitmap book_img = getIntent().getParcelableExtra("book_img");
-        iv_book_img.setImageBitmap(book_img);
-        iv_book_bg.setImageBitmap(Blur.apply(book_img));
-        iv_book_bg.setAlpha(0.9f);
+        if (book_img != null) {
+            iv_book_img.setImageBitmap(book_img);
+            iv_book_bg.setImageBitmap(Blur.apply(book_img));
+            iv_book_bg.setAlpha(0.9f);
+        } else {
+            //// TODO: 2016/9/7 请求照片
+        }
         mFab.setOnClickListener(v -> Toast.makeText(BookDetailActivity.this, "click", Toast.LENGTH_SHORT).show());
         bookDetailPresenter.loadReviews(mBookInfoResponse.getId(), PAGE * REVIEWS_COUNT, REVIEWS_COUNT, COMMENT_FIELDS);
     }

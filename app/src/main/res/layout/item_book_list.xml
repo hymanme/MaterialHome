@@ -33,7 +33,7 @@
                 android:lines="1"
                 android:padding="5dp"
                 android:text="百年独孤"
-                android:textColor="@color/primary_text"
+                android:textColor="?android:textColorPrimary"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -62,7 +62,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:text="8.3"
-                    android:textColor="@color/secondary_text"
+                    android:textColor="?android:textColorSecondary"
                     android:textSize="10sp" />
             </LinearLayout>
 
@@ -73,7 +73,7 @@
                 android:maxLines="2"
                 android:padding="5dp"
                 android:text="[日]某某/某某出版社/2015-4"
-                android:textColor="@color/secondary_text"
+                android:textColor="?android:textColorSecondary"
                 android:textSize="12sp" />
 
             <TextView
@@ -84,7 +84,7 @@
                 android:maxLines="3"
                 android:padding="5dp"
                 android:text="简介"
-                android:textColor="@color/secondary_text"
+                android:textColor="?android:textColorSecondary"
                 android:textSize="10sp" />
         </LinearLayout>
     </LinearLayout>

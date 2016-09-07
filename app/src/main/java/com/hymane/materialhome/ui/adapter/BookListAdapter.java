@@ -90,13 +90,11 @@ public class BookListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     Bundle b = new Bundle();
                     b.putSerializable(BookInfoResponse.serialVersionName, bookInfo);
                     Bitmap bitmap;
-//                    if (((BookListHolder) holder).iv_book_img.getDrawable() instanceof AsyncDrawable) {
-//                        final Drawable baseDrawable = ((AsyncDrawable) ((BookListHolder) holder).iv_book_img.getDrawable()).getBaseDrawable();
-//                        bitmap = ((BitmapDrawable) baseDrawable).getBitmap();
-//                    } else {
-                    bitmap = ((GlideBitmapDrawable) ((BookListHolder) holder).iv_book_img.getDrawable()).getBitmap();
-//                    }
-                    b.putParcelable("book_img", bitmap);
+                    GlideBitmapDrawable imageDrawable = (GlideBitmapDrawable) ((BookListHolder) holder).iv_book_img.getDrawable();
+                    if (imageDrawable != null) {
+                        bitmap = imageDrawable.getBitmap();
+                        b.putParcelable("book_img", bitmap);
+                    }
                     Intent intent = new Intent(UIUtils.getContext(), BookDetailActivity.class);
                     intent.putExtras(b);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

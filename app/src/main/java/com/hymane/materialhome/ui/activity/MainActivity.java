@@ -1,8 +1,5 @@
 package com.hymane.materialhome.ui.activity;
 
-import android.app.SearchManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -10,19 +7,23 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.SearchView;
+import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 
 import com.hymane.materialhome.R;
+import com.hymane.materialhome.common.Constant;
 import com.hymane.materialhome.ui.fragment.BaseFragment;
 import com.hymane.materialhome.ui.fragment.BookshelfFragment;
 import com.hymane.materialhome.ui.fragment.HomeFragment;
-import com.mypopsy.widget.FloatingSearchView;
+import com.hymane.materialhome.utils.SPUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +36,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     DrawerLayout drawer;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
+
+    private SwitchCompat mThemeSwitch;
     private long lastTime = 0;
 
     @Override
@@ -50,6 +53,36 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.replace(R.id.fl_content, currentFragment).commit();
         }
+        initNavView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    private void initNavView() {
+        boolean night = SPUtils.getPrefBoolean(Constant.THEME_MODEL, false);
+        if (night) {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_theme);
+        mThemeSwitch = (SwitchCompat) MenuItemCompat.getActionView(item).findViewById(R.id.view_switch);
+        mThemeSwitch.setChecked(night);
+        mThemeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SPUtils.setPrefBoolean(Constant.THEME_MODEL, isChecked);
+                mThemeSwitch.setChecked(isChecked);
+                if (isChecked) {
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                } else {
+                    getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                }
+            }
+        });
     }
 
     @Override
@@ -175,13 +208,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_theme) {
+
 
         } else if (id == R.id.nav_send) {
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

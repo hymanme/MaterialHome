@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
@@ -23,9 +23,10 @@
     <item android:title="Communicate">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_action_share"
-                android:title="Share" />
+                android:id="@+id/nav_theme"
+                android:icon="@drawable/ic_menu_theme"
+                android:title="Theme"
+                app:actionLayout="@layout/action_view_switch" />
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
