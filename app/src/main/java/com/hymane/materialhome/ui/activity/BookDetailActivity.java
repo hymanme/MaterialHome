@@ -64,7 +64,7 @@ public class BookDetailActivity extends BaseActivity implements IBookDetailView 
         setContentView(R.layout.activity_book_detail);
         ButterKnife.bind(this);
         super.onCreate(savedInstanceState);
-        mToolbar.setNavigationIcon(AppCompatResources.getDrawable(this, R.drawable.ic_close_dark));
+        mToolbar.setNavigationIcon(AppCompatResources.getDrawable(this, R.drawable.ic_action_clear));
     }
 
     @Override

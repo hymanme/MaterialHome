@@ -107,7 +107,7 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
         final int space = DensityUtils.dp2px(getActivity(), 4);
         mRecyclerView.addItemDecoration(new StaggeredGridDecoration(space, space, space, space));
         mSwipeRefreshLayout.setOnRefreshListener(this);
-//        mFab.setImageDrawable(AppCompatResources.getDrawable(getActivity(), R.drawable.ic_add_dark));
+//        mFab.setImageDrawable(AppCompatResources.getDrawable(getActivity(), R.drawable.ic_action_add_white));
         mFab.setOnClickListener(v -> {
             final BookShelfEditorHolder bookShelfHolder = new BookShelfEditorHolder(getActivity(), "", "");
             final int inputSpace = DensityUtils.dp2px(getActivity(), 16);

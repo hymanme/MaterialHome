@@ -14,7 +14,7 @@
         android:layout_width="100dp"
         android:layout_height="144dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/empty_img"/>
+        android:src="@drawable/empty_book_img"/>
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"

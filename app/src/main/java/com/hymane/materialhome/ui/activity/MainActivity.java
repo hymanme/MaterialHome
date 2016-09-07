@@ -1,5 +1,8 @@
 package com.hymane.materialhome.ui.activity;
 
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -9,6 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +22,7 @@ import com.hymane.materialhome.R;
 import com.hymane.materialhome.ui.fragment.BaseFragment;
 import com.hymane.materialhome.ui.fragment.BookshelfFragment;
 import com.hymane.materialhome.ui.fragment.HomeFragment;
+import com.mypopsy.widget.FloatingSearchView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -143,11 +148,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_search) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSearchRequested() {
+        return super.onSearchRequested();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
