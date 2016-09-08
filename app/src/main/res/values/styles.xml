@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="publishInfoBG">@color/publish_info_bg</item>
+        <item name="publishInfoBackground">@color/publish_info_bg</item>
     </style>
 
     <style name="AppTheme.DayNight.NoActionBar">
