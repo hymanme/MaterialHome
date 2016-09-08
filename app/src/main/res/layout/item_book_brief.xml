@@ -13,4 +13,7 @@
     app:expandHint="点击展开"
     app:foldHint="点击收回"
     app:indicateImage="@drawable/ic_arrow_down_light_round"
+    app:textContentColor="?android:attr/textColorPrimary"
+    app:textHintColor="?android:attr/textColorPrimary"
+    app:textTitleColor="?android:attr/textColorSecondary"
     app:titleText="简介" />

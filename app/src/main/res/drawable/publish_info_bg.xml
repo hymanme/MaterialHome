@@ -2,6 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
        android:shape="rectangle">
     <corners android:radius="6dp"></corners>
-    <solid android:color="@color/publish_info_bg"></solid>
+    <solid android:color="?attr/publishInfoBG"></solid>
 
 </shape>

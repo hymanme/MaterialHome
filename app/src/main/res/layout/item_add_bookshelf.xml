@@ -18,8 +18,8 @@
             android:hint="@string/bookshelf_name"
             android:maxLines="1"
             android:selectAllOnFocus="true"
-            android:textColor="@color/primary_text"
-            android:textColorHint="@color/secondary_text"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textColorHint="?android:attr/textColorSecondary"
             android:textSize="14sp" />
     </android.support.design.widget.TextInputLayout>
 
@@ -36,8 +36,8 @@
             android:hint="@string/remark"
             android:maxLines="3"
             android:selectAllOnFocus="true"
-            android:textColor="@color/primary_text"
-            android:textColorHint="@color/secondary_text"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textColorHint="?android:attr/textColorSecondary"
             android:textSize="14sp" />
     </android.support.design.widget.TextInputLayout>
 </LinearLayout>

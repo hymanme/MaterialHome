@@ -49,7 +49,7 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
     private BookListAdapter mListAdapter;
     private List<BookInfoResponse> bookInfoResponses;
     private BookListPresenterImpl bookListPresenter;
-    private int spanCount = 1;
+    private int listPosition;
 
     public static BookListFragment newInstance(String tag) {
 
@@ -61,9 +61,12 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
     }
 
     @Override
-    protected void initRootView(LayoutInflater inflater, ViewGroup container) {
+    protected void initRootView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         bookListPresenter = new BookListPresenterImpl(this);
-        mRootView = inflater.inflate(R.layout.recycler_content, null);
+        mRootView = inflater.inflate(R.layout.recycler_content, container, false);
+        if (savedInstanceState != null) {
+            listPosition = savedInstanceState.getInt("listPosition");
+        }
         String result = getArguments().getString("tag");
         if (!TextUtils.isEmpty(result)) {
             tag = result;
@@ -72,7 +75,7 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
 
     @Override
     protected void initEvents() {
-        spanCount = (int) getResources().getInteger(R.integer.home_span_count);
+        int spanCount = getResources().getInteger(R.integer.home_span_count);
         bookInfoResponses = new ArrayList<>();
         mSwipeRefreshLayout.setColorSchemeResources(R.color.recycler_color1, R.color.recycler_color2,
                 R.color.recycler_color3, R.color.recycler_color4);
@@ -96,6 +99,18 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addOnScrollListener(new RecyclerViewScrollDetector());
         mSwipeRefreshLayout.setOnRefreshListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mRecyclerView.smoothScrollToPosition(listPosition);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt("listPosition", mLayoutManager.findLastVisibleItemPosition());
+        super.onSaveInstanceState(outState);
     }
 
     @Override

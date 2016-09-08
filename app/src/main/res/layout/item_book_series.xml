@@ -12,7 +12,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:text="@string/guess_you_like"
-        android:textColor="@color/secondary_text"
+        android:textColor="?android:attr/textColorSecondary"
         android:textSize="16sp" />
 
     <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"

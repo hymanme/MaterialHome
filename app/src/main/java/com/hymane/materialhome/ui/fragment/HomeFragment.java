@@ -50,7 +50,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    protected void initRootView(LayoutInflater inflater, ViewGroup container) {
+    protected void initRootView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.home_fragment, container, false);
     }
 

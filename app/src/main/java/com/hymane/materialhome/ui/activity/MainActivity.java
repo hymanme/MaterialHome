@@ -30,15 +30,17 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final int EXIT_APP_DELAY = 1000;
-    private FragmentManager fragmentManager = getSupportFragmentManager();
-    private BaseFragment currentFragment;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
 
+    private FragmentManager fragmentManager = getSupportFragmentManager();
+    private BaseFragment currentFragment;
+    private int currentIndex;
     private SwitchCompat mThemeSwitch;
     private long lastTime = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             currentFragment = HomeFragment.newInstance();
             FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.replace(R.id.fl_content, currentFragment).commit();
+        } else {
+            //activity销毁后记住销毁前所在页面
+            currentIndex = savedInstanceState.getInt("currentIndex");
+            switch (this.currentIndex) {
+                case 0:
+                    if (currentFragment == null) {
+                        currentFragment = HomeFragment.newInstance();
+                    }
+                    switchContent(null, currentFragment);
+                    break;
+                case 1:
+                    if (currentFragment == null) {
+                        currentFragment = BookshelfFragment.newInstance();
+                    }
+                    switchContent(null, currentFragment);
+                    break;
+            }
         }
         initNavView();
     }
@@ -189,8 +208,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    public boolean onSearchRequested() {
-        return super.onSearchRequested();
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt("currentIndex", currentIndex);
+        super.onSaveInstanceState(outState);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

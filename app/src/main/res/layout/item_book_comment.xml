@@ -12,7 +12,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:text="@string/comment"
-        android:textColor="@color/secondary_text"
+        android:textColor="?android:attr/textColorSecondary"
         android:textSize="16sp"
         android:visibility="gone" />
 
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="hymanme"
-                android:textColor="@color/primary_text"
+                android:textColor="?android:attr/textColorPrimary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
@@ -67,7 +67,7 @@
                 android:layout_below="@+id/tv_user_name"
                 android:layout_marginBottom="6dp"
                 android:layout_marginTop="6dp"
-                android:textColor="@color/primary_text"
+                android:textColor="?android:attr/textColorPrimary"
                 android:textSize="14sp" />
 
             <ImageView
@@ -86,7 +86,7 @@
                 android:layout_marginLeft="4dp"
                 android:layout_toRightOf="@+id/iv_favorite"
                 android:gravity="center_vertical"
-                android:textColor="@color/secondary_text"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="12sp" />
 
             <TextView
@@ -97,7 +97,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/tv_comment_content"
                 android:gravity="center_vertical"
-                android:textColor="@color/secondary_text"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="12sp" />
         </RelativeLayout>
     </LinearLayout>
