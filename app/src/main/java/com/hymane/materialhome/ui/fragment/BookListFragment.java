@@ -109,8 +109,10 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
     }
 
     @Override
-    protected void initData() {
-        onRefresh();
+    protected void initData(boolean isSavedNull) {
+        if (isSavedNull) {
+            onRefresh();
+        }
     }
 
     @Override

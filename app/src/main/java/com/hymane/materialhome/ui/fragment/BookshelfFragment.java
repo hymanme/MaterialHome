@@ -130,7 +130,7 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
     }
 
     @Override
-    protected void initData() {
+    protected void initData(boolean isSavedNull) {
         onRefresh();
     }
 

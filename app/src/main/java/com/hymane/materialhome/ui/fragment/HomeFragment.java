@@ -60,7 +60,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    protected void initData() {
+    protected void initData(boolean isSavedNull) {
         titles = new String[]{"热门", "新书", "小说", "科幻", "文学", "其他"};
     }
 
