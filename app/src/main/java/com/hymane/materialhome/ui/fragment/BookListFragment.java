@@ -94,17 +94,12 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
         //设置adapter
         mListAdapter = new BookListAdapter(getActivity(), bookInfoResponses, spanCount);
         mRecyclerView.setAdapter(mListAdapter);
+        mRecyclerView.smoothScrollToPosition(listPosition);
 
         //设置Item增加、移除动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addOnScrollListener(new RecyclerViewScrollDetector());
         mSwipeRefreshLayout.setOnRefreshListener(this);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mRecyclerView.smoothScrollToPosition(listPosition);
     }
 
     @Override

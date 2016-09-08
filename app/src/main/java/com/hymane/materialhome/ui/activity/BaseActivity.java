@@ -15,6 +15,8 @@ import android.view.WindowManager;
 
 import com.hymane.materialhome.BaseApplication;
 import com.hymane.materialhome.R;
+import com.hymane.materialhome.common.Constant;
+import com.hymane.materialhome.utils.SPUtils;
 import com.hymane.materialhome.utils.SystemBarTintManager;
 import com.hymane.materialhome.utils.UIUtils;
 
@@ -108,7 +110,11 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @return ID
      */
     protected int getStatusColor() {
-        return R.color.colorPrimaryDark;
+        if (SPUtils.getPrefBoolean(Constant.THEME_MODEL, false)) {
+            return R.color.colorPrimaryDarkNight;
+        } else {
+            return R.color.colorPrimaryDark;
+        }
     }
 
     @TargetApi(19)
