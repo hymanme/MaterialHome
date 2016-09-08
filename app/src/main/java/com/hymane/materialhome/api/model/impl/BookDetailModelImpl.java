@@ -29,7 +29,7 @@ public class BookDetailModelImpl implements IBookDetailModel {
     public void loadReviewsList(String bookId, int start, int count, String fields, final ApiCompleteListener listener) {
         IBookReviewsService iBookReviewsService = ServiceFactory.createService(URL.HOST_URL_DOUBAN, IBookReviewsService.class);
         iBookReviewsService.getBookReviews(bookId, start, count, fields)
-                .subscribeOn(Schedulers.newThread())    //请求在新的线程中执行
+                .subscribeOn(Schedulers.io())    //请求在io线程中执行
                 .observeOn(AndroidSchedulers.mainThread())//最后在主线程中执行
                 .subscribe(new Subscriber<Response<BookReviewsListResponse>>() {
                     @Override

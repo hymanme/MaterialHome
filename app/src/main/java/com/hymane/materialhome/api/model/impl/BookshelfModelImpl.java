@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -37,26 +38,28 @@ public class BookshelfModelImpl implements IBookshelfModel {
     public void loadBookshelf(ApiCompleteListener listener) {
         if (db != null) {
             Observable<SqlBrite.Query> bookshelf = db.createQuery("bookshelf", "SELECT * FROM bookshelf");
-            subscribe = bookshelf.observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<SqlBrite.Query>() {
-                @Override
-                public void call(SqlBrite.Query query) {
-                    Cursor cursor = query.run();
-                    if (cursor == null || cursor.getCount() < 0) {
-                        return;
-                    }
-                    List<Bookshelf> bookshelfs = new ArrayList<>();
-                    while (cursor.moveToNext()) {
-                        Bookshelf bookshelfBean = new Bookshelf();
-                        bookshelfBean.setId(cursor.getInt(cursor.getColumnIndex("id")));
-                        bookshelfBean.setBookCount(cursor.getInt(cursor.getColumnIndex("bookCount")));
-                        bookshelfBean.setTitle(cursor.getString(cursor.getColumnIndex("title")));
-                        bookshelfBean.setRemark(cursor.getString(cursor.getColumnIndex("remark")));
-                        bookshelfBean.setCreateTime(cursor.getString(cursor.getColumnIndex("create_at")));
-                        bookshelfs.add(bookshelfBean);
-                    }
-                    listener.onComplected(bookshelfs);
-                }
-            });
+            subscribe = bookshelf.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<SqlBrite.Query>() {
+                        @Override
+                        public void call(SqlBrite.Query query) {
+                            Cursor cursor = query.run();
+                            if (cursor == null || cursor.getCount() < 0) {
+                                return;
+                            }
+                            List<Bookshelf> bookshelfs = new ArrayList<>();
+                            while (cursor.moveToNext()) {
+                                Bookshelf bookshelfBean = new Bookshelf();
+                                bookshelfBean.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                                bookshelfBean.setBookCount(cursor.getInt(cursor.getColumnIndex("bookCount")));
+                                bookshelfBean.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+                                bookshelfBean.setRemark(cursor.getString(cursor.getColumnIndex("remark")));
+                                bookshelfBean.setCreateTime(cursor.getString(cursor.getColumnIndex("create_at")));
+                                bookshelfs.add(bookshelfBean);
+                            }
+                            listener.onComplected(bookshelfs);
+                        }
+                    });
         } else {
             listener.onFailed(new BaseResponse(500, "db error : init"));
         }
