@@ -1,8 +1,8 @@
 # MaterialHome
-一款基于 Material Design 的图书展示类app。
+一款基于 Material Design 的图书展示类 app。
 
 ##简介
-虽然叫 Material Home，但是实质是一款图书展示类app，目前正处于逐步完善阶段，也期望感兴趣的朋友一起来完善“她”。目前图书接口来源于[豆瓣图书api](https://developers.douban.com/wiki/?title=api_v2),特此感谢豆瓣提供的免费接口。本app采用的是MD设计风格以及一些友好的交互动画，使用了一些最新的热门技术。
+虽然叫 Material Home，但是实质是一款图书展示类 app，目前正处于逐步完善阶段，也期望感兴趣的朋友一起来完善“她”。目前图书接口来源于[豆瓣图书 api](https://developers.douban.com/wiki/?title=api_v2),特此感谢豆瓣提供的免费接口。本 app 采用的是 MD 设计风格以及一些友好的交互动画，使用了一些最新的热门技术。
 >开源让编程更加快乐
 
 ##更新日志
@@ -46,8 +46,8 @@ wait...
 ##关于作者
 ![hymane](https://avatars0.githubusercontent.com/u/10279568?v=3&s=460)
 
-微博：[hymanme](http://weibo.com/hymane)
-github: [hymanme](https://github.com/hymanme)
+- 微博：[hymanme](http://weibo.com/hymane)
+- github: [hymanme](https://github.com/hymanme)
 
 > 部分资源来源于网络，如有侵权请联系我删除。
 
