@@ -12,7 +12,10 @@
         android:layout_height="match_parent"
         app:pv_background_color="?attr/colorPrimary"
         app:pv_host_text="Material"
+        app:pv_host_text_anim_time="400"
         app:pv_particle_text="Home"
         app:pv_particle_text_size="16sp"
+        app:pv_spread_anim_time="200"
+        app:pv_text_anim_time="600"
         app:pv_text_color="#FFF" />
 </LinearLayout>
