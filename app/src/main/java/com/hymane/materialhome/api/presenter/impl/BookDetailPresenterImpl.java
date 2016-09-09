@@ -66,7 +66,10 @@ public class BookDetailPresenterImpl implements IBookDetailPresenter, ApiComplet
      */
     @Override
     public void onFailed(BaseResponse msg) {
-        mBookDetailView.showMessage(msg.getMsg());
         mBookDetailView.hideProgress();
+        if (msg == null) {
+            return;
+        }
+        mBookDetailView.showMessage(msg.getMsg());
     }
 }

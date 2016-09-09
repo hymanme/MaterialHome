@@ -16,6 +16,9 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.api.presenter.impl.BookDetailPresenterImpl;
 import com.hymane.materialhome.api.view.IBookDetailView;
@@ -91,7 +94,17 @@ public class BookDetailActivity extends BaseActivity implements IBookDetailView 
             iv_book_bg.setImageBitmap(Blur.apply(book_img));
             iv_book_bg.setAlpha(0.9f);
         } else {
-            //// TODO: 2016/9/7 请求照片
+            Glide.with(this)
+                    .load(mBookInfoResponse.getImages().getLarge())
+                    .asBitmap()
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            iv_book_img.setImageBitmap(resource);
+                            iv_book_bg.setImageBitmap(Blur.apply(resource));
+                            iv_book_bg.setAlpha(0.9f);
+                        }
+                    });
         }
         mFab.setOnClickListener(v -> Toast.makeText(BookDetailActivity.this, "click", Toast.LENGTH_SHORT).show());
         bookDetailPresenter.loadReviews(mBookInfoResponse.getId(), PAGE * REVIEWS_COUNT, REVIEWS_COUNT, COMMENT_FIELDS);

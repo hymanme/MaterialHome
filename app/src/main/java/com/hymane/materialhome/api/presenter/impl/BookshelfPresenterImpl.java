@@ -65,7 +65,9 @@ public class BookshelfPresenterImpl implements IBookshelfPresenter, ApiCompleteL
 
     @Override
     public void onFailed(BaseResponse msg) {
-        mBookListView.showMessage(msg.getCode() + "|" + msg.getMsg());
         mBookListView.hideProgress();
+        if (msg != null) {
+            mBookListView.showMessage(msg.getCode() + "|" + msg.getMsg());
+        }
     }
 }
