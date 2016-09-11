@@ -1,5 +1,8 @@
 package com.hymane.materialhome.ui.activity;
 
+import android.animation.ValueAnimator;
+import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -13,17 +16,25 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
+import android.widget.PopupWindow;
 
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.common.Constant;
+import com.hymane.materialhome.holder.SearchViewHolder;
 import com.hymane.materialhome.ui.fragment.BaseFragment;
 import com.hymane.materialhome.ui.fragment.BookshelfFragment;
 import com.hymane.materialhome.ui.fragment.HomeFragment;
+import com.hymane.materialhome.utils.KeyBoardUtils;
+import com.hymane.materialhome.utils.PermissionUtils;
 import com.hymane.materialhome.utils.SPUtils;
+import com.hymane.materialhome.utils.ScreenUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,6 +50,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private BaseFragment currentFragment;
     private int currentIndex;
     private SwitchCompat mThemeSwitch;
+    private PopupWindow mPopupWindow;
+    private SearchViewHolder holder;
     private long lastTime = 0;
 
 
@@ -143,6 +156,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     public void setToolbar(Toolbar toolbar) {
         if (toolbar != null) {
+            mToolbar = toolbar;
             setSupportActionBar(toolbar);
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -163,6 +177,73 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    /**
+     * 搜索框
+     */
+    public void showSearchView() {
+        final WindowManager.LayoutParams lp = getWindow().getAttributes();
+        if (mPopupWindow == null) {
+            holder = new SearchViewHolder(this, code -> {
+                switch (code) {
+                    case SearchViewHolder.RESULT_SEARCH_EMPTY_KEYWORD:
+                        Snackbar.make(drawer, R.string.keyword_is_empty, Snackbar.LENGTH_SHORT).show();
+                        break;
+                    case SearchViewHolder.RESULT_SEARCH_SEARCH:
+                        Intent intent = new Intent(this, SearchResultActivity.class);
+                        intent.putExtra("q", holder.et_search_content.getText().toString());
+                        startActivity(intent);
+                        break;
+                    case SearchViewHolder.RESULT_SEARCH_GO_SCAN:
+                        if (PermissionUtils.requestCameraPermission(this)) {
+//                            startActivity(new Intent(this, CaptureActivity.class));
+                        }
+                        break;
+                    case SearchViewHolder.RESULT_SEARCH_CANCEL:
+                        mPopupWindow.dismiss();
+                        break;
+                }
+            });
+            mPopupWindow = new PopupWindow(holder.getContentView(),
+                    WindowManager.LayoutParams.MATCH_PARENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT, true);
+            mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
+            mPopupWindow.setFocusable(true);
+            mPopupWindow.setOutsideTouchable(true);
+            // 设置popWindow的显示和消失动画
+//                mPopupWindow.setAnimationStyle(R.style.PopupWindowStyle);
+            mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    holder.et_search_content.clearFocus();
+                    holder.et_search_content.setText("");
+                    KeyBoardUtils.closeKeyBord(holder.et_search_content, MainActivity.this);
+                    ValueAnimator animator = ValueAnimator.ofFloat(0.7f, 1f);
+                    animator.setDuration(500);
+                    animator.addUpdateListener(animation -> {
+                        lp.alpha = (float) animation.getAnimatedValue();
+                        getWindow().setAttributes(lp);
+                    });
+                    animator.start();
+                }
+            });
+            mPopupWindow.setTouchInterceptor(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return false;
+                }
+            });
+        }
+        KeyBoardUtils.openKeyBord(holder.et_search_content, MainActivity.this);
+        ValueAnimator animator = ValueAnimator.ofFloat(1f, 0.7f);
+        animator.setDuration(500);
+        animator.addUpdateListener(animation -> {
+            lp.alpha = (float) animation.getAnimatedValue();
+            getWindow().setAttributes(lp);
+        });
+        mPopupWindow.showAtLocation(mToolbar, Gravity.NO_GRAVITY, 0, ScreenUtils.getStatusHeight(activity));
+        animator.start();
     }
 
     /**
@@ -201,6 +282,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
+            showSearchView();
             return true;
         }
 

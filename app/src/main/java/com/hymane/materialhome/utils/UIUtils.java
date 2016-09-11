@@ -18,6 +18,7 @@ public class UIUtils {
     public static Context getContext() {
         return BaseApplication.getApplication();
     }
+
     /**
      * 页面跳转
      *

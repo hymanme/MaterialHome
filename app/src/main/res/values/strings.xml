@@ -6,7 +6,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
-    <string name="search_hint">Search</string>
+    <string name="search_hint">搜索书名、标签、类别或isbn号</string>
     <string name="poor_network">网络连接失败，请检查网络</string>
     <string name="more_brief">更多评论</string>
     <string name="click2collapse">点击收回</string>
@@ -33,4 +33,6 @@
     <string name="cancel">取消</string>
     <string name="repeal">撤销</string>
     <string name="delete_bookshelf_success">删除书架成功</string>
+    <string name="no_more">没有更多了</string>
+    <string name="keyword_is_empty">搜索关键字不能为空</string>
 </resources>

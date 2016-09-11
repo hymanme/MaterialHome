@@ -19,7 +19,10 @@
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.DayNight.NoActionBar"></activity>
+            android:theme="@style/AppTheme.DayNight.NoActionBar"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden">
+
+        </activity>
         <activity
             android:name=".ui.activity.SplashActivity"
             android:theme="@style/AppTheme.DayNight.NoActionBar">
@@ -31,10 +34,16 @@
         </activity>
         <activity
             android:name=".ui.activity.BookDetailActivity"
-            android:theme="@style/AppTheme.DayNight.NoActionBar" />
+            android:theme="@style/AppTheme.DayNight.NoActionBar"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".ui.activity.BookReviewsActivity"
-            android:theme="@style/AppTheme.DayNight.NoActionBar" />
+            android:theme="@style/AppTheme.DayNight.NoActionBar"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity
+            android:name=".ui.activity.SearchResultActivity"
+            android:theme="@style/AppTheme.DayNight.NoActionBar"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
     </application>
 
 </manifest>
