@@ -27,7 +27,7 @@
                 android:layout_marginLeft="4dp"
                 android:foreground="?attr/selectableItemBackground"
                 android:src="@drawable/ic_arrow_back_light"
-                android:tint="?attr/searchIconColor" />
+                android:tint="?android:attr/textColorPrimary" />
 
             <ImageView
                 android:id="@+id/iv_scan"
@@ -37,7 +37,7 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:padding="0dp"
                 android:src="@drawable/ic_scan_light"
-                android:tint="?attr/searchIconColor" />
+                android:tint="?android:attr/textColorPrimary" />
 
             <EditText
                 android:id="@+id/et_search_content"
@@ -61,7 +61,7 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:padding="-1dp"
                 android:src="@drawable/ic_fork_clear_light"
-                android:tint="@color/search_icon_color"
+                android:tint="?android:attr/textColorPrimary"
                 android:visibility="gone" />
 
             <ImageView
@@ -72,7 +72,7 @@
                 android:layout_marginRight="8dp"
                 android:foreground="?attr/selectableItemBackground"
                 android:padding="4dp"
-                android:src="?attr/searchIconColor" />
+                android:src="@drawable/ic_search_query" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 

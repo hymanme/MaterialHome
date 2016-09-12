@@ -9,6 +9,7 @@
     <color name="primary_text">#de000000</color>
     <color name="secondary_text">#8a000000</color>
     <color name="primary_text_dark">#deffffff</color>
+    <color name="search_icon_color">#be000000</color>
 
     <!--navigation header-->
     <color name="startColor">#81C784</color>
@@ -25,7 +26,7 @@
     <color name="recycler_color4">#68d661</color>
 
     <color name="book_title_mask">#80000000</color>
-    <color name="publish_info_bg">#6ef2f2f2</color>
+    <color name="publish_info_bg">#6ececece</color>
     <color name="dividers">#1f000000</color>
     <color name="grass_green">#46C01C</color>
     <color name="bookshelf_tag_mask">#66ffffff</color>

@@ -25,7 +25,8 @@
         </activity>
         <activity
             android:name=".ui.activity.SplashActivity"
-            android:theme="@style/AppTheme.DayNight.NoActionBar">
+            android:theme="@style/AppTheme.DayNight.NoActionBar"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,7 +35,7 @@
         </activity>
         <activity
             android:name=".ui.activity.BookDetailActivity"
-            android:theme="@style/AppTheme.DayNight.NoActionBar"
+            android:theme="@style/AppTheme.DayNight.NoActionBar.BookDetail"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".ui.activity.BookReviewsActivity"

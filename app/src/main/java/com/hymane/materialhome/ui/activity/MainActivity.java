@@ -223,7 +223,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     animator.setDuration(500);
                     animator.addUpdateListener(animation -> {
                         lp.alpha = (float) animation.getAnimatedValue();
+                        lp.dimAmount = (float) animation.getAnimatedValue();
                         getWindow().setAttributes(lp);
+                        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
                     });
                     animator.start();
                 }
@@ -240,7 +242,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         animator.setDuration(500);
         animator.addUpdateListener(animation -> {
             lp.alpha = (float) animation.getAnimatedValue();
+            lp.dimAmount = (float) animation.getAnimatedValue();
             getWindow().setAttributes(lp);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         });
         mPopupWindow.showAtLocation(mToolbar, Gravity.NO_GRAVITY, 0, ScreenUtils.getStatusHeight(activity));
         animator.start();

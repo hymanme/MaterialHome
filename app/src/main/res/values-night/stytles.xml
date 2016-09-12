@@ -7,5 +7,6 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDarkNight</item>
         <item name="colorAccent">@color/colorAccentNight</item>
         <item name="publishInfoBackground">@color/publish_info_bg_night</item>
+        <item name="searchIconColor">@color/search_icon_color_night</item>
     </style>
 </resources>

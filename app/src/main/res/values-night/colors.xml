@@ -4,6 +4,7 @@
     <color name="colorPrimaryNight">#212121</color>
     <color name="colorPrimaryDarkNight">#000000</color>
     <color name="colorAccentNight">#787878</color>
+    <color name="search_icon_color_night">#ffffff</color>
 
     <!--navigation header-->
     <color name="startColor">#6a6b6a</color>
@@ -11,7 +12,7 @@
     <color name="endColor">#203b21</color>
 
     <color name="book_title_mask">#80000000</color>
-    <color name="publish_info_bg_night">#6e535353</color>
+    <color name="publish_info_bg_night">#6e5c5c5c</color>
     <color name="dividers">#1f000000</color>
     <color name="grass_green">#46C01C</color>
     <color name="bookshelf_tag_mask">#66ffffff</color>
