@@ -79,7 +79,7 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
     @Override
     protected void initEvents() {
         mToolbar.setTitle("Bookshelf");
-        spanCount = (int) getResources().getInteger(R.integer.gallery_span_count);
+        spanCount = getResources().getInteger(R.integer.gallery_span_count);
         mBookshelfPresenter = new BookshelfPresenterImpl(this);
         mBookshelfs = new ArrayList<>();
         mSwipeRefreshLayout.setColorSchemeResources(R.color.recycler_color1, R.color.recycler_color2,
@@ -104,7 +104,7 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addOnScrollListener(new RecyclerViewScrollDetector());
         final int space = DensityUtils.dp2px(getActivity(), 4);
-        mRecyclerView.addItemDecoration(new StaggeredGridDecoration(space, space, space, space));
+        mRecyclerView.addItemDecoration(new StaggeredGridDecoration(space, space, space, space, spanCount));
         mSwipeRefreshLayout.setOnRefreshListener(this);
 //        mFab.setImageDrawable(AppCompatResources.getDrawable(getActivity(), R.drawable.ic_action_add_white));
         mFab.setOnClickListener(v -> {

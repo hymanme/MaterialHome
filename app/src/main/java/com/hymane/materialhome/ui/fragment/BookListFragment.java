@@ -62,7 +62,6 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
 
     @Override
     protected void initRootView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        bookListPresenter = new BookListPresenterImpl(this);
         mRootView = inflater.inflate(R.layout.recycler_content, container, false);
         if (savedInstanceState != null) {
             listPosition = savedInstanceState.getInt("listPosition");
@@ -76,6 +75,7 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
     @Override
     protected void initEvents() {
         int spanCount = getResources().getInteger(R.integer.home_span_count);
+        bookListPresenter = new BookListPresenterImpl(this);
         bookInfoResponses = new ArrayList<>();
         mSwipeRefreshLayout.setColorSchemeResources(R.color.recycler_color1, R.color.recycler_color2,
                 R.color.recycler_color3, R.color.recycler_color4);

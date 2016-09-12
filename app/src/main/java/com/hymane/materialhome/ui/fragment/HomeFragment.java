@@ -61,7 +61,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initData(boolean isSavedNull) {
-        titles = new String[]{"热门", "新书", "小说", "科幻", "文学", "其他"};
+        titles = new String[]{"热门", "新书", "小说", "分类", "文学", "其他"};
     }
 
     @Override
@@ -74,9 +74,13 @@ public class HomeFragment extends BaseFragment {
 
     private void init() {
         fragments = new ArrayList<>();
-        for (String t : titles) {
-            fragments.add(BookListFragment.newInstance(t));
-        }
+        fragments.add(BookListFragment.newInstance(titles[0]));
+        fragments.add(BookListFragment.newInstance(titles[1]));
+        fragments.add(BookListFragment.newInstance(titles[2]));
+        fragments.add(CategoryFragment.newInstance());
+        fragments.add(BookListFragment.newInstance(titles[4]));
+        fragments.add(BookListFragment.newInstance(titles[5]));
+
         mViewPager.setAdapter(new MainAdapter(getChildFragmentManager(), titles, fragments));
         mViewPager.setOffscreenPageLimit(5);
         mViewPager.setCurrentItem(2);

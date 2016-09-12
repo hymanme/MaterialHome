@@ -15,23 +15,25 @@ public class StaggeredGridDecoration extends RecyclerView.ItemDecoration {
     private int top;
     private int right;
     private int bottom;
+    private int spanCount;
 
-    public StaggeredGridDecoration(int left, int top, int right, int bottom) {
+    public StaggeredGridDecoration(int left, int top, int right, int bottom, int spanCount) {
         this.left = left;
         this.top = top;
         this.right = right;
         this.bottom = bottom;
+        this.spanCount = spanCount;
     }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         outRect.bottom = bottom;
-        if (parent.getChildAdapterPosition(view) < 2) {
+        if (parent.getChildAdapterPosition(view) < spanCount) {
             outRect.top = 2 * top;
         } else {
             outRect.top = top;
         }
-        if (parent.getChildAdapterPosition(view) % 2 == 0) {
+        if (parent.getChildAdapterPosition(view) % spanCount == 0) {
             outRect.left = 2 * left;
             outRect.right = right;
         } else {
