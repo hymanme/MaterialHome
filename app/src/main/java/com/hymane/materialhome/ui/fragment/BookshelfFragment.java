@@ -28,6 +28,7 @@ import com.hymane.materialhome.ui.activity.MainActivity;
 import com.hymane.materialhome.ui.adapter.BookShelfAdapter;
 import com.hymane.materialhome.ui.widget.RecyclerViewDecoration.StaggeredGridDecoration;
 import com.hymane.materialhome.utils.DensityUtils;
+import com.hymane.materialhome.utils.KeyBoardUtils;
 import com.hymane.materialhome.utils.TimeUtils;
 import com.hymane.materialhome.utils.UIUtils;
 
@@ -131,6 +132,7 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
                         } else {
                             mBookshelfPresenter.addBookshelf(bookShelfHolder.getName(), bookShelfHolder.getRemark(), TimeUtils.getCurrentTime());
                         }
+                        KeyBoardUtils.closeKeyBord(bookShelfHolder.et_bookshelf_name, getActivity());
                     }).create().show();
         });
         touchHelper = new ItemTouchHelper(new SimpleItemTouchHelperCallback(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT));

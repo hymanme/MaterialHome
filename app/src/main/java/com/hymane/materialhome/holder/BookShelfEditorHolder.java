@@ -20,7 +20,7 @@ public class BookShelfEditorHolder {
     private Context mContext;
     private View mContentView;
     private TextInputLayout til_bookshelf;
-    private EditText et_bookshelf_name;
+    public EditText et_bookshelf_name;
     private EditText et_bookshelf_remark;
 
     public BookShelfEditorHolder(Context context) {

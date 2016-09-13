@@ -19,6 +19,8 @@ import com.hymane.materialhome.bean.table.Bookshelf;
 import com.hymane.materialhome.holder.BookShelfEditorHolder;
 import com.hymane.materialhome.ui.activity.BaseActivity;
 import com.hymane.materialhome.utils.DensityUtils;
+import com.hymane.materialhome.utils.KeyBoardUtils;
+import com.hymane.materialhome.utils.TimeUtils;
 import com.hymane.materialhome.utils.UIUtils;
 
 import java.util.List;
@@ -110,8 +112,9 @@ public class BookShelfAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                         Snackbar.make(BaseActivity.activity.getToolbar(), R.string.bookshelf_name_is_empty, Snackbar.LENGTH_SHORT).show();
                                         return;
                                     } else {
-
+                                        // TODO: 2016/9/13 修改书架
                                     }
+                                    KeyBoardUtils.closeKeyBord(bookShelfHolder.et_bookshelf_name, mContext);
                                 }
                             }).create().show();
                     return true;
