@@ -44,7 +44,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.nav_view)
-    NavigationView navigationView;
+    NavigationView mNavigationView;
 
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private BaseFragment currentFragment;
@@ -100,7 +100,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         } else {
             getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-        MenuItem item = navigationView.getMenu().findItem(R.id.nav_theme);
+        MenuItem item = mNavigationView.getMenu().findItem(R.id.nav_theme);
+        mNavigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
         mThemeSwitch = (SwitchCompat) MenuItemCompat.getActionView(item).findViewById(R.id.view_switch);
         mThemeSwitch.setChecked(night);
         mThemeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -165,7 +166,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
             drawer.setDrawerListener(toggle);
             toggle.syncState();
-            navigationView.setNavigationItemSelectedListener(this);
+            mNavigationView.setNavigationItemSelectedListener(this);
         }
     }
 
@@ -269,6 +270,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         invalidateOptionsMenu();
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_sort);
+        if (currentFragment instanceof BookshelfFragment) {
+            item.setVisible(true);
+        } else {
+            item.setVisible(false);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     public void showFloatingBar() {
 //        mFab.show();
     }
@@ -289,7 +301,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             showSearchView();
             return true;
         }
-
+        currentFragment.onOptionsItemSelected(item);
         return super.onOptionsItemSelected(item);
     }
 

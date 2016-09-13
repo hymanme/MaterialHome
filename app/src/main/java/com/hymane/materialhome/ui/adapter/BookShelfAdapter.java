@@ -5,12 +5,10 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatRatingBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +35,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private final List<Bookshelf> bookshelfs;
     private Context mContext;
     private int columns;
+    private boolean isSortable;
 
     public BookShelfAdapter(Context context, List<Bookshelf> responses, int columns) {
         this.bookshelfs = responses;
@@ -89,33 +88,47 @@ public class BookShelfAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((BookShelfHolder) holder).tv_remark.setText(bookshelf.getRemark());
             ((BookShelfHolder) holder).tv_create_time.setText(bookshelf.getCreateTime());
             ((BookShelfHolder) holder).itemView.setOnClickListener(v -> Toast.makeText(mContext, "click", Toast.LENGTH_SHORT).show());
-//            ((BookShelfHolder) holder).itemView.setOnLongClickListener(v -> {
-//                final BookShelfEditorHolder bookShelfHolder = new BookShelfEditorHolder(mContext, bookshelfs.get(position).getTitle(), bookshelfs.get(position).getRemark());
-//                final int space = DensityUtils.dp2px(UIUtils.getContext(), 16);
-//                final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-//                builder.setCancelable(false)
-//                        .setView(bookShelfHolder.getContentView(), space, space, space, space)
-//                        .setTitle(UIUtils.getContext().getString(R.string.edit_bookshelf))
-//                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                dialog.dismiss();
-//                            }
-//                        })
-//                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                if (!bookShelfHolder.check()) {
-//                                    Snackbar.make(BaseActivity.activity.getToolbar(), R.string.bookshelf_name_is_empty, Snackbar.LENGTH_SHORT).show();
-//                                    return;
-//                                } else {
-//
-//                                }
-//                            }
-//                        }).create().show();
-//                return true;
-//            });
+            if (!isSortable) {
+                holder.itemView.setAlpha(1.0f);
+                ((BookShelfHolder) holder).itemView.setOnLongClickListener(v -> {
+                    final BookShelfEditorHolder bookShelfHolder = new BookShelfEditorHolder(mContext, bookshelfs.get(position).getTitle(), bookshelfs.get(position).getRemark());
+                    final int space = DensityUtils.dp2px(UIUtils.getContext(), 16);
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setCancelable(false)
+                            .setView(bookShelfHolder.getContentView(), space, space, space, space)
+                            .setTitle(UIUtils.getContext().getString(R.string.edit_bookshelf))
+                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (!bookShelfHolder.check()) {
+                                        Snackbar.make(BaseActivity.activity.getToolbar(), R.string.bookshelf_name_is_empty, Snackbar.LENGTH_SHORT).show();
+                                        return;
+                                    } else {
+
+                                    }
+                                }
+                            }).create().show();
+                    return true;
+                });
+            } else {
+                holder.itemView.setAlpha(0.4f);
+                holder.itemView.setOnLongClickListener(null);
+            }
         }
+    }
+
+    public boolean isSortable() {
+        return isSortable;
+    }
+
+    public void setSortable(boolean sortable) {
+        isSortable = sortable;
     }
 
     @Override

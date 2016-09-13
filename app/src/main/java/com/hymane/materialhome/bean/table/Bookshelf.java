@@ -13,6 +13,8 @@ public class Bookshelf {
     private String title;
     private String remark;
     private String createTime;
+    private long order;
+    private boolean isSortable;
 
     public int getIndex() {
         return index;
@@ -60,5 +62,21 @@ public class Bookshelf {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public long getOrder() {
+        return order;
+    }
+
+    public void setOrder(long order) {
+        this.order = order;
+    }
+
+    public boolean isSortable() {
+        return isSortable;
+    }
+
+    public void setSortable(boolean sortable) {
+        isSortable = sortable;
     }
 }

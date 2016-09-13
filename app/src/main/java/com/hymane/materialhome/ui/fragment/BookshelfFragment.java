@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -59,6 +60,9 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
     private List<Bookshelf> mBookshelfs;
     private BookshelfPresenterImpl mBookshelfPresenter;
     private int spanCount = 1;
+    private boolean isSortable;
+
+    private ItemTouchHelper touchHelper;
 
     public static BookshelfFragment mInstance;
 
@@ -74,6 +78,9 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
     @Override
     protected void initRootView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.bookshelf_fragment, container, false);
+        if (savedInstanceState != null) {
+            isSortable = savedInstanceState.getBoolean("isSortable");
+        }
     }
 
     @Override
@@ -98,6 +105,7 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
 
         //设置adapter
         mbookshelfAdapter = new BookShelfAdapter(getActivity(), mBookshelfs, spanCount);
+        mbookshelfAdapter.setSortable(isSortable);
         mRecyclerView.setAdapter(mbookshelfAdapter);
 
         //设置Item增加、移除动画
@@ -113,7 +121,7 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
             final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setCancelable(false)
                     .setView(bookShelfHolder.getContentView(), inputSpace, inputSpace, inputSpace, inputSpace)
-                    .setTitle(UIUtils.getContext().getString(R.string.edit_bookshelf))
+                    .setTitle(UIUtils.getContext().getString(R.string.add_bookshelf))
                     .setNegativeButton(R.string.cancel, (dialog, which) -> {
                         dialog.dismiss();
                     })
@@ -125,8 +133,23 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
                         }
                     }).create().show();
         });
-        ItemTouchHelper touchHelper = new ItemTouchHelper(new SimpleItemTouchHelperCallback(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT));
-        touchHelper.attachToRecyclerView(mRecyclerView);
+        touchHelper = new ItemTouchHelper(new SimpleItemTouchHelperCallback(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_sort) {
+            if (isSortable) {
+                touchHelper.attachToRecyclerView(null);
+            } else {
+                touchHelper.attachToRecyclerView(mRecyclerView);
+            }
+            isSortable = !isSortable;
+            mbookshelfAdapter.setSortable(isSortable);
+            mbookshelfAdapter.notifyDataSetChanged();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -143,6 +166,12 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
 
     private void init() {
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("isSortable", isSortable);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
