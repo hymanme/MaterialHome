@@ -198,7 +198,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         break;
                     case SearchViewHolder.RESULT_SEARCH_GO_SCAN:
                         if (PermissionUtils.requestCameraPermission(this)) {
-//                            startActivity(new Intent(this, CaptureActivity.class));
+                            startActivity(new Intent(this, CaptureActivity.class));
                         }
                         break;
                     case SearchViewHolder.RESULT_SEARCH_CANCEL:

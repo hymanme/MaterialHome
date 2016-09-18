@@ -8,6 +8,11 @@
     <uses-permission android:name="android.permission.CLEAR_APP_CACHE" />
     <!-- 允许应用程序联网，以便向我们的服务器端发送数据 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!--相机-->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
     <application
         android:name=".BaseApplication"
         android:allowBackup="true"
@@ -48,6 +53,16 @@
         <activity
             android:name=".ui.activity.CategoryDetailActivity"
             android:theme="@style/AppTheme.DayNight.NoActionBar"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity
+            android:name=".ui.activity.WebViewActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.DayNight.NoActionBar"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity
+            android:name=".ui.activity.CaptureActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.DayNight.NoActionBar.Fullscreen"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
     </application>
 

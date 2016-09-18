@@ -37,4 +37,8 @@
     <string name="delete_bookshelf_success">删除书架成功</string>
     <string name="no_more">没有更多了</string>
     <string name="keyword_is_empty">搜索关键字不能为空</string>
+    <string name="rich_scan">扫一扫</string>
+    <string name="open_flashlight">开灯</string>
+    <string name="capture_hint">将书本背面的条形码放入框内，\n即可自动扫描</string>
+    <string name="action_open_in_browser">在浏览器中打开</string>
 </resources>
