@@ -14,7 +14,6 @@ public class Bookshelf {
     private String remark;
     private String createTime;
     private long order;
-    private boolean isSortable;
 
     public int getIndex() {
         return index;
@@ -70,13 +69,5 @@ public class Bookshelf {
 
     public void setOrder(long order) {
         this.order = order;
-    }
-
-    public boolean isSortable() {
-        return isSortable;
-    }
-
-    public void setSortable(boolean sortable) {
-        isSortable = sortable;
     }
 }

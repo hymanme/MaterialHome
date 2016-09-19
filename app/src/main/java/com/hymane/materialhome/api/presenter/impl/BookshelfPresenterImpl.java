@@ -6,6 +6,7 @@ import com.hymane.materialhome.api.model.impl.BookshelfModelImpl;
 import com.hymane.materialhome.api.presenter.IBookshelfPresenter;
 import com.hymane.materialhome.api.view.IBookListView;
 import com.hymane.materialhome.bean.http.BaseResponse;
+import com.hymane.materialhome.bean.table.Bookshelf;
 
 import java.util.List;
 
@@ -37,9 +38,15 @@ public class BookshelfPresenterImpl implements IBookshelfPresenter, ApiCompleteL
     }
 
     @Override
-    public void updateBookshelf(String id, String title, String remark) {
+    public void updateBookshelf(Bookshelf bookshelf) {
         mBookListView.showProgress();
-        mBookshelfModel.updateBookshelf(id, title, remark, this);
+        mBookshelfModel.updateBookshelf(bookshelf, this);
+    }
+
+    @Override
+    public void orderBookshelf(int id, long front, long behind) {
+        mBookListView.showProgress();
+        mBookshelfModel.orderBookshelf(id, front, behind, this);
     }
 
     @Override

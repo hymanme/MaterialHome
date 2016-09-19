@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.ViewGroup;
@@ -270,6 +271,18 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
                 }
             }
             mbookshelfAdapter.notifyItemMoved(fromPosition, toPosition);
+//            Log.i("TAG", "fromPosition=" + fromPosition + "||toPosition=" + toPosition);
+//            long front = 0;
+//            long behind = 0;
+//            if (toPosition == 0) {
+//                fromPosition = 0;
+//            } else if (toPosition == mBookshelfs.size() - 1) {
+//                behind = System.currentTimeMillis();
+//            } else {
+//                front = mBookshelfs.get(toPosition).getOrder();
+//                behind = mBookshelfs.get(toPosition + 1).getOrder();
+//            }
+//            mBookshelfPresenter.orderBookshelf(mBookshelfs.get(fromPosition).getId(),front,behind);
             //返回true表示执行拖动
             return true;
         }

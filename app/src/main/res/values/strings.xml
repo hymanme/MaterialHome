@@ -41,4 +41,5 @@
     <string name="open_flashlight">开灯</string>
     <string name="capture_hint">将书本背面的条形码放入框内，\n即可自动扫描</string>
     <string name="action_open_in_browser">在浏览器中打开</string>
+    <string name="you_may_search">大家都在搜</string>
 </resources>

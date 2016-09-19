@@ -2,7 +2,7 @@ package com.hymane.materialhome;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -12,6 +12,14 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
+        int l = 0;
+        int r = 3000*1000;
+        long count = 0;
+        do {
+            l = l + (r - l) / 2;
+            count++;
+        } while ((count <= 10000 && (r - l) > 2));
+        System.out.println("count==" + count);
         assertEquals(4, 2 + 2);
     }
 }

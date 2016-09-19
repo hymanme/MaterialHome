@@ -1,6 +1,7 @@
 package com.hymane.materialhome.api.model;
 
 import com.hymane.materialhome.api.ApiCompleteListener;
+import com.hymane.materialhome.bean.table.Bookshelf;
 
 /**
  * Author   :hymanme
@@ -29,12 +30,20 @@ public interface IBookshelfModel {
     /**
      * 修改一个书架
      *
+     * @param bookshelf bookshelf
+     * @param listener  回调
+     */
+    void updateBookshelf(Bookshelf bookshelf, ApiCompleteListener listener);
+
+    /**
+     * 排序
+     *
      * @param id       id
-     * @param title    书架名称
-     * @param remark   备注
+     * @param front    前一个bookshelf order
+     * @param behind   后一个bookshelf order
      * @param listener 回调
      */
-    void updateBookshelf(String id, String title, String remark, ApiCompleteListener listener);
+    void orderBookshelf(int id, long front, long behind, ApiCompleteListener listener);
 
     /**
      * 清空书架

@@ -113,6 +113,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                         return;
                                     } else {
                                         // TODO: 2016/9/13 修改书架
+
                                     }
                                     KeyBoardUtils.closeKeyBord(bookShelfHolder.et_bookshelf_name, mContext);
                                 }

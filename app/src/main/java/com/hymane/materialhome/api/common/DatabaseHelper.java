@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "MaterialHome.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static DatabaseHelper mDatabaseHelper = null;
 
     public static DatabaseHelper getInstance(Context context) {
@@ -42,6 +42,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        switch (oldVersion) {
+            case 1:
+                db.execSQL("alter table bookshelf add column 'order' integer");
+            default:
+                break;
+        }
     }
 }

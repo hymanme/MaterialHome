@@ -37,8 +37,6 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.fab)
     FloatingActionButton mFab;
     private List<BaseFragment> fragments;
-    private String[] titles;
-    public static HomeFragment mInstance;
 
     public static HomeFragment newInstance() {
 
@@ -61,7 +59,6 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initData(boolean isSavedNull) {
-        titles = new String[]{"热门", "新书", "小说", "分类", "文学", "其他"};
     }
 
     @Override
@@ -74,27 +71,27 @@ public class HomeFragment extends BaseFragment {
 
     private void init() {
         fragments = new ArrayList<>();
-        fragments.add(BookListFragment.newInstance(titles[0]));
-        fragments.add(BookListFragment.newInstance(titles[1]));
-        fragments.add(BookListFragment.newInstance(titles[2]));
+        fragments.add(BookListFragment.newInstance("新书"));
+        fragments.add(BookListFragment.newInstance("热门"));
+        fragments.add(BookListFragment.newInstance("推荐"));
         fragments.add(CategoryFragment.newInstance());
-        fragments.add(BookListFragment.newInstance(titles[4]));
-        fragments.add(BookListFragment.newInstance(titles[5]));
+        fragments.add(BookListFragment.newInstance("小说"));
+        fragments.add(DiscoverFragment.newInstance());
 
-        mViewPager.setAdapter(new MainAdapter(getChildFragmentManager(), titles, fragments));
+        mViewPager.setAdapter(new MainAdapter(getChildFragmentManager(), fragments));
         mViewPager.setOffscreenPageLimit(5);
         mViewPager.setCurrentItem(2);
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setSelectedTabIndicatorColor(getContext().getResources().getColor(R.color.white));
     }
 
-    static class MainAdapter extends FragmentStatePagerAdapter {
+    class MainAdapter extends FragmentStatePagerAdapter {
         private List<BaseFragment> mFragments;
         private final String[] titles;
 
-        public MainAdapter(FragmentManager fm, String[] titles, List<BaseFragment> fragments) {
+        public MainAdapter(FragmentManager fm, List<BaseFragment> fragments) {
             super(fm);
-            this.titles = titles;
+            this.titles = getResources().getStringArray(R.array.main_tab_type);
             mFragments = fragments;
         }
 
