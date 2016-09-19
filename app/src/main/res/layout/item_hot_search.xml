@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.github.hymanme.tagflowlayout.TagFlowLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tag_flow_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <com.github.hymanme.tagflowlayout.TagFlowLayout
-        android:id="@+id/tag_flow_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:expandHint="查看更多"
-        app:foldHint="点击缩回"
-        app:minVisibleHeight="90dp" />
-
-</LinearLayout>
+    android:layout_height="wrap_content"
+    app:expandHint="查看更多"
+    app:foldHint="点击缩回"
+    app:minVisibleHeight="90dp"
+    tools:context=".ui.activity.MainActivity" />

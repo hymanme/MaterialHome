@@ -11,7 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.github.hymanme.tagflowlayout.OnTagClickListener;
+import com.github.hymanme.tagflowlayout.TagAdapter;
+import com.github.hymanme.tagflowlayout.TagFlowLayout;
+import com.github.hymanme.tagflowlayout.bean.TagBean;
+import com.github.hymanme.tagflowlayout.tags.ColorfulTagView;
+import com.github.hymanme.tagflowlayout.tags.DefaultTagView;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.api.presenter.impl.HotSearchPresenterImpl;
 import com.hymane.materialhome.api.view.IHotSearchView;
@@ -25,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Author   :hymanme
@@ -122,6 +130,38 @@ public class DiscoverFragment extends BaseFragment implements IHotSearchView {
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof HotSearchHolder) {
+                //设置监听(单击和长按事件)
+                ((HotSearchHolder) holder).tagFlowLayout.setTagListener(new OnTagClickListener() {
+                    @Override
+                    public void onClick(TagFlowLayout parent, View view, int position) {
+                        Toast.makeText(UIUtils.getContext(), "click==" + ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onLongClick(TagFlowLayout parent, View view, int position) {
+                        Toast.makeText(UIUtils.getContext(), "long click==" + ((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+                TagAdapter<TagBean> tagAdapter = new TagAdapter<TagBean>() {
+
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        //定制tag的样式，包括背景颜色，点击时背景颜色，背景形状等
+                        DefaultTagView textView = new ColorfulTagView(UIUtils.getContext());
+                        textView.setText(((TagBean) getItem(position)).getName());
+                        return textView;
+                    }
+                };
+                //设置adapter
+                ((HotSearchHolder) holder).tagFlowLayout.setTagAdapter(tagAdapter);
+
+
+                //给adapter绑定数据
+                List<TagBean> tagBeans = new ArrayList<>();
+                for (int i = 0; i < 100; i++) {
+                    tagBeans.add(new TagBean(i, "tags" + i));
+                }
+                tagAdapter.addAllTags(tagBeans);
             }
         }
 
@@ -141,13 +181,14 @@ public class DiscoverFragment extends BaseFragment implements IHotSearchView {
     }
 
     class SearchHeaderHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView tv_search;
-        private ImageView iv_scan;
+        @BindView(R.id.tv_search)
+        TextView tv_search;
+        @BindView(R.id.iv_scan)
+        ImageView iv_scan;
 
         public SearchHeaderHolder(View itemView) {
             super(itemView);
-            tv_search = (TextView) itemView.findViewById(R.id.tv_search);
-            iv_scan = (ImageView) itemView.findViewById(R.id.iv_scan);
+            ButterKnife.bind(this, itemView);
             tv_search.setOnClickListener(this);
             iv_scan.setOnClickListener(this);
         }
@@ -165,9 +206,12 @@ public class DiscoverFragment extends BaseFragment implements IHotSearchView {
     }
 
     class HotSearchHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.tag_flow_layout)
+        TagFlowLayout tagFlowLayout;
 
         public HotSearchHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

@@ -3,7 +3,7 @@ package com.hymane.materialhome.bean.http;
 import com.hymane.materialhome.bean.BookRatingBean;
 import com.hymane.materialhome.bean.ImageBean;
 import com.hymane.materialhome.bean.SeriesBean;
-import com.hymane.materialhome.bean.TagBean;
+import com.hymane.materialhome.bean.BookTagBean;
 
 import java.io.Serializable;
 import java.util.List;
@@ -25,7 +25,7 @@ public class BookInfoResponse implements Serializable {
     private String[] author;
     private String[] translator;
     private String pubdate;
-    private List<TagBean> tags;
+    private List<BookTagBean> tags;
     private String image;
     private String ebook_url;
     private String pages;
@@ -111,11 +111,11 @@ public class BookInfoResponse implements Serializable {
         this.pubdate = pubdate;
     }
 
-    public List<TagBean> getTags() {
+    public List<BookTagBean> getTags() {
         return tags;
     }
 
-    public void setTags(List<TagBean> tags) {
+    public void setTags(List<BookTagBean> tags) {
         this.tags = tags;
     }
 

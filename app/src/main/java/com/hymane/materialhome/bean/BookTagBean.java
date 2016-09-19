@@ -9,7 +9,7 @@ import android.os.Parcelable;
  * Create at 2016/1/8
  * Description:
  */
-public class TagBean implements Parcelable{
+public class BookTagBean implements Parcelable{
     private int count;
     private String name;
     private String title;
@@ -50,21 +50,21 @@ public class TagBean implements Parcelable{
         dest.writeString(title);
     }
 
-    protected TagBean(Parcel in) {
+    protected BookTagBean(Parcel in) {
         count = in.readInt();
         name = in.readString();
         title = in.readString();
     }
 
-    public static final Creator<TagBean> CREATOR = new Creator<TagBean>() {
+    public static final Creator<BookTagBean> CREATOR = new Creator<BookTagBean>() {
         @Override
-        public TagBean createFromParcel(Parcel in) {
-            return new TagBean(in);
+        public BookTagBean createFromParcel(Parcel in) {
+            return new BookTagBean(in);
         }
 
         @Override
-        public TagBean[] newArray(int size) {
-            return new TagBean[size];
+        public BookTagBean[] newArray(int size) {
+            return new BookTagBean[size];
         }
     };
 }

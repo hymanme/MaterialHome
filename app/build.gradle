@@ -65,7 +65,7 @@ dependencies {
     //ExpandTextView
     compile 'com.hymane.expandtextview:library:1.0.1'
     //TagFlowLayout
-    compile 'com.github.hymanme.tagflowlayout:tagflowlayout:0.2.0'
+    compile 'com.github.hymanme.tagflowlayout:tagflowlayout:0.2.1'
     //FlycoLabelView
     compile 'com.flyco.labelview:FlycoLabelView_Lib:1.0.2@aar'
     //ParticleView
