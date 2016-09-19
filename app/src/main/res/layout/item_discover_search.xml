@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/tag_layout_bg">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:background="@color/white">
+        android:background="?attr/discoverSearchBg">
 
         <TextView
             android:id="@+id/tv_search"
@@ -20,7 +19,7 @@
             android:gravity="center_vertical"
             android:padding="4dp"
             android:text="@string/search_hint"
-            android:textColor="@color/hint_text"
+            android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp" />
 
         <ImageView

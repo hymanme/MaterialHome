@@ -8,6 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="publishInfoBackground">@color/publish_info_bg</item>
         <item name="searchIconColor">@color/search_icon_color</item>
+        <item name="discoverSearchBg">@color/white</item>
+
     </style>
 
     <style name="AppTheme.DayNight.NoActionBar">

@@ -16,5 +16,6 @@
     <color name="dividers">#1f000000</color>
     <color name="grass_green">#46C01C</color>
     <color name="bookshelf_tag_mask">#66ffffff</color>
+    <color name="discover_search_bg">#de666666</color>
 
 </resources>

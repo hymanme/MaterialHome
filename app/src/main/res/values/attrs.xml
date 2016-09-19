@@ -3,5 +3,6 @@
     <declare-styleable name="MaterialHome">
         <attr name="publishInfoBackground" format="reference|color" />
         <attr name="searchIconColor" format="reference|color" />
+        <attr name="discoverSearchBg" format="reference|color" />
     </declare-styleable>
 </resources>

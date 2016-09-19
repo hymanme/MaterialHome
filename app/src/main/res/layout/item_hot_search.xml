@@ -7,5 +7,6 @@
     android:layout_height="wrap_content"
     app:expandHint="查看更多"
     app:foldHint="点击缩回"
-    app:minVisibleHeight="90dp"
+    app:backGroundColor="@android:color/transparent"
+    app:minVisibleHeight="100dp"
     tools:context=".ui.activity.MainActivity" />
