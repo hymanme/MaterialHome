@@ -3,6 +3,7 @@ package com.hymane.materialhome.ui.activity;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -21,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.PopupWindow;
@@ -218,7 +220,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                 @Override
                 public void onDismiss() {
-                    holder.et_search_content.clearFocus();
                     holder.et_search_content.setText("");
                     KeyBoardUtils.closeKeyBord(holder.et_search_content, MainActivity.this);
                     ValueAnimator animator = ValueAnimator.ofFloat(0.7f, 1f);
@@ -258,6 +259,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
      * @param from
      * @param to
      */
+
     public void switchContent(BaseFragment from, BaseFragment to) {
         if (currentFragment == to) {
             return;

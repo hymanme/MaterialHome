@@ -126,6 +126,7 @@ public class BookshelfFragment extends BaseFragment implements IBookListView, Sw
                     .setTitle(UIUtils.getContext().getString(R.string.add_bookshelf))
                     .setNegativeButton(R.string.cancel, (dialog, which) -> {
                         dialog.dismiss();
+                        KeyBoardUtils.closeKeyBord(bookShelfHolder.et_bookshelf_name, getActivity());
                     })
                     .setPositiveButton(R.string.ok, (dialog, which) -> {
                         if (!bookShelfHolder.check()) {

@@ -20,7 +20,6 @@ import com.hymane.materialhome.holder.BookShelfEditorHolder;
 import com.hymane.materialhome.ui.activity.BaseActivity;
 import com.hymane.materialhome.utils.DensityUtils;
 import com.hymane.materialhome.utils.KeyBoardUtils;
-import com.hymane.materialhome.utils.TimeUtils;
 import com.hymane.materialhome.utils.UIUtils;
 
 import java.util.List;
@@ -103,6 +102,7 @@ public class BookShelfAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
+                                    KeyBoardUtils.closeKeyBord(bookShelfHolder.et_bookshelf_name, mContext);
                                 }
                             })
                             .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
