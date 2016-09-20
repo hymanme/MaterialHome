@@ -8,6 +8,14 @@
         <item>标签</item>
         <item>发现</item>
     </string-array>
+    <string-array name="ebook_tab_type">
+        <item>最热</item>
+        <item>留存</item>
+        <item>完结</item>
+        <item>潜力</item>
+        <item>分类</item>
+        <item>发现</item>
+    </string-array>
     <string-array name="book_category">
         <item>文学</item>
         <item>流行</item>

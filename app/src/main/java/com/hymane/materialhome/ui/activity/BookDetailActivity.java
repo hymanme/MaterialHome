@@ -127,8 +127,13 @@ public class BookDetailActivity extends BaseActivity implements IBookDetailView 
                 sb.append(getString(R.string.share_book_1));
                 sb.append(mBookInfoResponse.getTitle());
                 sb.append(getString(R.string.share_book_2));
-
                 UIUtils.share(this, sb.toString(), null);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (item.getIcon() instanceof Animatable) {
+                        ((Animatable) item.getIcon()).start();
+                    }
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

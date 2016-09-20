@@ -17,20 +17,20 @@ public class Blur {
 
         Bitmap bitmap = Bitmap.createScaledBitmap(sentBitmap, sentBitmap.getWidth() / 2, sentBitmap.getHeight() / 2, false);
         // FIXME: 2016/2/25 0025 使用这个新api会出现bug
-//        if (VERSION.SDK_INT > 16) {
-//            final RenderScript rs = RenderScript.create(x.app());
-//            final Allocation input = Allocation.createFromBitmap(rs, bitmap, Allocation.MipmapControl.MIPMAP_NONE,
-//                    Allocation.USAGE_SCRIPT);
-//            final Allocation output = Allocation.createTyped(rs, input.getAction());
-//            final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
-//            script.setRadius(radius);
-//            script.setInput(input);
-//            script.forEach(output);
-//            output.copyTo(bitmap);
-//            rs.destroy();
-//            input.destroy();
-//            output.destroy();
-//            script.destroy();
+//        if (Build.VERSION.SDK_INT > 16) {
+//            final RenderScript rs = RenderScript.create(UIUtils.getContext());
+//            try {
+//                final Allocation input = Allocation.createFromBitmap(rs, bitmap, Allocation.MipmapControl.MIPMAP_NONE,
+//                        Allocation.USAGE_SCRIPT);
+//                final Allocation output = Allocation.createTyped(rs, input.getType());
+//                final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+//                script.setRadius(radius);
+//                script.setInput(input);
+//                script.forEach(output);
+//                output.copyTo(bitmap);
+//            } finally {
+//                rs.destroy();
+//            }
 //            return bitmap;
 //        }
 

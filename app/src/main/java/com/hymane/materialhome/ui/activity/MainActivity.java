@@ -30,6 +30,7 @@ import com.hymane.materialhome.common.Constant;
 import com.hymane.materialhome.holder.SearchViewHolder;
 import com.hymane.materialhome.ui.fragment.BaseFragment;
 import com.hymane.materialhome.ui.fragment.BookshelfFragment;
+import com.hymane.materialhome.ui.fragment.EBookFragment;
 import com.hymane.materialhome.ui.fragment.HomeFragment;
 import com.hymane.materialhome.utils.KeyBoardUtils;
 import com.hymane.materialhome.utils.PermissionUtils;
@@ -320,10 +321,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (id == R.id.nav_home) {
             // Handle the camera action
             switchContent(currentFragment, HomeFragment.newInstance());
+        } else if (id == R.id.nav_ebook) {
+            switchContent(currentFragment, EBookFragment.newInstance());
         } else if (id == R.id.nav_bookshelf) {
             switchContent(currentFragment, BookshelfFragment.newInstance());
-        } else if (id == R.id.nav_slideshow) {
-
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_theme) {

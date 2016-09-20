@@ -15,16 +15,23 @@
   limitations under the License.
   -->
 
-<animated-vector
+<vector
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/ic_share_avd">
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportHeight="24"
+    android:viewportWidth="24">
 
-    <target
+    <path
         android:name="@string/name_dots"
-        android:animation="@anim/share_dots" />
+        android:pathData="@string/path_share_dots"
+        android:fillColor="@color/white" />
 
-    <target
+    <path
         android:name="@string/name_lines"
-        android:animation="@anim/share_lines" />
+        android:pathData="@string/path_share_lines"
+        android:strokeColor="@color/white"
+        android:strokeLineCap="square"
+        android:strokeWidth="2" />
 
-</animated-vector>
+</vector>
