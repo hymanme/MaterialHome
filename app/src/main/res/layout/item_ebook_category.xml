@@ -6,21 +6,11 @@
     android:background="?android:selectableItemBackground"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingBottom="8dp"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
-    android:paddingTop="8dp">
-
-    <ImageView
-        android:id="@+id/iv_category_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_category_literature" />
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/tv_ceil_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-2dp"
         android:text="文学" />
 </LinearLayout>

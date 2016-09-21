@@ -1,6 +1,5 @@
 package com.hymane.materialhome.ui.adapter;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +9,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hymane.materialhome.R;
-import com.hymane.materialhome.ui.activity.CategoryDetailActivity;
-import com.hymane.materialhome.utils.UIUtils;
+import com.hymane.materialhome.bean.http.ebook.CategoryList;
+
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Author   :hymanme
@@ -22,10 +25,12 @@ import com.hymane.materialhome.utils.UIUtils;
 public class EBookCategoryAdapter extends RecyclerView.Adapter {
     private static final int TYPE_TITLE = 0;
     private static final int TYPE_ITEM = 1;
-    private String[] mCategory;
+    private List<CategoryList.CategoryBean> male;
+    private List<CategoryList.CategoryBean> female;
 
-    public EBookCategoryAdapter() {
-        mCategory = UIUtils.getContext().getResources().getStringArray(R.array.book_category);
+    public EBookCategoryAdapter(List<CategoryList.CategoryBean> male, List<CategoryList.CategoryBean> female) {
+        this.male = male;
+        this.female = female;
     }
 
     @Override
@@ -54,22 +59,34 @@ public class EBookCategoryAdapter extends RecyclerView.Adapter {
 //                UIUtils.startActivity(intent);
 //            }
 //        });
+        if (holder instanceof TitleHolder) {
+            if (position != 0) {
+                ((TitleHolder) holder).tv_title.setText("female");
+            }
+        }
     }
 
     @Override
     public int getItemViewType(int position) {
-        return super.getItemViewType(position);
+        if (position == 0 || position == male.size() + 1) {
+            return TYPE_TITLE;
+        } else {
+            return TYPE_ITEM;
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mCategory.length;
+        return male.size() + female.size() + 2;
     }
 
     class TitleHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.tv_title)
+        TextView tv_title;
 
         public TitleHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 

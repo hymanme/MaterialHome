@@ -1,5 +1,6 @@
 package com.hymane.materialhome.bean.http.ebook;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,6 +18,12 @@ public class CategoryList extends Base {
      */
 
     private List<CategoryBean> male;
+
+    public CategoryList() {
+        male = new ArrayList<>();
+        female = new ArrayList<>();
+    }
+
     /**
      * name : 古代言情
      * bookCount : 125103

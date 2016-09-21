@@ -10,8 +10,12 @@ import android.view.ViewGroup;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.api.presenter.impl.EBookPresenterImpl;
 import com.hymane.materialhome.api.view.IEBookListView;
+import com.hymane.materialhome.bean.http.ebook.CategoryList;
 import com.hymane.materialhome.ui.adapter.EBookCategoryAdapter;
-import com.hymane.materialhome.ui.widget.RecyclerViewDecoration.SpacesItemDecoration;
+import com.hymane.materialhome.ui.widget.RecyclerViewDecoration.SpacesCategoryDecoration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -27,6 +31,8 @@ public class EBookCategoryFragment extends BaseFragment implements IEBookListVie
     private GridLayoutManager mLayoutManager;
     private EBookCategoryAdapter mCategoryAdapter;
     private EBookPresenterImpl mEBookPresenter;
+    private List<CategoryList.CategoryBean> male;
+    private List<CategoryList.CategoryBean> female;
 
     public static EBookCategoryFragment newInstance() {
 
@@ -46,19 +52,25 @@ public class EBookCategoryFragment extends BaseFragment implements IEBookListVie
     @Override
     protected void initEvents() {
         int spanCount = getResources().getInteger(R.integer.category_span_count);
+        male = new ArrayList<>();
+        female = new ArrayList<>();
         //添加装饰器
-        mRecyclerView.addItemDecoration(new SpacesItemDecoration(20));
+        mRecyclerView.addItemDecoration(new SpacesCategoryDecoration(5));
         //设置布局管理器
         mLayoutManager = new GridLayoutManager(getActivity(), spanCount);
         mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                return spanCount;
+                if (position == 0 || position == male.size() + 1) {
+                    return spanCount;
+                } else {
+                    return 1;
+                }
             }
         });
         mRecyclerView.setLayoutManager(mLayoutManager);
         //设置adapter
-        mCategoryAdapter = new EBookCategoryAdapter();
+        mCategoryAdapter = new EBookCategoryAdapter(male, female);
         mRecyclerView.setAdapter(mCategoryAdapter);
         //设置Item增加、移除动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -66,9 +78,7 @@ public class EBookCategoryFragment extends BaseFragment implements IEBookListVie
 
     @Override
     protected void initData(boolean isSavedNull) {
-        if (isSavedNull) {
-            mEBookPresenter.getCategoryList();
-        }
+        mEBookPresenter.getCategoryList();
     }
 
     @Override
@@ -88,6 +98,12 @@ public class EBookCategoryFragment extends BaseFragment implements IEBookListVie
 
     @Override
     public void refreshData(Object result) {
-
+        if (result instanceof CategoryList) {
+            male.clear();
+            female.clear();
+            male.addAll(((CategoryList) result).getMale());
+            female.addAll(((CategoryList) result).getFemale());
+            mCategoryAdapter.notifyDataSetChanged();
+        }
     }
 }

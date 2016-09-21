@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:lines="1"
-        android:maxEms="6"
+        android:maxEms="7"
         android:padding="4dp"
         android:text="狼图腾"
         android:textColor="?android:attr/textColorPrimary"
