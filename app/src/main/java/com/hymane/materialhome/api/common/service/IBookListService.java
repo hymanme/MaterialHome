@@ -1,6 +1,6 @@
 package com.hymane.materialhome.api.common.service;
 
-import com.hymane.materialhome.bean.http.BookListResponse;
+import com.hymane.materialhome.bean.http.douban.BookListResponse;
 
 import retrofit2.Response;
 import retrofit2.http.GET;

@@ -1,6 +1,6 @@
 package com.hymane.materialhome.api;
 
-import com.hymane.materialhome.bean.http.BaseResponse;
+import com.hymane.materialhome.bean.http.douban.BaseResponse;
 
 /**
  * Author   :hymanme

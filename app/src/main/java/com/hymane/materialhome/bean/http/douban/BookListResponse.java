@@ -1,22 +1,24 @@
-package com.hymane.materialhome.bean.http;
+package com.hymane.materialhome.bean.http.douban;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Author   :hymanme
  * Email    :hymanme@163.com
- * Create at 2016/2/23 0023
+ * Create at 2016/1/8
  * Description:
  */
-public class BookReviewsListResponse extends BaseResponse {
+public class BookListResponse extends BaseResponse {
     private int count;
     private int start;
     private int total;
-    private List<BookReviewResponse> reviews;
+    protected List<BookInfoResponse> books;
 
-    public BookReviewsListResponse() {
-        this.reviews = new ArrayList<>();
+    public BookListResponse() {
+    }
+
+    public BookListResponse(int code, String msg) {
+        super(code, msg);
     }
 
     public int getCount() {
@@ -43,11 +45,11 @@ public class BookReviewsListResponse extends BaseResponse {
         this.total = total;
     }
 
-    public List<BookReviewResponse> getReviews() {
-        return reviews;
+    public List<BookInfoResponse> getBooks() {
+        return books;
     }
 
-    public void setReviews(List<BookReviewResponse> reviews) {
-        this.reviews = reviews;
+    public void setBooks(List<BookInfoResponse> books) {
+        this.books = books;
     }
 }

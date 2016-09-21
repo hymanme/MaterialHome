@@ -11,8 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.api.presenter.impl.BookListPresenterImpl;
 import com.hymane.materialhome.api.view.IBookListView;
-import com.hymane.materialhome.bean.http.BookInfoResponse;
-import com.hymane.materialhome.bean.http.BookListResponse;
+import com.hymane.materialhome.bean.http.douban.BookInfoResponse;
+import com.hymane.materialhome.bean.http.douban.BookListResponse;
 import com.hymane.materialhome.ui.adapter.BookListAdapter;
 
 import java.util.ArrayList;

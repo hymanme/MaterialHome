@@ -1,4 +1,4 @@
-package com.hymane.materialhome.bean.http;
+package com.hymane.materialhome.bean.http.douban;
 
 /**
  * Author   :hymanme

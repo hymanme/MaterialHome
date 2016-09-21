@@ -1,4 +1,4 @@
-package com.hymane.materialhome.bean.http;
+package com.hymane.materialhome.bean.http.douban;
 
 /**
  * Created by hyman on 2016/8/2.

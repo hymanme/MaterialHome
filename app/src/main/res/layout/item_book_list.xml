@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
-    android:background="@color/white"
     android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout

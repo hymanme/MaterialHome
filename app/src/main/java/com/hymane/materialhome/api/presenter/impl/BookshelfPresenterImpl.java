@@ -5,7 +5,7 @@ import com.hymane.materialhome.api.model.IBookshelfModel;
 import com.hymane.materialhome.api.model.impl.BookshelfModelImpl;
 import com.hymane.materialhome.api.presenter.IBookshelfPresenter;
 import com.hymane.materialhome.api.view.IBookListView;
-import com.hymane.materialhome.bean.http.BaseResponse;
+import com.hymane.materialhome.bean.http.douban.BaseResponse;
 import com.hymane.materialhome.bean.table.Bookshelf;
 
 import java.util.List;

@@ -5,7 +5,7 @@ import com.hymane.materialhome.api.model.IHotSearchModel;
 import com.hymane.materialhome.api.model.impl.HotSearchModelImpl;
 import com.hymane.materialhome.api.presenter.IHotSearchPresenter;
 import com.hymane.materialhome.api.view.IHotSearchView;
-import com.hymane.materialhome.bean.http.BaseResponse;
+import com.hymane.materialhome.bean.http.douban.BaseResponse;
 
 /**
  * Author   :hymanme

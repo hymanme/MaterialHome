@@ -22,7 +22,7 @@ import com.github.hymanme.tagflowlayout.tags.DefaultTagView;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.api.presenter.impl.HotSearchPresenterImpl;
 import com.hymane.materialhome.api.view.IHotSearchView;
-import com.hymane.materialhome.bean.http.HotSearchResponse;
+import com.hymane.materialhome.bean.http.douban.HotSearchResponse;
 import com.hymane.materialhome.ui.activity.CaptureActivity;
 import com.hymane.materialhome.ui.activity.MainActivity;
 import com.hymane.materialhome.utils.PermissionUtils;

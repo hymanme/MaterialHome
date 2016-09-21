@@ -1,8 +1,11 @@
 package com.hymane.materialhome.api.common.service;
 
+import com.hymane.materialhome.bean.http.ebook.CategoryList;
+import com.hymane.materialhome.bean.http.ebook.Rankings;
+
 import retrofit2.http.GET;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
+import rx.Observable;
 
 /**
  * Author   :hymanme
@@ -12,6 +15,26 @@ import retrofit2.http.Query;
  */
 
 public interface IEBooksService {
+
+    /**
+     * 获取单一排行榜
+     * 周榜：rankingId->_id
+     * 月榜：rankingId->monthRank
+     * 总榜：rankingId->totalRank
+     *
+     * @return
+     */
+    @GET("/ranking/{rankingId}")
+    Observable<Rankings> getRanking(@Path("rankingId") String rankingId);
+
+    /**
+     * 获取一级分类
+     *
+     * @return
+     */
+    @GET("/cats/lv2/statistics")
+    Observable<CategoryList> getCategoryList();
+
     /***
      * 图书推荐
      *
@@ -169,7 +192,7 @@ public interface IEBooksService {
 //    Observable<BookListDetail> getBookListDetail(@Path("bookListId") String bookListId);
 //
 //    /**
-//     * 获取分类
+//     * 获取一级分类
 //     *
 //     * @return
 //     */
@@ -177,7 +200,7 @@ public interface IEBooksService {
 //    Observable<CategoryList> getCategoryList();
 //
 //    /**
-//     * 获取二级分类
+//     * 获取一级以及二级分类
 //     *
 //     * @return
 //     */
@@ -185,7 +208,7 @@ public interface IEBooksService {
 //    Observable<CategoryListLv2> getCategoryListLv2();
 //
 //    /**
-//     * 按分类获取书籍列表
+//     * 按分类获取书籍列表，分类详细页面
 //     *
 //     * @param gender male、female
 //     * @param type   hot(热门)、new(新书)、reputation(好评)、over(完结)

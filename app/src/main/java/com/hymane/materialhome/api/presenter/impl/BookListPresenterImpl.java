@@ -7,8 +7,8 @@ import com.hymane.materialhome.api.model.IBookListModel;
 import com.hymane.materialhome.api.model.impl.BookListModelImpl;
 import com.hymane.materialhome.api.presenter.IBookListPresenter;
 import com.hymane.materialhome.api.view.IBookListView;
-import com.hymane.materialhome.bean.http.BaseResponse;
-import com.hymane.materialhome.bean.http.BookListResponse;
+import com.hymane.materialhome.bean.http.douban.BaseResponse;
+import com.hymane.materialhome.bean.http.douban.BookListResponse;
 import com.hymane.materialhome.utils.NetworkUtils;
 
 /**

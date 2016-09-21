@@ -12,12 +12,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.hymane.materialhome.R;
-import com.hymane.materialhome.api.presenter.impl.BookListPresenterImpl;
-import com.hymane.materialhome.api.view.IBookListView;
-import com.hymane.materialhome.bean.http.douban.BookInfoResponse;
-import com.hymane.materialhome.bean.http.douban.BookListResponse;
+import com.hymane.materialhome.api.presenter.impl.EBookPresenterImpl;
+import com.hymane.materialhome.api.view.IEBookListView;
+import com.hymane.materialhome.bean.http.ebook.Rankings;
+import com.hymane.materialhome.bean.http.ebook.Rankings.RankingBean.BooksBean;
 import com.hymane.materialhome.ui.activity.MainActivity;
-import com.hymane.materialhome.ui.adapter.BookListAdapter;
+import com.hymane.materialhome.ui.adapter.EBookListAdapter;
 import com.hymane.materialhome.utils.DensityUtils;
 
 import java.util.ArrayList;
@@ -32,30 +32,26 @@ import butterknife.BindView;
  * Description:
  */
 
-public class BookListFragment extends BaseFragment implements IBookListView, SwipeRefreshLayout.OnRefreshListener {
+public class EBookListFragment extends BaseFragment implements IEBookListView, SwipeRefreshLayout.OnRefreshListener {
     //接口调用参数 tag：标签，q：搜索关键词，fields：过滤词，count：一次返回数据数，
     // page：当前已经加载的页数，PS:tag,q只存在其中一个，另一个置空
-    private String tag = "hot";
-    private static final String fields = "id,title,subtitle,origin_title,rating,author,translator,publisher,pubdate,summary,images,pages,price,binding,isbn13,series";
-    private static int count = 20;
-    private static int page = 0;
-    private static final int group = 2;
+    private String categoryId = "";
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
     @BindView(R.id.swipe_refresh_widget)
     SwipeRefreshLayout mSwipeRefreshLayout;
     private GridLayoutManager mLayoutManager;
-    private BookListAdapter mListAdapter;
-    private List<BookInfoResponse> bookInfoResponses;
-    private BookListPresenterImpl bookListPresenter;
-    private int listPosition;
 
-    public static BookListFragment newInstance(String tag) {
+    private EBookListAdapter mListAdapter;
+    private List<BooksBean> bookInfoResponses;
+    private EBookPresenterImpl eBookRankPresenter;
+
+    public static EBookListFragment newInstance(String id) {
 
         Bundle args = new Bundle();
-        args.putString("tag", tag);
-        BookListFragment fragment = new BookListFragment();
+        args.putString("categoryId", id);
+        EBookListFragment fragment = new EBookListFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,19 +59,16 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
     @Override
     protected void initRootView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.recycler_content, container, false);
-        if (savedInstanceState != null) {
-            listPosition = savedInstanceState.getInt("listPosition");
-        }
-        String result = getArguments().getString("tag");
+        String result = getArguments().getString("categoryId");
         if (!TextUtils.isEmpty(result)) {
-            tag = result;
+            categoryId = result;
         }
     }
 
     @Override
     protected void initEvents() {
         int spanCount = getResources().getInteger(R.integer.home_span_count);
-        bookListPresenter = new BookListPresenterImpl(this);
+        eBookRankPresenter = new EBookPresenterImpl(this);
         bookInfoResponses = new ArrayList<>();
         mSwipeRefreshLayout.setColorSchemeResources(R.color.recycler_color1, R.color.recycler_color2,
                 R.color.recycler_color3, R.color.recycler_color4);
@@ -92,9 +85,8 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         //设置adapter
-        mListAdapter = new BookListAdapter(getActivity(), bookInfoResponses, spanCount);
+        mListAdapter = new EBookListAdapter(getActivity(), bookInfoResponses, spanCount);
         mRecyclerView.setAdapter(mListAdapter);
-        mRecyclerView.smoothScrollToPosition(listPosition);
 
         //设置Item增加、移除动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -103,16 +95,10 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putInt("listPosition", mLayoutManager.findLastVisibleItemPosition());
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
     protected void initData(boolean isSavedNull) {
-        if (isSavedNull) {
-            onRefresh();
-        }
+//        if (isSavedNull) {
+        onRefresh();
+//        }
     }
 
     @Override
@@ -132,30 +118,22 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
 
     @Override
     public void refreshData(Object result) {
-        if (result instanceof BookListResponse) {
+        if (result instanceof Rankings.RankingBean) {
             bookInfoResponses.clear();
-            bookInfoResponses.addAll(((BookListResponse) result).getBooks());
+            bookInfoResponses.addAll(((Rankings.RankingBean) result).getBooks());
             mListAdapter.notifyDataSetChanged();
-            page++;
         }
-    }
-
-    @Override
-    public void addData(Object result) {
-        bookInfoResponses.addAll(((BookListResponse) result).getBooks());
-        mListAdapter.notifyDataSetChanged();
-        page++;
     }
 
     @Override
     public void onRefresh() {
-        bookListPresenter.loadBooks(null, tag, 0, count, fields);
+        eBookRankPresenter.getRanking(categoryId);
     }
 
     public void onLoadMore() {
-        if (!mSwipeRefreshLayout.isRefreshing()) {
-            bookListPresenter.loadBooks(null, tag, page * count, count, fields);
-        }
+//        if (!mSwipeRefreshLayout.isRefreshing()) {
+//            bookListPresenter.loadBooks(null, tag, page * count, count, fields);
+//        }
     }
 
     class RecyclerViewScrollDetector extends RecyclerView.OnScrollListener {

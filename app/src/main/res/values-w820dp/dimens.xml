@@ -6,4 +6,5 @@
 
     <integer name="home_span_count">3</integer>
     <integer name="gallery_span_count">3</integer>
+    <integer name="category_span_count">4</integer>
 </resources>

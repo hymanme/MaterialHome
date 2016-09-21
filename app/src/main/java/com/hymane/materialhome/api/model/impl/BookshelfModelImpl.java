@@ -6,7 +6,7 @@ import android.database.Cursor;
 import com.hymane.materialhome.api.ApiCompleteListener;
 import com.hymane.materialhome.api.common.DatabaseHelper;
 import com.hymane.materialhome.api.model.IBookshelfModel;
-import com.hymane.materialhome.bean.http.BaseResponse;
+import com.hymane.materialhome.bean.http.douban.BaseResponse;
 import com.hymane.materialhome.bean.table.Bookshelf;
 import com.hymane.materialhome.utils.UIUtils;
 import com.squareup.sqlbrite.BriteDatabase;

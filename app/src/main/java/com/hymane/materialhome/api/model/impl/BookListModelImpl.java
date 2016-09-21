@@ -4,8 +4,8 @@ import com.hymane.materialhome.api.ApiCompleteListener;
 import com.hymane.materialhome.api.common.ServiceFactory;
 import com.hymane.materialhome.api.common.service.IBookListService;
 import com.hymane.materialhome.api.model.IBookListModel;
-import com.hymane.materialhome.bean.http.BaseResponse;
-import com.hymane.materialhome.bean.http.BookListResponse;
+import com.hymane.materialhome.bean.http.douban.BaseResponse;
+import com.hymane.materialhome.bean.http.douban.BookListResponse;
 import com.hymane.materialhome.common.URL;
 
 import java.net.UnknownHostException;

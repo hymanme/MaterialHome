@@ -13,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.hymane.materialhome.R;
+import com.hymane.materialhome.common.Constant;
 import com.hymane.materialhome.ui.activity.MainActivity;
+import com.hymane.materialhome.utils.EBookUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +56,7 @@ public class EBookFragment extends BaseFragment {
 
     @Override
     protected void initEvents() {
-        mToolbar.setTitle("EBooks");
+        mToolbar.setTitle("EBook");
     }
 
     @Override
@@ -71,11 +73,11 @@ public class EBookFragment extends BaseFragment {
 
     private void init() {
         fragments = new ArrayList<>();
-        fragments.add(BookListFragment.newInstance("新书"));
-        fragments.add(BookListFragment.newInstance("热门"));
-        fragments.add(BookListFragment.newInstance("推荐"));
-        fragments.add(BookListFragment.newInstance("小说"));
-        fragments.add(CategoryFragment.newInstance());
+        fragments.add(EBookListFragment.newInstance(EBookUtils.getHotRankingId(Constant.Gender.MALE)));
+        fragments.add(EBookListFragment.newInstance(EBookUtils.getRetainedRankingId(Constant.Gender.MALE)));
+        fragments.add(EBookListFragment.newInstance(EBookUtils.getFinishedRankingId(Constant.Gender.MALE)));
+        fragments.add(EBookListFragment.newInstance(EBookUtils.getPotentialRankingId(Constant.Gender.MALE)));
+        fragments.add(EBookCategoryFragment.newInstance());
         fragments.add(DiscoverFragment.newInstance());
 
         mViewPager.setAdapter(new EBookFragment.MainAdapter(getChildFragmentManager(), fragments));

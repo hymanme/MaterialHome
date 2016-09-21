@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.hymane.materialhome.R;
-import com.hymane.materialhome.bean.http.BookInfoResponse;
+import com.hymane.materialhome.bean.http.douban.BookInfoResponse;
 import com.hymane.materialhome.ui.activity.BaseActivity;
 import com.hymane.materialhome.ui.activity.BookDetailActivity;
 import com.hymane.materialhome.utils.UIUtils;

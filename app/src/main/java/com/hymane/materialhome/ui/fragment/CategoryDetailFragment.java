@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.api.presenter.impl.BookListPresenterImpl;
 import com.hymane.materialhome.api.view.IBookListView;
-import com.hymane.materialhome.bean.http.BookInfoResponse;
-import com.hymane.materialhome.bean.http.BookListResponse;
+import com.hymane.materialhome.bean.http.douban.BookInfoResponse;
+import com.hymane.materialhome.bean.http.douban.BookListResponse;
 import com.hymane.materialhome.ui.activity.BaseActivity;
 import com.hymane.materialhome.ui.adapter.BookListAdapter;
 

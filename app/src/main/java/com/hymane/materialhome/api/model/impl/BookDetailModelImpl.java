@@ -5,9 +5,9 @@ import com.hymane.materialhome.api.common.ServiceFactory;
 import com.hymane.materialhome.api.common.service.IBookReviewsService;
 import com.hymane.materialhome.api.common.service.IBookSeriesService;
 import com.hymane.materialhome.api.model.IBookDetailModel;
-import com.hymane.materialhome.bean.http.BaseResponse;
-import com.hymane.materialhome.bean.http.BookReviewsListResponse;
-import com.hymane.materialhome.bean.http.BookSeriesListResponse;
+import com.hymane.materialhome.bean.http.douban.BaseResponse;
+import com.hymane.materialhome.bean.http.douban.BookReviewsListResponse;
+import com.hymane.materialhome.bean.http.douban.BookSeriesListResponse;
 import com.hymane.materialhome.common.URL;
 
 import java.net.UnknownHostException;

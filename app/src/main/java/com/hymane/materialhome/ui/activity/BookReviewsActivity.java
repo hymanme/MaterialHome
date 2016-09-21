@@ -10,8 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.api.presenter.impl.BookDetailPresenterImpl;
 import com.hymane.materialhome.api.view.IReviewsView;
-import com.hymane.materialhome.bean.http.BookReviewResponse;
-import com.hymane.materialhome.bean.http.BookReviewsListResponse;
+import com.hymane.materialhome.bean.http.douban.BookReviewResponse;
+import com.hymane.materialhome.bean.http.douban.BookReviewsListResponse;
 import com.hymane.materialhome.ui.adapter.BookReviewsAdapter;
 
 import java.util.ArrayList;
