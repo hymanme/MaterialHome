@@ -154,13 +154,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
     public void setToolbar(Toolbar toolbar) {
         if (toolbar != null) {
             mToolbar = toolbar;
@@ -290,13 +283,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.action_sort);
-        if (currentFragment instanceof BookshelfFragment) {
-            item.setVisible(true);
-        } else {
-            item.setVisible(false);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        int menuId = R.menu.main;
+        if (currentFragment instanceof HomeFragment) {
+            menuId = R.menu.main;
+        } else if (currentFragment instanceof BookshelfFragment) {
+            menuId = R.menu.bookshelf_main;
+        } else if (currentFragment instanceof EBookFragment) {
+            menuId = R.menu.ebook_main;
         }
+        getMenuInflater().inflate(menuId, menu);
+        currentFragment.onCreateOptionsMenu(menu, getMenuInflater());
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
     }
 

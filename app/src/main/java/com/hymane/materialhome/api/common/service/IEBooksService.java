@@ -5,6 +5,7 @@ import com.hymane.materialhome.bean.http.ebook.BooksByCats;
 import com.hymane.materialhome.bean.http.ebook.CategoryList;
 import com.hymane.materialhome.bean.http.ebook.Rankings;
 
+import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -45,7 +46,7 @@ public interface IEBooksService {
      * @return
      */
     @GET("/book/{bookId}")
-    Observable<BookDetail> getBookDetail(@Path("bookId") String bookId);
+    Observable<Response<BookDetail>> getBookDetail(@Path("bookId") String bookId);
 
     /**
      * 按分类获取书籍列表，分类详细页面

@@ -7,12 +7,14 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.api.presenter.impl.EBookPresenterImpl;
 import com.hymane.materialhome.api.view.IEBookListView;
 import com.hymane.materialhome.bean.http.ebook.BooksBean;
 import com.hymane.materialhome.bean.http.ebook.BooksByCats;
+import com.hymane.materialhome.common.Constant;
 import com.hymane.materialhome.ui.adapter.EBookListAdapter;
 import com.hymane.materialhome.utils.EBookUtils;
 
@@ -34,7 +36,7 @@ public class EBookCategoryDetailActivity extends BaseActivity implements IEBookL
     private int start = 0;
     //二级排序分类
     //hot(热门)、new(新书)、reputation(好评)、over(完结)
-    private String type = "hot";
+    private String type = Constant.EBOOK_FILTER_HOT;
     //图书类别
     private String major;
     //性别
@@ -93,6 +95,34 @@ public class EBookCategoryDetailActivity extends BaseActivity implements IEBookL
         onRefresh();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_filter_hot:
+                type = Constant.EBOOK_FILTER_HOT;
+                onRefresh();
+                break;
+            case R.id.action_filter_new:
+                type = Constant.EBOOK_FILTER_NEW;
+                onRefresh();
+                break;
+            case R.id.action_filter_reputation:
+                type = Constant.EBOOK_FILTER_REPUTATION;
+                onRefresh();
+                break;
+            case R.id.action_filter_over:
+                type = Constant.EBOOK_FILTER_OVER;
+                onRefresh();
+                break;
+        }
+        item.setChecked(true);
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected int getMenuID() {
+        return R.menu.menu_ebook_category;
+    }
 
     @Override
     public void showMessage(String msg) {

@@ -50,4 +50,24 @@ public class EBookUtils {
     public static String getGender() {
         return SPUtils.getPrefString(Constant.USER_GENDER, Constant.Gender.MALE);
     }
+
+    public static void setGender(String gender) {
+        SPUtils.setPrefString(Constant.USER_GENDER, gender);
+    }
+
+    //通过列表以及性别获取id，然后拉取书列表
+    public static String getRankId(int type, String gender) {
+        switch (type) {
+            case Constant.TYPE_HOT_RANKING:
+                return getHotRankingId(gender);
+            case Constant.TYPE_RETAINED_RANKING:
+                return getRetainedRankingId(gender);
+            case Constant.TYPE_FINISHED_RANKING:
+                return getFinishedRankingId(gender);
+            case Constant.TYPE_POTENTIAL_RANKING:
+                return getPotentialRankingId(gender);
+            default:
+                return getHotRankingId(gender);
+        }
+    }
 }

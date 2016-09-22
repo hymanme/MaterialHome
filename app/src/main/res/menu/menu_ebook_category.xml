@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_filter"
+        android:icon="@drawable/ic_action_filter"
+        android:title="@string/action_filter"
+        app:showAsAction="ifRoom">
+        <menu>
+            <group
+                android:checkableBehavior="single"
+                android:title="@string/action_filter"
+                app:showAsAction="ifRoom">
+                <item
+                    android:id="@+id/action_filter_hot"
+                    android:checked="true"
+                    android:title="@string/action_filter_hot"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_filter_new"
+                    android:title="@string/action_filter_new"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_filter_reputation"
+                    android:title="@string/action_filter_reputation"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_filter_over"
+                    android:title="@string/action_filter_over"
+                    app:showAsAction="never" />
+            </group>
+        </menu>
+    </item>
+
+</menu>

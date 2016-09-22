@@ -5,11 +5,13 @@ import com.hymane.materialhome.api.common.ServiceFactory;
 import com.hymane.materialhome.api.common.service.IEBooksService;
 import com.hymane.materialhome.api.model.IEBookModel;
 import com.hymane.materialhome.bean.http.douban.BaseResponse;
+import com.hymane.materialhome.bean.http.ebook.BookDetail;
 import com.hymane.materialhome.bean.http.ebook.BooksByCats;
 import com.hymane.materialhome.bean.http.ebook.CategoryList;
 import com.hymane.materialhome.bean.http.ebook.Rankings;
 import com.hymane.materialhome.common.URL;
 
+import retrofit2.Response;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -109,6 +111,36 @@ public class EBookModelImpl implements IEBookModel {
                             listener.onComplected(booksByCats);
                         } else {
                             listener.onFailed(new BaseResponse(400, booksByCats.getMsg()));
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void getBookDetail(String bookId, ApiCompleteListener listener) {
+        if (eBooksService == null) {
+            eBooksService = ServiceFactory.createService(URL.HOST_URL_ZSSQ, IEBooksService.class);
+        }
+        eBooksService.getBookDetail(bookId)
+                .subscribeOn(Schedulers.io())    //请求在io线程中执行
+                .observeOn(AndroidSchedulers.mainThread())//最后在主线程中执行
+                .subscribe(new Subscriber<Response<BookDetail>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        listener.onFailed(new BaseResponse(400, e.toString()));
+                    }
+
+                    @Override
+                    public void onNext(Response<BookDetail> bookDetail) {
+                        if (bookDetail.isSuccessful()) {
+                            listener.onComplected(bookDetail.body());
+                        } else {
+                            listener.onFailed(new BaseResponse(400, bookDetail.errorBody().toString()));
                         }
                     }
                 });

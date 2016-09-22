@@ -6,7 +6,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -14,16 +13,21 @@ import android.widget.Toast;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.api.presenter.impl.EBookPresenterImpl;
 import com.hymane.materialhome.api.view.IEBookListView;
+import com.hymane.materialhome.bean.event.GenderChangedEvent;
 import com.hymane.materialhome.bean.http.ebook.BooksBean;
 import com.hymane.materialhome.bean.http.ebook.Rankings;
+import com.hymane.materialhome.common.Constant;
 import com.hymane.materialhome.ui.activity.MainActivity;
 import com.hymane.materialhome.ui.adapter.EBookListAdapter;
 import com.hymane.materialhome.utils.DensityUtils;
+import com.hymane.materialhome.utils.EBookUtils;
+import com.hymane.materialhome.utils.RxBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import rx.functions.Action1;
 
 /**
  * Author   :hymanme
@@ -34,7 +38,9 @@ import butterknife.BindView;
 
 public class EBookListFragment extends BaseFragment implements IEBookListView, SwipeRefreshLayout.OnRefreshListener {
     //categoryId 分类id
+    private int type;
     private String categoryId = "";
+    private String gender = Constant.Gender.MALE;
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
@@ -46,10 +52,11 @@ public class EBookListFragment extends BaseFragment implements IEBookListView, S
     private List<BooksBean> bookInfoResponses;
     private EBookPresenterImpl eBookRankPresenter;
 
-    public static EBookListFragment newInstance(String id) {
+    public static EBookListFragment newInstance(int type, String gender) {
 
         Bundle args = new Bundle();
-        args.putString("categoryId", id);
+        args.putString("gender", gender);
+        args.putInt("type", type);
         EBookListFragment fragment = new EBookListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -58,10 +65,9 @@ public class EBookListFragment extends BaseFragment implements IEBookListView, S
     @Override
     protected void initRootView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.recycler_content, container, false);
-        String result = getArguments().getString("categoryId");
-        if (!TextUtils.isEmpty(result)) {
-            categoryId = result;
-        }
+        gender = getArguments().getString("gender");
+        type = getArguments().getInt("type");
+        categoryId = EBookUtils.getRankId(type, gender);
     }
 
     @Override
@@ -91,6 +97,21 @@ public class EBookListFragment extends BaseFragment implements IEBookListView, S
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addOnScrollListener(new RecyclerViewScrollDetector());
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        // rxSubscription是一个Subscription的全局变量，这段代码可以在onCreate/onStart等生命周期内
+        RxBus.getDefault().toObservable(GenderChangedEvent.class)
+                .subscribe(new Action1<GenderChangedEvent>() {
+                               @Override
+                               public void call(GenderChangedEvent genderEvent) {
+                                   categoryId = EBookUtils.getRankId(type, genderEvent.getGender());
+                                   onRefresh();
+                               }
+                           },
+                        new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                // TODO: 处理异常
+                            }
+                        });
     }
 
     @Override

@@ -44,4 +44,10 @@
     <string name="you_may_search">大家都在搜</string>
     <string name="male">男生</string>
     <string name="female">女生</string>
+    <string name="action_filter">过滤</string>
+    <string name="action_filter_hot">热门</string>
+    <string name="action_filter_new">新书</string>
+    <string name="action_filter_reputation">好评</string>
+    <string name="action_filter_over">完结</string>
+    <string name="action_gender">性别</string>
 </resources>

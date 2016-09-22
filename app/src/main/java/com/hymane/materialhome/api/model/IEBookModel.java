@@ -24,6 +24,14 @@ public interface IEBookModel {
     void getCategoryList(ApiCompleteListener listener);
 
     /***
+     * 获取电子图书详情
+     *
+     * @param bookId   bookid
+     * @param listener 监听
+     */
+    void getBookDetail(String bookId, ApiCompleteListener listener);
+
+    /***
      * 获取分类图书列表
      *
      * @param gender 性别

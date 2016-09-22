@@ -72,7 +72,12 @@ public class EBookListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     .load(EBookUtils.getImageUrl(bookInfo.getCover()))
                     .into(((EBookListHolder) holder).iv_book_img);
             ((EBookListHolder) holder).tv_book_title.setText(bookInfo.getTitle());
-            float ratio = Float.parseFloat(bookInfo.getRetentionRatio()) / 20;
+            float ratio = 0;
+            try {
+                ratio = Float.parseFloat(bookInfo.getRetentionRatio()) / 20;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             ((EBookListHolder) holder).ratingBar_hots.setRating(ratio);
             ((EBookListHolder) holder).tv_hots_num.setText(bookInfo.getLatelyFollower() + "人在追");
             ((EBookListHolder) holder).tv_book_info.setText(bookInfo.getBookInfoString());

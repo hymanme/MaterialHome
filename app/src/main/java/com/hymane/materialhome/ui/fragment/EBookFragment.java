@@ -10,12 +10,17 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.hymane.materialhome.R;
+import com.hymane.materialhome.bean.event.GenderChangedEvent;
 import com.hymane.materialhome.common.Constant;
 import com.hymane.materialhome.ui.activity.MainActivity;
 import com.hymane.materialhome.utils.EBookUtils;
+import com.hymane.materialhome.utils.RxBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +44,7 @@ public class EBookFragment extends BaseFragment {
     @BindView(R.id.fab)
     FloatingActionButton mFab;
     private List<BaseFragment> fragments;
+    private String gender;
 
     public static EBookFragment newInstance() {
 
@@ -57,6 +63,7 @@ public class EBookFragment extends BaseFragment {
     @Override
     protected void initEvents() {
         mToolbar.setTitle("EBook");
+        gender = EBookUtils.getGender();
     }
 
     @Override
@@ -71,12 +78,39 @@ public class EBookFragment extends BaseFragment {
         ((MainActivity) getActivity()).setFab(mFab);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        MenuItem item = menu.getItem(0);
+        if (gender.equals(Constant.Gender.MALE)) {
+            item.setIcon(R.drawable.ic_action_gender_male);
+        } else {
+            item.setIcon(R.drawable.ic_action_gender_female);
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_gender) {
+            if (gender.equals(Constant.Gender.MALE)) {
+                gender = Constant.Gender.FEMALE;
+                item.setIcon(R.drawable.ic_action_gender_female);
+            } else {
+                gender = Constant.Gender.MALE;
+                item.setIcon(R.drawable.ic_action_gender_male);
+            }
+        }
+        RxBus.getDefault().post(new GenderChangedEvent(gender));
+        EBookUtils.setGender(gender);
+        return super.onOptionsItemSelected(item);
+    }
+
     private void init() {
         fragments = new ArrayList<>();
-        fragments.add(EBookListFragment.newInstance(EBookUtils.getHotRankingId(Constant.Gender.MALE)));
-        fragments.add(EBookListFragment.newInstance(EBookUtils.getRetainedRankingId(Constant.Gender.MALE)));
-        fragments.add(EBookListFragment.newInstance(EBookUtils.getFinishedRankingId(Constant.Gender.MALE)));
-        fragments.add(EBookListFragment.newInstance(EBookUtils.getPotentialRankingId(Constant.Gender.MALE)));
+        fragments.add(EBookListFragment.newInstance(Constant.TYPE_HOT_RANKING, gender));
+        fragments.add(EBookListFragment.newInstance(Constant.TYPE_RETAINED_RANKING, gender));
+        fragments.add(EBookListFragment.newInstance(Constant.TYPE_FINISHED_RANKING, gender));
+        fragments.add(EBookListFragment.newInstance(Constant.TYPE_POTENTIAL_RANKING, gender));
         fragments.add(EBookCategoryFragment.newInstance());
         fragments.add(DiscoverFragment.newInstance());
 

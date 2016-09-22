@@ -22,6 +22,7 @@
         android:theme="@style/Theme.AppCompat.DayNight">
         <activity
             android:name=".ui.activity.MainActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.DayNight.NoActionBar"
@@ -30,6 +31,7 @@
         </activity>
         <activity
             android:name=".ui.activity.SplashActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:theme="@style/AppTheme.DayNight.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden">
             <intent-filter>
@@ -40,32 +42,39 @@
         </activity>
         <activity
             android:name=".ui.activity.BookDetailActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:theme="@style/AppTheme.DayNight.NoActionBar.BookDetail"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".ui.activity.BookReviewsActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:theme="@style/AppTheme.DayNight.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".ui.activity.SearchResultActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:theme="@style/AppTheme.DayNight.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".ui.activity.EBookCategoryDetailActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.DayNight.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".ui.activity.CategoryDetailActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:theme="@style/AppTheme.DayNight.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".ui.activity.WebViewActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.DayNight.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".ui.activity.CaptureActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.DayNight.NoActionBar.Fullscreen"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />

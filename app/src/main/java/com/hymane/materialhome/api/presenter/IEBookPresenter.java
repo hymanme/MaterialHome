@@ -32,6 +32,13 @@ public interface IEBookPresenter {
      */
     void getCategoryListDetail(String gender, String type, String major, String minor, int start, int limit);
 
+    /***
+     * 获取电子图书详情
+     *
+     * @param bookId bookid
+     */
+    void getBookDetail(String bookId);
+
     /**
      * 取消加载数据
      */

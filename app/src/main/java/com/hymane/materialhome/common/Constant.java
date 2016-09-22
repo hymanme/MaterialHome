@@ -44,6 +44,17 @@ public class Constant {
     //潜力排行
     public static final String EBOOK_RANK_ID_POTENTIAL_MALE = "564547c694f1c6a144ec979b";
     public static final String EBOOK_RANK_ID_POTENTIAL_FEMALE = "5645482405b052fe70aeb1b5";
+    //rank type
+    public static final int TYPE_HOT_RANKING = 0;
+    public static final int TYPE_RETAINED_RANKING = 1;
+    public static final int TYPE_FINISHED_RANKING = 2;
+    public static final int TYPE_POTENTIAL_RANKING = 3;
+    //图书过滤
+    //hot(热门)、new(新书)、reputation(好评)、over(完结)
+    public static final String EBOOK_FILTER_HOT = "hot";
+    public static final String EBOOK_FILTER_NEW = "new";
+    public static final String EBOOK_FILTER_REPUTATION = "reputation";
+    public static final String EBOOK_FILTER_OVER = "over";
 
     @StringDef({
             Gender.MALE,

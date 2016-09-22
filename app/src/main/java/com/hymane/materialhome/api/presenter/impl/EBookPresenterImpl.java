@@ -63,6 +63,18 @@ public class EBookPresenterImpl implements IEBookPresenter, ApiCompleteListener 
     }
 
     @Override
+    public void getBookDetail(String bookId) {
+        if (!NetworkUtils.isConnected(UIUtils.getContext())) {
+            mEBookListView.showMessage(UIUtils.getContext().getString(R.string.poor_network));
+            mEBookListView.hideProgress();
+            //没网络读取缓存
+//            return;
+        }
+        mEBookListView.showProgress();
+        mEBookRankModel.getBookDetail(bookId, this);
+    }
+
+    @Override
     public void cancelLoading() {
 
     }
