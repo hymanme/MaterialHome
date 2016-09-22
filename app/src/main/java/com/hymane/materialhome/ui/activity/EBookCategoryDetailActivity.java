@@ -16,7 +16,6 @@ import com.hymane.materialhome.bean.http.ebook.BooksBean;
 import com.hymane.materialhome.bean.http.ebook.BooksByCats;
 import com.hymane.materialhome.common.Constant;
 import com.hymane.materialhome.ui.adapter.EBookListAdapter;
-import com.hymane.materialhome.utils.EBookUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +39,7 @@ public class EBookCategoryDetailActivity extends BaseActivity implements IEBookL
     //图书类别
     private String major;
     //性别
-    private static String gender = "";
+    private String gender = "";
     //二级类别：为空
     private static String minor = "";
 
@@ -64,7 +63,7 @@ public class EBookCategoryDetailActivity extends BaseActivity implements IEBookL
     @Override
     protected void initEvents() {
         major = getIntent().getStringExtra("major");
-        gender = EBookUtils.getGender();
+        gender = getIntent().getStringExtra("gender");
         setTitle(major == null ? "category" : major);
 
         int spanCount = getResources().getInteger(R.integer.home_span_count);

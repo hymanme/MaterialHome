@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.bean.http.ebook.CategoryList;
+import com.hymane.materialhome.common.Constant;
 import com.hymane.materialhome.ui.activity.EBookCategoryDetailActivity;
 
 import java.util.List;
@@ -69,6 +70,7 @@ public class EBookCategoryAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, EBookCategoryDetailActivity.class);
                     intent.putExtra("major", male.get(position - 1).getName());
+                    intent.putExtra("gender", Constant.Gender.MALE);
                     mContext.startActivity(intent);
                 }
             });
@@ -81,6 +83,7 @@ public class EBookCategoryAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, EBookCategoryDetailActivity.class);
                     intent.putExtra("major", male.get(index).getName());
+                    intent.putExtra("gender", Constant.Gender.FEMALE);
                     mContext.startActivity(intent);
                 }
             });
