@@ -13,4 +13,6 @@
     <item name="ic_menu_theme" type="drawable">@drawable/ic_color_lens_white_24dp</item>
     <item name="ic_menu_ebook" type="drawable">@drawable/ic_import_contacts_white_24dp</item>
     <item name="ic_action_filter" type="drawable">@drawable/ic_filter_list_white_24dp</item>
+    <item name="ic_action_gender_female" type="drawable">@drawable/ic_gender_female_white</item>
+    <item name="ic_action_gender_male" type="drawable">@drawable/ic_gender_male_white</item>
 </resources>
