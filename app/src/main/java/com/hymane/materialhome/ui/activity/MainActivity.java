@@ -3,13 +3,15 @@ package com.hymane.materialhome.ui.activity;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,7 +24,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.PopupWindow;
@@ -38,6 +39,7 @@ import com.hymane.materialhome.utils.KeyBoardUtils;
 import com.hymane.materialhome.utils.PermissionUtils;
 import com.hymane.materialhome.utils.SPUtils;
 import com.hymane.materialhome.utils.ScreenUtils;
+import com.hymane.materialhome.utils.customtabs.CustomTabActivityHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +50,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     DrawerLayout drawer;
     @BindView(R.id.nav_view)
     NavigationView mNavigationView;
+    private FloatingActionButton mFab;
 
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private BaseFragment currentFragment;
@@ -174,7 +177,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void setFab(FloatingActionButton fab) {
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab = fab;
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -195,9 +199,21 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         Snackbar.make(drawer, R.string.keyword_is_empty, Snackbar.LENGTH_SHORT).show();
                         break;
                     case SearchViewHolder.RESULT_SEARCH_SEARCH:
-                        Intent intent = new Intent(this, SearchResultActivity.class);
-                        intent.putExtra("q", holder.et_search_content.getText().toString());
-                        startActivity(intent);
+                        String q = holder.et_search_content.getText().toString();
+                        if (q.startsWith("@")) {
+                            CustomTabActivityHelper.openCustomTab(
+                                    this,
+                                    new CustomTabsIntent.Builder()
+                                            .setShowTitle(true)
+                                            .setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                                            .addDefaultShareMenuItem()
+                                            .build(),
+                                    Uri.parse(q.replace("@", "")));
+                        } else {
+                            Intent intent = new Intent(this, SearchResultActivity.class);
+                            intent.putExtra("q", q);
+                            startActivity(intent);
+                        }
                         break;
                     case SearchViewHolder.RESULT_SEARCH_GO_SCAN:
                         if (PermissionUtils.requestCameraPermission(this)) {
@@ -285,11 +301,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void showFloatingBar() {
-//        mFab.show();
+        if (mFab != null) {
+            mFab.show();
+        }
     }
 
     public void hideFloatingBar() {
-//        mFab.hide();
+        if (mFab != null) {
+            mFab.hide();
+        }
     }
 
     @Override

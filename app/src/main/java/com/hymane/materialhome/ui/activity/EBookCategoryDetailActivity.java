@@ -1,71 +1,70 @@
-package com.hymane.materialhome.ui.fragment;
+package com.hymane.materialhome.ui.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.api.presenter.impl.EBookPresenterImpl;
 import com.hymane.materialhome.api.view.IEBookListView;
 import com.hymane.materialhome.bean.http.ebook.BooksBean;
-import com.hymane.materialhome.bean.http.ebook.Rankings;
-import com.hymane.materialhome.ui.activity.MainActivity;
+import com.hymane.materialhome.bean.http.ebook.BooksByCats;
 import com.hymane.materialhome.ui.adapter.EBookListAdapter;
-import com.hymane.materialhome.utils.DensityUtils;
+import com.hymane.materialhome.utils.EBookUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Author   :hymanme
  * Email    :hymanme@163.com
- * Create at 2016/7/13
+ * Create at 2016/2/26
  * Description:
  */
+public class EBookCategoryDetailActivity extends BaseActivity implements IEBookListView, SwipeRefreshLayout.OnRefreshListener {
 
-public class EBookListFragment extends BaseFragment implements IEBookListView, SwipeRefreshLayout.OnRefreshListener {
-    //categoryId 分类id
-    private String categoryId = "";
+    private static int limit = 20;
+    private int start = 0;
+    //二级排序分类
+    //hot(热门)、new(新书)、reputation(好评)、over(完结)
+    private String type = "hot";
+    //图书类别
+    private String major;
+    //性别
+    private static String gender = "";
+    //二级类别：为空
+    private static String minor = "";
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
     @BindView(R.id.swipe_refresh_widget)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    private GridLayoutManager mLayoutManager;
 
+    private GridLayoutManager mLayoutManager;
     private EBookListAdapter mListAdapter;
     private List<BooksBean> bookInfoResponses;
     private EBookPresenterImpl eBookRankPresenter;
 
-    public static EBookListFragment newInstance(String id) {
-
-        Bundle args = new Bundle();
-        args.putString("categoryId", id);
-        EBookListFragment fragment = new EBookListFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    protected void initRootView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.recycler_content, container, false);
-        String result = getArguments().getString("categoryId");
-        if (!TextUtils.isEmpty(result)) {
-            categoryId = result;
-        }
+    protected void onCreate(Bundle savedInstanceState) {
+        setContentView(R.layout.activity_reviews);
+        ButterKnife.bind(this);
+        super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void initEvents() {
+        major = getIntent().getStringExtra("major");
+        gender = EBookUtils.getGender();
+        setTitle(major == null ? "category" : major);
+
         int spanCount = getResources().getInteger(R.integer.home_span_count);
         eBookRankPresenter = new EBookPresenterImpl(this);
         bookInfoResponses = new ArrayList<>();
@@ -73,7 +72,7 @@ public class EBookListFragment extends BaseFragment implements IEBookListView, S
                 R.color.recycler_color3, R.color.recycler_color4);
 
         //设置布局管理器
-        mLayoutManager = new GridLayoutManager(getActivity(), spanCount);
+        mLayoutManager = new GridLayoutManager(this, spanCount);
         mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -84,25 +83,20 @@ public class EBookListFragment extends BaseFragment implements IEBookListView, S
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         //设置adapter
-        mListAdapter = new EBookListAdapter(getActivity(), bookInfoResponses, spanCount);
+        mListAdapter = new EBookListAdapter(this, bookInfoResponses, spanCount);
         mRecyclerView.setAdapter(mListAdapter);
 
         //设置Item增加、移除动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addOnScrollListener(new RecyclerViewScrollDetector());
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        onRefresh();
     }
 
-    @Override
-    protected void initData(boolean isSavedNull) {
-//        if (isSavedNull) {
-        onRefresh();
-//        }
-    }
 
     @Override
     public void showMessage(String msg) {
-        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+        Snackbar.make(mToolbar, msg, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -112,32 +106,38 @@ public class EBookListFragment extends BaseFragment implements IEBookListView, S
 
     @Override
     public void hideProgress() {
-        mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(false));
+        mSwipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override
     public void refreshData(Object result) {
-        if (result instanceof Rankings.RankingBean) {
-            bookInfoResponses.clear();
-            bookInfoResponses.addAll(((Rankings.RankingBean) result).getBooks());
+        if (result instanceof BooksByCats) {
+            if (start == 0) {
+                bookInfoResponses.clear();
+            }
+            bookInfoResponses.addAll(((BooksByCats) result).getBooks());
             mListAdapter.notifyDataSetChanged();
+            start += limit;
         }
     }
 
     @Override
     public void onRefresh() {
-        eBookRankPresenter.getRanking(categoryId);
+        start = 0;
+        eBookRankPresenter.getCategoryListDetail(gender, type, major, minor, start, limit);
     }
 
-    public void onLoadMore() {
-//        if (!mSwipeRefreshLayout.isRefreshing()) {
-//            bookListPresenter.loadBooks(null, tag, page * count, count, fields);
-//        }
+    private void onLoadMore() {
+        eBookRankPresenter.getCategoryListDetail(gender, type, major, minor, start, limit);
     }
 
     class RecyclerViewScrollDetector extends RecyclerView.OnScrollListener {
         private int lastVisibleItem;
-        private int mScrollThreshold = DensityUtils.dp2px(getActivity(), 1);
 
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -150,16 +150,6 @@ public class EBookListFragment extends BaseFragment implements IEBookListView, S
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            boolean isSignificantDelta = Math.abs(dy) > mScrollThreshold;
-
-            if (isSignificantDelta) {
-                if (dy > 0) {
-                    ((MainActivity) getActivity()).hideFloatingBar();
-                } else {
-                    ((MainActivity) getActivity()).showFloatingBar();
-                }
-            }
-
             lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
         }
     }

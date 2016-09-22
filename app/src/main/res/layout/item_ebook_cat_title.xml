@@ -3,7 +3,8 @@
     android:id="@+id/tv_title"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="16dp"
     android:text="male"
     android:textColor="?android:attr/textColorSecondary"
     android:textSize="16sp" />

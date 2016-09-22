@@ -5,6 +5,7 @@ import com.hymane.materialhome.api.common.ServiceFactory;
 import com.hymane.materialhome.api.common.service.IEBooksService;
 import com.hymane.materialhome.api.model.IEBookModel;
 import com.hymane.materialhome.bean.http.douban.BaseResponse;
+import com.hymane.materialhome.bean.http.ebook.BooksByCats;
 import com.hymane.materialhome.bean.http.ebook.CategoryList;
 import com.hymane.materialhome.bean.http.ebook.Rankings;
 import com.hymane.materialhome.common.URL;
@@ -78,6 +79,36 @@ public class EBookModelImpl implements IEBookModel {
                             listener.onComplected(categoryList);
                         } else {
                             listener.onFailed(new BaseResponse(400, categoryList.getMsg()));
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void getCategoryListDetail(String gender, String type, String major, String minor, int start, int limit, ApiCompleteListener listener) {
+        if (eBooksService == null) {
+            eBooksService = ServiceFactory.createService(URL.HOST_URL_ZSSQ, IEBooksService.class);
+        }
+        eBooksService.getBooksByCats(gender, type, major, minor, start, limit)
+                .subscribeOn(Schedulers.io())    //请求在io线程中执行
+                .observeOn(AndroidSchedulers.mainThread())//最后在主线程中执行
+                .subscribe(new Subscriber<BooksByCats>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        listener.onFailed(new BaseResponse(400, e.toString()));
+                    }
+
+                    @Override
+                    public void onNext(BooksByCats booksByCats) {
+                        if (booksByCats.isOk()) {
+                            listener.onComplected(booksByCats);
+                        } else {
+                            listener.onFailed(new BaseResponse(400, booksByCats.getMsg()));
                         }
                     }
                 });

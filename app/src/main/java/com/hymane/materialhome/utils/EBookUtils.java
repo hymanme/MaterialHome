@@ -46,4 +46,8 @@ public class EBookUtils {
     public static String getImageUrl(String name) {
         return URL.HOST_URL_ZSSQ_IMG + name;
     }
+
+    public static String getGender() {
+        return SPUtils.getPrefString(Constant.USER_GENDER, Constant.Gender.MALE);
+    }
 }

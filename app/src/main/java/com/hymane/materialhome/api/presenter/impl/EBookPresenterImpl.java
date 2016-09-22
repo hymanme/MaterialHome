@@ -51,6 +51,18 @@ public class EBookPresenterImpl implements IEBookPresenter, ApiCompleteListener 
     }
 
     @Override
+    public void getCategoryListDetail(String gender, String type, String major, String minor, int start, int limit) {
+        if (!NetworkUtils.isConnected(UIUtils.getContext())) {
+            mEBookListView.showMessage(UIUtils.getContext().getString(R.string.poor_network));
+            mEBookListView.hideProgress();
+            //没网络读取缓存
+//            return;
+        }
+        mEBookListView.showProgress();
+        mEBookRankModel.getCategoryListDetail(gender, type, major, minor, start, limit, this);
+    }
+
+    @Override
     public void cancelLoading() {
 
     }

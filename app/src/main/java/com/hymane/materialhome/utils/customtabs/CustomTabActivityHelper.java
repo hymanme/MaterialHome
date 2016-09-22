@@ -60,7 +60,7 @@ public class CustomTabActivityHelper {
             customTabsIntent.intent.setPackage(packageName);
             customTabsIntent.launchUrl(activity, uri);
         } else {
-            //user WebView
+            //use WebView
             Intent intent = new Intent(activity, WebViewActivity.class);
             intent.putExtra("url", uri.toString());
             activity.startActivity(intent);

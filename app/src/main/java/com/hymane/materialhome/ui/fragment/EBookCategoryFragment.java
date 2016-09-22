@@ -70,7 +70,7 @@ public class EBookCategoryFragment extends BaseFragment implements IEBookListVie
         });
         mRecyclerView.setLayoutManager(mLayoutManager);
         //设置adapter
-        mCategoryAdapter = new EBookCategoryAdapter(male, female);
+        mCategoryAdapter = new EBookCategoryAdapter(getActivity(), male, female);
         mRecyclerView.setAdapter(mCategoryAdapter);
         //设置Item增加、移除动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());

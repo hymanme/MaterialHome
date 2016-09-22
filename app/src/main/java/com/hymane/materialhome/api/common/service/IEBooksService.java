@@ -1,10 +1,13 @@
 package com.hymane.materialhome.api.common.service;
 
+import com.hymane.materialhome.bean.http.ebook.BookDetail;
+import com.hymane.materialhome.bean.http.ebook.BooksByCats;
 import com.hymane.materialhome.bean.http.ebook.CategoryList;
 import com.hymane.materialhome.bean.http.ebook.Rankings;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -34,6 +37,28 @@ public interface IEBooksService {
      */
     @GET("/cats/lv2/statistics")
     Observable<CategoryList> getCategoryList();
+
+    /**
+     * 图书详情
+     *
+     * @param bookId
+     * @return
+     */
+    @GET("/book/{bookId}")
+    Observable<BookDetail> getBookDetail(@Path("bookId") String bookId);
+
+    /**
+     * 按分类获取书籍列表，分类详细页面
+     *
+     * @param gender male、female
+     * @param type   hot(热门)、new(新书)、reputation(好评)、over(完结)
+     * @param major  玄幻
+     * @param minor  东方玄幻、异界大陆、异界争霸、远古神话
+     * @param limit  50
+     * @return
+     */
+    @GET("/book/by-categories")
+    Observable<BooksByCats> getBooksByCats(@Query("gender") String gender, @Query("type") String type, @Query("major") String major, @Query("minor") String minor, @Query("start") int start, @Query("limit") int limit);
 
     /***
      * 图书推荐

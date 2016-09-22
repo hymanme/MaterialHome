@@ -23,6 +23,17 @@ public interface IEBookModel {
      */
     void getCategoryList(ApiCompleteListener listener);
 
+    /***
+     * 获取分类图书列表
+     *
+     * @param gender 性别
+     * @param type   排序类别
+     * @param major  分类
+     * @param minor  二级分类
+     * @param limit  限制
+     */
+    void getCategoryListDetail(String gender, String type, String major, String minor, int start, int limit, ApiCompleteListener listener);
+
     /**
      * 取消加载数据
      */

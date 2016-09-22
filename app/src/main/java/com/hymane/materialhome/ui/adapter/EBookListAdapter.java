@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.hymane.materialhome.R;
-import com.hymane.materialhome.bean.http.ebook.Rankings.RankingBean.BooksBean;
+import com.hymane.materialhome.bean.http.ebook.BooksBean;
 import com.hymane.materialhome.utils.EBookUtils;
 
 import java.util.List;

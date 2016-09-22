@@ -13,6 +13,7 @@ import java.lang.annotation.RetentionPolicy;
  */
 public class Constant {
     public static final String THEME_MODEL = "theme_model";
+    public static final String USER_GENDER = "user_gender";
 
     /**
      * category index

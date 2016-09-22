@@ -12,5 +12,14 @@
         android:id="@+id/tv_ceil_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="文学" />
+        android:text="文学"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_ceil_book_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textSize="12sp" />
 </LinearLayout>
