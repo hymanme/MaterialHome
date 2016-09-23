@@ -82,7 +82,7 @@ public class EBookCategoryAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, EBookCategoryDetailActivity.class);
-                    intent.putExtra("major", male.get(index).getName());
+                    intent.putExtra("major", female.get(index).getName());
                     intent.putExtra("gender", Constant.Gender.FEMALE);
                     mContext.startActivity(intent);
                 }

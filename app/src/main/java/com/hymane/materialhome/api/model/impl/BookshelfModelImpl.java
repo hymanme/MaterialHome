@@ -35,7 +35,7 @@ public class BookshelfModelImpl implements IBookshelfModel {
     @Override
     public void loadBookshelf(ApiCompleteListener listener) {
         if (db != null) {
-            Observable<SqlBrite.Query> bookshelf = db.createQuery("bookshelf", "SELECT * FROM bookshelf order by 'order' DESC");
+            Observable<SqlBrite.Query> bookshelf = db.createQuery("bookshelf", "SELECT * FROM bookshelf order by orders DESC");
             subscribe = bookshelf.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<SqlBrite.Query>() {
@@ -52,7 +52,7 @@ public class BookshelfModelImpl implements IBookshelfModel {
                                 bookshelfBean.setBookCount(cursor.getInt(cursor.getColumnIndex("bookCount")));
                                 bookshelfBean.setTitle(cursor.getString(cursor.getColumnIndex("title")));
                                 bookshelfBean.setRemark(cursor.getString(cursor.getColumnIndex("remark")));
-                                bookshelfBean.setOrder(cursor.getInt(cursor.getColumnIndex("order")));
+                                bookshelfBean.setOrder(cursor.getInt(cursor.getColumnIndex("orders")));
                                 bookshelfBean.setCreateTime(cursor.getString(cursor.getColumnIndex("create_at")));
                                 bookshelfs.add(bookshelfBean);
                             }
@@ -71,7 +71,7 @@ public class BookshelfModelImpl implements IBookshelfModel {
             values.put("title", title);
             values.put("remark", remark);
             values.put("create_at", createAt);
-            values.put("order", System.currentTimeMillis());
+            values.put("orders", System.currentTimeMillis());
             db.insert("bookshelf", values);
         } else {
             listener.onFailed(new BaseResponse(500, "db error : add"));
@@ -95,7 +95,7 @@ public class BookshelfModelImpl implements IBookshelfModel {
         if (db != null) {
             long mOrder = front + (behind - front) / 2;
             ContentValues values = new ContentValues();
-            values.put("'order'", mOrder);
+            values.put("orders", mOrder);
             db.update("bookshelf", values, "id=?", id + "");
         } else {
             listener.onFailed(new BaseResponse(500, "db error : update"));
