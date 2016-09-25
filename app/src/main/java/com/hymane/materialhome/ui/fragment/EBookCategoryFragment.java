@@ -1,6 +1,7 @@
 package com.hymane.materialhome.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,10 +26,12 @@ import butterknife.BindView;
  * Create at 2016/1/12
  * Description:
  */
-public class EBookCategoryFragment extends BaseFragment implements IEBookListView {
+public class EBookCategoryFragment extends BaseFragment implements IEBookListView, SwipeRefreshLayout.OnRefreshListener {
+    @BindView(R.id.swipe_refresh_widget)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
-    private GridLayoutManager mLayoutManager;
+
     private EBookCategoryAdapter mCategoryAdapter;
     private EBookPresenterImpl mEBookPresenter;
     private List<CategoryList.CategoryBean> male;
@@ -45,7 +48,7 @@ public class EBookCategoryFragment extends BaseFragment implements IEBookListVie
 
     @Override
     protected void initRootView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.category_fragment, null, false);
+        mRootView = inflater.inflate(R.layout.recycler_content, null, false);
         mEBookPresenter = new EBookPresenterImpl(this);
     }
 
@@ -54,10 +57,12 @@ public class EBookCategoryFragment extends BaseFragment implements IEBookListVie
         int spanCount = getResources().getInteger(R.integer.category_span_count);
         male = new ArrayList<>();
         female = new ArrayList<>();
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.recycler_color1, R.color.recycler_color2,
+                R.color.recycler_color3, R.color.recycler_color4);
         //添加装饰器
         mRecyclerView.addItemDecoration(new SpacesCategoryDecoration(5));
         //设置布局管理器
-        mLayoutManager = new GridLayoutManager(getActivity(), spanCount);
+        GridLayoutManager mLayoutManager = new GridLayoutManager(getActivity(), spanCount);
         mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -74,6 +79,7 @@ public class EBookCategoryFragment extends BaseFragment implements IEBookListVie
         mRecyclerView.setAdapter(mCategoryAdapter);
         //设置Item增加、移除动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -88,12 +94,12 @@ public class EBookCategoryFragment extends BaseFragment implements IEBookListVie
 
     @Override
     public void showProgress() {
-
+        mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(true));
     }
 
     @Override
     public void hideProgress() {
-
+        mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(false));
     }
 
     @Override
@@ -105,5 +111,10 @@ public class EBookCategoryFragment extends BaseFragment implements IEBookListVie
             female.addAll(((CategoryList) result).getFemale());
             mCategoryAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        mEBookPresenter.getCategoryList();
     }
 }

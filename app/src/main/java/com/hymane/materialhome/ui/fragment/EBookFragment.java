@@ -44,7 +44,7 @@ public class EBookFragment extends BaseFragment {
     @BindView(R.id.fab)
     FloatingActionButton mFab;
     private List<BaseFragment> fragments;
-    private String gender;
+    private String gender = "";
 
     public static EBookFragment newInstance() {
 
@@ -81,10 +81,10 @@ public class EBookFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         MenuItem item = menu.getItem(0);
-        if (gender.equals(Constant.Gender.MALE)) {
-            item.setIcon(R.drawable.ic_action_gender_male);
-        } else {
+        if (gender.equals(Constant.Gender.FEMALE)) {
             item.setIcon(R.drawable.ic_action_gender_female);
+        } else {
+            item.setIcon(R.drawable.ic_action_gender_male);
         }
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -92,12 +92,12 @@ public class EBookFragment extends BaseFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_gender) {
-            if (gender.equals(Constant.Gender.MALE)) {
-                gender = Constant.Gender.FEMALE;
-                item.setIcon(R.drawable.ic_action_gender_female);
-            } else {
+            if (gender.equals(Constant.Gender.FEMALE)) {
                 gender = Constant.Gender.MALE;
                 item.setIcon(R.drawable.ic_action_gender_male);
+            } else {
+                gender = Constant.Gender.FEMALE;
+                item.setIcon(R.drawable.ic_action_gender_female);
             }
         }
         RxBus.getDefault().post(new GenderChangedEvent(gender));
