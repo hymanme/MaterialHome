@@ -81,6 +81,9 @@ public class EBookFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         MenuItem item = menu.getItem(0);
+        if (gender == null) {
+            gender = EBookUtils.getGender();
+        }
         if (gender.equals(Constant.Gender.MALE)) {
             item.setIcon(R.drawable.ic_action_gender_male);
         } else {

@@ -20,11 +20,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.hymane.materialhome.R;
-import com.hymane.materialhome.api.presenter.impl.BookDetailPresenterImpl;
-import com.hymane.materialhome.api.view.IBookDetailView;
-import com.hymane.materialhome.bean.http.douban.BookInfoResponse;
+import com.hymane.materialhome.api.presenter.impl.EBookPresenterImpl;
+import com.hymane.materialhome.api.view.IEBookListView;
 import com.hymane.materialhome.bean.http.douban.BookReviewsListResponse;
 import com.hymane.materialhome.bean.http.douban.BookSeriesListResponse;
+import com.hymane.materialhome.bean.http.ebook.BookDetail;
 import com.hymane.materialhome.ui.adapter.BookDetailAdapter;
 import com.hymane.materialhome.utils.Blur;
 import com.hymane.materialhome.utils.UIUtils;
@@ -38,7 +38,7 @@ import butterknife.ButterKnife;
  * Create at 2016/9/22
  * Description: 电子图书详情页
  */
-public class EBookDetailActivity extends BaseActivity implements IBookDetailView {
+public class EBookDetailActivity extends BaseActivity implements IEBookListView {
     private static final String COMMENT_FIELDS = "id,rating,author,title,updated,comments,summary,votes,useless";
     private static final String SERIES_FIELDS = "id,title,subtitle,origin_title,rating,author,translator,publisher,pubdate,summary,images,pages,price,binding,isbn13,series";
     private static final int REVIEWS_COUNT = 5;
@@ -56,11 +56,11 @@ public class EBookDetailActivity extends BaseActivity implements IBookDetailView
     private ImageView iv_book_img;
     private ImageView iv_book_bg;
 
-    private BookInfoResponse mBookInfoResponse;
+    private BookDetail mBookInfoResponse;
     private BookReviewsListResponse mReviewsListResponse;
     private BookSeriesListResponse mSeriesListResponse;
 
-    private BookDetailPresenterImpl bookDetailPresenter;
+    private EBookPresenterImpl eBookPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +72,10 @@ public class EBookDetailActivity extends BaseActivity implements IBookDetailView
 
     @Override
     protected void initEvents() {
-        bookDetailPresenter = new BookDetailPresenterImpl(this);
+        eBookPresenter = new EBookPresenterImpl(this);
         mReviewsListResponse = new BookReviewsListResponse();
         mSeriesListResponse = new BookSeriesListResponse();
-        mBookInfoResponse = (BookInfoResponse) getIntent().getSerializableExtra(BookInfoResponse.serialVersionName);
+        mBookInfoResponse = (BookDetail) getIntent().getSerializableExtra(BookDetail.serialVersionName);
         mLayoutManager = new LinearLayoutManager(EBookDetailActivity.this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -107,7 +107,7 @@ public class EBookDetailActivity extends BaseActivity implements IBookDetailView
                     });
         }
         mFab.setOnClickListener(v -> Toast.makeText(EBookDetailActivity.this, "click", Toast.LENGTH_SHORT).show());
-        bookDetailPresenter.loadReviews(mBookInfoResponse.getId(), PAGE * REVIEWS_COUNT, REVIEWS_COUNT, COMMENT_FIELDS);
+        eBookPresenter.getBookDetail("");
     }
 
     @Override
@@ -169,22 +169,27 @@ public class EBookDetailActivity extends BaseActivity implements IBookDetailView
     }
 
     @Override
-    public void updateView(Object result) {
-        if (result instanceof BookReviewsListResponse) {
-            final BookReviewsListResponse response = (BookReviewsListResponse) result;
-            mReviewsListResponse.setTotal(response.getTotal());
-            mReviewsListResponse.getReviews().addAll(response.getReviews());
-            mDetailAdapter.notifyDataSetChanged();
-            if (mBookInfoResponse.getSeries() != null) {
-                bookDetailPresenter.loadSeries(mBookInfoResponse.getSeries().getId(), PAGE * SERIES_COUNT, 6, SERIES_FIELDS);
-            }
-        } else if (result instanceof BookSeriesListResponse) {
-            final BookSeriesListResponse response = (BookSeriesListResponse) result;
-            mSeriesListResponse.setTotal(response.getTotal());
-            mSeriesListResponse.getBooks().addAll(response.getBooks());
-            mDetailAdapter.notifyDataSetChanged();
-        }
+    public void refreshData(Object result) {
+
     }
+
+//    @Override
+//    public void updateView(Object result) {
+//        if (result instanceof BookReviewsListResponse) {
+//            final BookReviewsListResponse response = (BookReviewsListResponse) result;
+//            mReviewsListResponse.setTotal(response.getTotal());
+//            mReviewsListResponse.getReviews().addAll(response.getReviews());
+//            mDetailAdapter.notifyDataSetChanged();
+//            if (mBookInfoResponse.getSeries() != null) {
+//                bookDetailPresenter.loadSeries(mBookInfoResponse.getSeries().getId(), PAGE * SERIES_COUNT, 6, SERIES_FIELDS);
+//            }
+//        } else if (result instanceof BookSeriesListResponse) {
+//            final BookSeriesListResponse response = (BookSeriesListResponse) result;
+//            mSeriesListResponse.setTotal(response.getTotal());
+//            mSeriesListResponse.getBooks().addAll(response.getBooks());
+//            mDetailAdapter.notifyDataSetChanged();
+//        }
+//    }
 
     @Override
     protected void onPause() {
@@ -193,7 +198,7 @@ public class EBookDetailActivity extends BaseActivity implements IBookDetailView
 
     @Override
     protected void onDestroy() {
-        bookDetailPresenter.cancelLoading();
+        eBookPresenter.cancelLoading();
         if (mFab.getDrawable() instanceof Animatable) {
             ((Animatable) mFab.getDrawable()).stop();
         }

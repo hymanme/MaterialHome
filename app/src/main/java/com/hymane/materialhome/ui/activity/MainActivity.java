@@ -139,6 +139,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
             if (!(currentFragment instanceof HomeFragment)) {
                 switchContent(currentFragment, HomeFragment.newInstance());
+                mNavigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
                 return;
             }
             if ((System.currentTimeMillis() - lastTime) > EXIT_APP_DELAY) {

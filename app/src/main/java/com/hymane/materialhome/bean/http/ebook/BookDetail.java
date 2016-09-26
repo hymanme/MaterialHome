@@ -59,7 +59,7 @@ public class BookDetail implements Serializable {
      * hasCp : true
      * _le : false
      */
-
+    public static final String serialVersionName = "bookDetail";
     private String _id;
     private String author;
     private int banned;
