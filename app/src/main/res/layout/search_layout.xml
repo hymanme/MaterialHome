@@ -72,7 +72,7 @@
                 android:layout_marginRight="8dp"
                 android:foreground="?attr/selectableItemBackground"
                 android:padding="4dp"
-                android:src="?attr/searchIconColor" />
+                android:src="@drawable/ic_search_query" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 

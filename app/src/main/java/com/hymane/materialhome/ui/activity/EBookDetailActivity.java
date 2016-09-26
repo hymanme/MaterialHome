@@ -20,12 +20,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.hymane.materialhome.R;
-import com.hymane.materialhome.api.presenter.impl.EBookPresenterImpl;
-import com.hymane.materialhome.api.view.IEBookListView;
+import com.hymane.materialhome.api.presenter.impl.EBookDetailPresenterImpl;
+import com.hymane.materialhome.api.view.IEBookDetailView;
+import com.hymane.materialhome.bean.http.douban.BookInfoResponse;
 import com.hymane.materialhome.bean.http.douban.BookReviewsListResponse;
 import com.hymane.materialhome.bean.http.douban.BookSeriesListResponse;
-import com.hymane.materialhome.bean.http.ebook.BookDetail;
-import com.hymane.materialhome.ui.adapter.BookDetailAdapter;
+import com.hymane.materialhome.ui.adapter.EBookDetailAdapter;
 import com.hymane.materialhome.utils.Blur;
 import com.hymane.materialhome.utils.UIUtils;
 
@@ -38,9 +38,7 @@ import butterknife.ButterKnife;
  * Create at 2016/9/22
  * Description: 电子图书详情页
  */
-public class EBookDetailActivity extends BaseActivity implements IEBookListView {
-    private static final String COMMENT_FIELDS = "id,rating,author,title,updated,comments,summary,votes,useless";
-    private static final String SERIES_FIELDS = "id,title,subtitle,origin_title,rating,author,translator,publisher,pubdate,summary,images,pages,price,binding,isbn13,series";
+public class EBookDetailActivity extends BaseActivity implements IEBookDetailView {
     private static final int REVIEWS_COUNT = 5;
     private static final int SERIES_COUNT = 6;
     private static final int PAGE = 0;
@@ -52,19 +50,20 @@ public class EBookDetailActivity extends BaseActivity implements IEBookListView 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
-    private BookDetailAdapter mDetailAdapter;
+    private EBookDetailAdapter mDetailAdapter;
     private ImageView iv_book_img;
     private ImageView iv_book_bg;
+    private String bookId;
 
-    private BookDetail mBookInfoResponse;
+    private BookInfoResponse mBookInfoResponse;
     private BookReviewsListResponse mReviewsListResponse;
     private BookSeriesListResponse mSeriesListResponse;
 
-    private EBookPresenterImpl eBookPresenter;
+    private EBookDetailPresenterImpl eBookPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_book_detail);
+        setContentView(R.layout.activity_ebook_detail);
         ButterKnife.bind(this);
         super.onCreate(savedInstanceState);
         mToolbar.setNavigationIcon(AppCompatResources.getDrawable(this, R.drawable.ic_action_clear));
@@ -72,14 +71,15 @@ public class EBookDetailActivity extends BaseActivity implements IEBookListView 
 
     @Override
     protected void initEvents() {
-        eBookPresenter = new EBookPresenterImpl(this);
+        eBookPresenter = new EBookDetailPresenterImpl(this);
         mReviewsListResponse = new BookReviewsListResponse();
         mSeriesListResponse = new BookSeriesListResponse();
-        mBookInfoResponse = (BookDetail) getIntent().getSerializableExtra(BookDetail.serialVersionName);
+        bookId = getIntent().getStringExtra("bookId");
+        mBookInfoResponse = (BookInfoResponse) getIntent().getSerializableExtra(BookInfoResponse.serialVersionName);
         mLayoutManager = new LinearLayoutManager(EBookDetailActivity.this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mDetailAdapter = new BookDetailAdapter(mBookInfoResponse, mReviewsListResponse, mSeriesListResponse);
+        mDetailAdapter = new EBookDetailAdapter(mBookInfoResponse, mReviewsListResponse, mSeriesListResponse);
         mRecyclerView.setAdapter(mDetailAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -107,7 +107,8 @@ public class EBookDetailActivity extends BaseActivity implements IEBookListView 
                     });
         }
         mFab.setOnClickListener(v -> Toast.makeText(EBookDetailActivity.this, "click", Toast.LENGTH_SHORT).show());
-        eBookPresenter.getBookDetail("");
+
+//        eBookPresenter.getBookDetail();
     }
 
     @Override
@@ -169,27 +170,22 @@ public class EBookDetailActivity extends BaseActivity implements IEBookListView 
     }
 
     @Override
-    public void refreshData(Object result) {
-
+    public void updateView(Object result) {
+        if (result instanceof BookReviewsListResponse) {
+            final BookReviewsListResponse response = (BookReviewsListResponse) result;
+            mReviewsListResponse.setTotal(response.getTotal());
+            mReviewsListResponse.getReviews().addAll(response.getReviews());
+            mDetailAdapter.notifyDataSetChanged();
+            if (mBookInfoResponse.getSeries() != null) {
+//                eBookPresenter.loadSeries(mBookInfoResponse.getSeries().getId(), PAGE * SERIES_COUNT, 6, SERIES_FIELDS);
+            }
+        } else if (result instanceof BookSeriesListResponse) {
+            final BookSeriesListResponse response = (BookSeriesListResponse) result;
+            mSeriesListResponse.setTotal(response.getTotal());
+            mSeriesListResponse.getBooks().addAll(response.getBooks());
+            mDetailAdapter.notifyDataSetChanged();
+        }
     }
-
-//    @Override
-//    public void updateView(Object result) {
-//        if (result instanceof BookReviewsListResponse) {
-//            final BookReviewsListResponse response = (BookReviewsListResponse) result;
-//            mReviewsListResponse.setTotal(response.getTotal());
-//            mReviewsListResponse.getReviews().addAll(response.getReviews());
-//            mDetailAdapter.notifyDataSetChanged();
-//            if (mBookInfoResponse.getSeries() != null) {
-//                bookDetailPresenter.loadSeries(mBookInfoResponse.getSeries().getId(), PAGE * SERIES_COUNT, 6, SERIES_FIELDS);
-//            }
-//        } else if (result instanceof BookSeriesListResponse) {
-//            final BookSeriesListResponse response = (BookSeriesListResponse) result;
-//            mSeriesListResponse.setTotal(response.getTotal());
-//            mSeriesListResponse.getBooks().addAll(response.getBooks());
-//            mDetailAdapter.notifyDataSetChanged();
-//        }
-//    }
 
     @Override
     protected void onPause() {
