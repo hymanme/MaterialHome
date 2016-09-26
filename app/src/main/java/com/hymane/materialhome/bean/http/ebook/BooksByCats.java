@@ -26,13 +26,13 @@ public class BooksByCats extends Base {
      * tags : ["腹黑","玄幻","异界大陆"]
      */
 
-    private List<BooksBean> books;
+    private List<BookDetail> books;
 
-    public List<BooksBean> getBooks() {
+    public List<BookDetail> getBooks() {
         return books;
     }
 
-    public void setBooks(List<BooksBean> books) {
+    public void setBooks(List<BookDetail> books) {
         this.books = books;
     }
 }

@@ -78,7 +78,7 @@ public class Rankings extends Base {
          * retentionRatio : 52.48
          */
 
-        public List<BooksBean> books;
+        public List<BookDetail> books;
 
         public String get_id() {
             return _id;
@@ -200,11 +200,11 @@ public class Rankings extends Base {
             this.id = id;
         }
 
-        public List<BooksBean> getBooks() {
+        public List<BookDetail> getBooks() {
             return books;
         }
 
-        public void setBooks(List<BooksBean> books) {
+        public void setBooks(List<BookDetail> books) {
             this.books = books;
         }
     }

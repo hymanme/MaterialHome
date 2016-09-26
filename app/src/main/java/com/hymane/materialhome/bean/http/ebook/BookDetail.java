@@ -1,6 +1,8 @@
 package com.hymane.materialhome.bean.http.ebook;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -10,7 +12,7 @@ import java.util.List;
  * Description:
  */
 
-public class BookDetail implements Serializable {
+public class BookDetail implements Parcelable {
 
 
     /**
@@ -26,8 +28,8 @@ public class BookDetail implements Serializable {
      * lastChapter : 请安装【追书神器】，本应用已停用
      * latelyFollower : 2385
      * longIntro : 您当前所使用的软件已改名为【追书神器】。
-     请搜索“追书神器”下载安装最新版【追书神器】。
-     无广告；不闪退；章节更新自动通知。
+     * 请搜索“追书神器”下载安装最新版【追书神器】。
+     * 无广告；不闪退；章节更新自动通知。
      * postCount : 111
      * serializeWordCount : 4614
      * site : zhuishuvip
@@ -59,7 +61,7 @@ public class BookDetail implements Serializable {
      * hasCp : true
      * _le : false
      */
-    public static final String serialVersionName = "bookDetail";
+
     private String _id;
     private String author;
     private int banned;
@@ -75,6 +77,12 @@ public class BookDetail implements Serializable {
     private int postCount; // 社区帖子数
     private int serializeWordCount;
     private String site;
+
+    //bookbean
+    private String shortIntro;
+    private int latelyFollowerBase;
+    private String minRetentionRatio;
+
     private String title;
     private Object totalPoint;
     private String type;
@@ -85,7 +93,7 @@ public class BookDetail implements Serializable {
     private int chaptersCount;
     private int tocCount;
     private String tocUpdated;
-    private double retentionRatio;
+    private String retentionRatio;
     private boolean hasCmread;
     private String thirdFlagsUpdated;
     private int wordCount;
@@ -102,11 +110,67 @@ public class BookDetail implements Serializable {
     private List<String> categories;
     private List<String> gender;
 
-    public String get_id() {
+    protected BookDetail(Parcel in) {
+        _id = in.readString();
+        author = in.readString();
+        banned = in.readInt();
+        cover = in.readString();
+        creater = in.readString();
+        followerCount = in.readInt();
+        gradeCount = in.readInt();
+        isSerial = in.readByte() != 0;
+        lastChapter = in.readString();
+        latelyFollower = in.readInt();
+        longIntro = in.readString();
+        postCount = in.readInt();
+        serializeWordCount = in.readInt();
+        site = in.readString();
+        shortIntro = in.readString();
+        latelyFollowerBase = in.readInt();
+        minRetentionRatio = in.readString();
+        title = in.readString();
+        type = in.readString();
+        updated = in.readString();
+        hasNotice = in.readByte() != 0;
+        tagStuck = in.readInt();
+        chaptersCount = in.readInt();
+        tocCount = in.readInt();
+        tocUpdated = in.readString();
+        retentionRatio = in.readString();
+        hasCmread = in.readByte() != 0;
+        thirdFlagsUpdated = in.readString();
+        wordCount = in.readInt();
+        cat = in.readString();
+        majorCate = in.readString();
+        minorCate = in.readString();
+        reviewCount = in.readInt();
+        totalFollower = in.readInt();
+        cpOnly = in.readByte() != 0;
+        hasCp = in.readByte() != 0;
+        _le = in.readByte() != 0;
+        tags = in.createStringArrayList();
+        tocs = in.createStringArrayList();
+        categories = in.createStringArrayList();
+        gender = in.createStringArrayList();
+    }
+
+    public static final Creator<BookDetail> CREATOR = new Creator<BookDetail>() {
+        @Override
+        public BookDetail createFromParcel(Parcel in) {
+            return new BookDetail(in);
+        }
+
+        @Override
+        public BookDetail[] newArray(int size) {
+            return new BookDetail[size];
+        }
+    };
+
+    public String getId() {
         return _id;
     }
 
-    public void set_id(String _id) {
+    public void setId(String _id) {
         this._id = _id;
     }
 
@@ -222,6 +286,30 @@ public class BookDetail implements Serializable {
         this.site = site;
     }
 
+    public String getShortIntro() {
+        return shortIntro;
+    }
+
+    public void setShortIntro(String shortIntro) {
+        this.shortIntro = shortIntro;
+    }
+
+    public int getLatelyFollowerBase() {
+        return latelyFollowerBase;
+    }
+
+    public void setLatelyFollowerBase(int latelyFollowerBase) {
+        this.latelyFollowerBase = latelyFollowerBase;
+    }
+
+    public String getMinRetentionRatio() {
+        return minRetentionRatio;
+    }
+
+    public void setMinRetentionRatio(String minRetentionRatio) {
+        this.minRetentionRatio = minRetentionRatio;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -302,11 +390,11 @@ public class BookDetail implements Serializable {
         this.tocUpdated = tocUpdated;
     }
 
-    public double getRetentionRatio() {
+    public String getRetentionRatio() {
         return retentionRatio;
     }
 
-    public void setRetentionRatio(double retentionRatio) {
+    public void setRetentionRatio(String retentionRatio) {
         this.retentionRatio = retentionRatio;
     }
 
@@ -428,5 +516,62 @@ public class BookDetail implements Serializable {
 
     public void setGender(List<String> gender) {
         this.gender = gender;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public String getBookInfoString() {
+        if (cat == null) {
+            cat = majorCate;
+        }
+        return author + " | " + cat + " | " + retentionRatio + "%读者留存";
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(_id);
+        dest.writeString(author);
+        dest.writeInt(banned);
+        dest.writeString(cover);
+        dest.writeString(creater);
+        dest.writeInt(followerCount);
+        dest.writeInt(gradeCount);
+        dest.writeByte((byte) (isSerial ? 1 : 0));
+        dest.writeString(lastChapter);
+        dest.writeInt(latelyFollower);
+        dest.writeString(longIntro);
+        dest.writeInt(postCount);
+        dest.writeInt(serializeWordCount);
+        dest.writeString(site);
+        dest.writeString(shortIntro);
+        dest.writeInt(latelyFollowerBase);
+        dest.writeString(minRetentionRatio);
+        dest.writeString(title);
+        dest.writeString(type);
+        dest.writeString(updated);
+        dest.writeByte((byte) (hasNotice ? 1 : 0));
+        dest.writeInt(tagStuck);
+        dest.writeInt(chaptersCount);
+        dest.writeInt(tocCount);
+        dest.writeString(tocUpdated);
+        dest.writeString(retentionRatio);
+        dest.writeByte((byte) (hasCmread ? 1 : 0));
+        dest.writeString(thirdFlagsUpdated);
+        dest.writeInt(wordCount);
+        dest.writeString(cat);
+        dest.writeString(majorCate);
+        dest.writeString(minorCate);
+        dest.writeInt(reviewCount);
+        dest.writeInt(totalFollower);
+        dest.writeByte((byte) (cpOnly ? 1 : 0));
+        dest.writeByte((byte) (hasCp ? 1 : 0));
+        dest.writeByte((byte) (_le ? 1 : 0));
+        dest.writeStringList(tags);
+        dest.writeStringList(tocs);
+        dest.writeStringList(categories);
+        dest.writeStringList(gender);
     }
 }

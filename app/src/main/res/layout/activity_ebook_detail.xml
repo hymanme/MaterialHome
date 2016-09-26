@@ -45,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_gravity="bottom"
-                android:background="@color/book_title_mask"/>
+                android:background="@color/book_title_mask" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -59,14 +59,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="500dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-    </android.support.v7.widget.RecyclerView>
+    <include layout="@layout/recycler_content" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

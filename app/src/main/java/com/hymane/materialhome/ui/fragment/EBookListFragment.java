@@ -14,7 +14,7 @@ import com.hymane.materialhome.R;
 import com.hymane.materialhome.api.presenter.impl.EBookPresenterImpl;
 import com.hymane.materialhome.api.view.IEBookListView;
 import com.hymane.materialhome.bean.event.GenderChangedEvent;
-import com.hymane.materialhome.bean.http.ebook.BooksBean;
+import com.hymane.materialhome.bean.http.ebook.BookDetail;
 import com.hymane.materialhome.bean.http.ebook.Rankings;
 import com.hymane.materialhome.common.Constant;
 import com.hymane.materialhome.ui.activity.MainActivity;
@@ -49,7 +49,7 @@ public class EBookListFragment extends BaseFragment implements IEBookListView, S
     private GridLayoutManager mLayoutManager;
 
     private EBookListAdapter mListAdapter;
-    private List<BooksBean> bookInfoResponses;
+    private List<BookDetail> bookInfoResponses;
     private EBookPresenterImpl eBookRankPresenter;
 
     public static EBookListFragment newInstance(int type, String gender) {

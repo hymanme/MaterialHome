@@ -65,7 +65,7 @@
             android:name=".ui.activity.EBookDetailActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.DayNight.NoActionBar"
+            android:theme="@style/AppTheme.DayNight.NoActionBar.BookDetail"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name=".ui.activity.CategoryDetailActivity"

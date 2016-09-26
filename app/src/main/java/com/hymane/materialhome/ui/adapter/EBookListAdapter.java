@@ -1,6 +1,11 @@
 package com.hymane.materialhome.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.AppCompatRatingBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,9 +15,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.hymane.materialhome.R;
-import com.hymane.materialhome.bean.http.ebook.BooksBean;
+import com.hymane.materialhome.bean.http.ebook.BookDetail;
+import com.hymane.materialhome.ui.activity.BaseActivity;
+import com.hymane.materialhome.ui.activity.EBookDetailActivity;
 import com.hymane.materialhome.utils.EBookUtils;
+import com.hymane.materialhome.utils.UIUtils;
 
 import java.util.List;
 
@@ -24,11 +33,11 @@ import java.util.List;
 public class EBookListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_EMPTY = 0;
     private static final int TYPE_DEFAULT = 1;
-    private final List<BooksBean> bookInfoResponses;
+    private final List<BookDetail> bookInfoResponses;
     private Context mContext;
     private int columns;
 
-    public EBookListAdapter(Context context, List<BooksBean> responses, int columns) {
+    public EBookListAdapter(Context context, List<BookDetail> responses, int columns) {
         this.bookInfoResponses = responses;
         this.columns = columns;
         this.mContext = context;
@@ -67,7 +76,7 @@ public class EBookListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof EBookListHolder) {
-            final BooksBean bookInfo = bookInfoResponses.get(position);
+            final BookDetail bookInfo = bookInfoResponses.get(position);
             Glide.with(mContext)
                     .load(EBookUtils.getImageUrl(bookInfo.getCover()))
                     .into(((EBookListHolder) holder).iv_book_img);
@@ -82,32 +91,33 @@ public class EBookListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((EBookListHolder) holder).tv_hots_num.setText(bookInfo.getLatelyFollower() + "人在追");
             ((EBookListHolder) holder).tv_book_info.setText(bookInfo.getBookInfoString());
             ((EBookListHolder) holder).tv_book_description.setText("\u3000" + bookInfo.getShortIntro());
-//            ((BookListHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Bundle b = new Bundle();
-//                    b.putSerializable(BookInfoResponse.serialVersionName, bookInfo);
-//                    Bitmap bitmap;
-//                    GlideBitmapDrawable imageDrawable = (GlideBitmapDrawable) ((BookListHolder) holder).iv_book_img.getDrawable();
-//                    if (imageDrawable != null) {
-//                        bitmap = imageDrawable.getBitmap();
-//                        b.putParcelable("book_img", bitmap);
-//                    }
-//                    Intent intent = new Intent(UIUtils.getContext(), BookDetailActivity.class);
-//                    intent.putExtras(b);
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                        if (BaseActivity.activity == null) {
-//                            UIUtils.startActivity(intent);
-//                            return;
-//                        }
-//                        ActivityOptionsCompat options = ActivityOptionsCompat.
-//                                makeSceneTransitionAnimation(BaseActivity.activity, ((BookListHolder) holder).iv_book_img, "book_img");
-//                        BaseActivity.activity.startActivity(intent, options.toBundle());
-//                    } else {
-//                        UIUtils.startActivity(intent);
-//                    }
-//                }
-//            });
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle b = new Bundle();
+                    b.putParcelable("BookDetail", bookInfo);
+                    b.putString("bookId", bookInfo.getId());
+                    Bitmap bitmap;
+                    GlideBitmapDrawable imageDrawable = (GlideBitmapDrawable) ((EBookListHolder) holder).iv_book_img.getDrawable();
+                    if (imageDrawable != null) {
+                        bitmap = imageDrawable.getBitmap();
+                        b.putParcelable("book_img", bitmap);
+                    }
+                    Intent intent = new Intent(mContext, EBookDetailActivity.class);
+                    intent.putExtras(b);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        if (BaseActivity.activity == null) {
+                            UIUtils.startActivity(intent);
+                            return;
+                        }
+                        ActivityOptionsCompat options = ActivityOptionsCompat.
+                                makeSceneTransitionAnimation(BaseActivity.activity, ((EBookListHolder) holder).iv_book_img, "book_img");
+                        BaseActivity.activity.startActivity(intent, options.toBundle());
+                    } else {
+                        UIUtils.startActivity(intent);
+                    }
+                }
+            });
         }
     }
 

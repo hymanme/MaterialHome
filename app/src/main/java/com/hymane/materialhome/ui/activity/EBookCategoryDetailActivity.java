@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.api.presenter.impl.EBookPresenterImpl;
 import com.hymane.materialhome.api.view.IEBookListView;
-import com.hymane.materialhome.bean.http.ebook.BooksBean;
+import com.hymane.materialhome.bean.http.ebook.BookDetail;
 import com.hymane.materialhome.bean.http.ebook.BooksByCats;
 import com.hymane.materialhome.common.Constant;
 import com.hymane.materialhome.ui.adapter.EBookListAdapter;
@@ -50,7 +50,7 @@ public class EBookCategoryDetailActivity extends BaseActivity implements IEBookL
 
     private GridLayoutManager mLayoutManager;
     private EBookListAdapter mListAdapter;
-    private List<BooksBean> bookInfoResponses;
+    private List<BookDetail> bookInfoResponses;
     private EBookPresenterImpl eBookRankPresenter;
 
     @Override

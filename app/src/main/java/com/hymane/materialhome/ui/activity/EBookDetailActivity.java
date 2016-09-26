@@ -8,10 +8,12 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -22,9 +24,9 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.api.presenter.impl.EBookDetailPresenterImpl;
 import com.hymane.materialhome.api.view.IEBookDetailView;
-import com.hymane.materialhome.bean.http.douban.BookInfoResponse;
 import com.hymane.materialhome.bean.http.douban.BookReviewsListResponse;
 import com.hymane.materialhome.bean.http.douban.BookSeriesListResponse;
+import com.hymane.materialhome.bean.http.ebook.BookDetail;
 import com.hymane.materialhome.ui.adapter.EBookDetailAdapter;
 import com.hymane.materialhome.utils.Blur;
 import com.hymane.materialhome.utils.UIUtils;
@@ -38,7 +40,7 @@ import butterknife.ButterKnife;
  * Create at 2016/9/22
  * Description: 电子图书详情页
  */
-public class EBookDetailActivity extends BaseActivity implements IEBookDetailView {
+public class EBookDetailActivity extends BaseActivity implements IEBookDetailView, SwipeRefreshLayout.OnRefreshListener {
     private static final int REVIEWS_COUNT = 5;
     private static final int SERIES_COUNT = 6;
     private static final int PAGE = 0;
@@ -47,6 +49,8 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
     CollapsingToolbarLayout mCollapsingLayout;
     @BindView(R.id.fab)
     FloatingActionButton mFab;
+    @BindView(R.id.swipe_refresh_widget)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
@@ -55,7 +59,8 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
     private ImageView iv_book_bg;
     private String bookId;
 
-    private BookInfoResponse mBookInfoResponse;
+    //    private BookDetail bookDetail;
+    private BookDetail bookInfo;
     private BookReviewsListResponse mReviewsListResponse;
     private BookSeriesListResponse mSeriesListResponse;
 
@@ -75,18 +80,19 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
         mReviewsListResponse = new BookReviewsListResponse();
         mSeriesListResponse = new BookSeriesListResponse();
         bookId = getIntent().getStringExtra("bookId");
-        mBookInfoResponse = (BookInfoResponse) getIntent().getSerializableExtra(BookInfoResponse.serialVersionName);
+        bookInfo = getIntent().getParcelableExtra("BookDetail");
         mLayoutManager = new LinearLayoutManager(EBookDetailActivity.this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mDetailAdapter = new EBookDetailAdapter(mBookInfoResponse, mReviewsListResponse, mSeriesListResponse);
+        mDetailAdapter = new EBookDetailAdapter(bookInfo, mReviewsListResponse, mSeriesListResponse);
         mRecyclerView.setAdapter(mDetailAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.recycler_color1, R.color.recycler_color2,
+                R.color.recycler_color3, R.color.recycler_color4);
         //头部图片
         iv_book_img = (ImageView) findViewById(R.id.iv_book_img);
         iv_book_bg = (ImageView) findViewById(R.id.iv_book_bg);
-        mCollapsingLayout.setTitle(mBookInfoResponse.getTitle());
+        mCollapsingLayout.setTitle(bookInfo.getTitle());
 
         Bitmap book_img = getIntent().getParcelableExtra("book_img");
         if (book_img != null) {
@@ -95,7 +101,7 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
             iv_book_bg.setAlpha(0.9f);
         } else {
             Glide.with(this)
-                    .load(mBookInfoResponse.getImages().getLarge())
+                    .load(bookInfo.getCover())
                     .asBitmap()
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
@@ -107,8 +113,7 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
                     });
         }
         mFab.setOnClickListener(v -> Toast.makeText(EBookDetailActivity.this, "click", Toast.LENGTH_SHORT).show());
-
-//        eBookPresenter.getBookDetail();
+        mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -126,7 +131,7 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
                 StringBuilder sb = new StringBuilder();
                 sb.append(getString(R.string.your_friend));
                 sb.append(getString(R.string.share_book_1));
-                sb.append(mBookInfoResponse.getTitle());
+                sb.append(bookInfo.getTitle());
                 sb.append(getString(R.string.share_book_2));
                 UIUtils.share(this, sb.toString(), null);
 
@@ -148,6 +153,7 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
 
     @Override
     public void showProgress() {
+        mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(true));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (mFab.getDrawable() instanceof Animatable) {
                 ((Animatable) mFab.getDrawable()).start();
@@ -160,6 +166,7 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
 
     @Override
     public void hideProgress() {
+        mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(false));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (mFab.getDrawable() instanceof Animatable) {
                 ((Animatable) mFab.getDrawable()).stop();
@@ -171,20 +178,24 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
 
     @Override
     public void updateView(Object result) {
-        if (result instanceof BookReviewsListResponse) {
-            final BookReviewsListResponse response = (BookReviewsListResponse) result;
-            mReviewsListResponse.setTotal(response.getTotal());
-            mReviewsListResponse.getReviews().addAll(response.getReviews());
-            mDetailAdapter.notifyDataSetChanged();
-            if (mBookInfoResponse.getSeries() != null) {
-//                eBookPresenter.loadSeries(mBookInfoResponse.getSeries().getId(), PAGE * SERIES_COUNT, 6, SERIES_FIELDS);
-            }
-        } else if (result instanceof BookSeriesListResponse) {
-            final BookSeriesListResponse response = (BookSeriesListResponse) result;
-            mSeriesListResponse.setTotal(response.getTotal());
-            mSeriesListResponse.getBooks().addAll(response.getBooks());
-            mDetailAdapter.notifyDataSetChanged();
+        if (result instanceof BookDetail) {
+            bookInfo = (BookDetail) result;
+            mDetailAdapter.notifyItemChanged(0);
         }
+//        if (result instanceof BookReviewsListResponse) {
+//            final BookReviewsListResponse response = (BookReviewsListResponse) result;
+//            mReviewsListResponse.setTotal(response.getTotal());
+//            mReviewsListResponse.getReviews().addAll(response.getReviews());
+//            mDetailAdapter.notifyDataSetChanged();
+//            if (mBookInfoResponse.getSeries() != null) {
+////                eBookPresenter.loadSeries(mBookInfoResponse.getSeries().getId(), PAGE * SERIES_COUNT, 6, SERIES_FIELDS);
+//            }
+//        } else if (result instanceof BookSeriesListResponse) {
+//            final BookSeriesListResponse response = (BookSeriesListResponse) result;
+//            mSeriesListResponse.setTotal(response.getTotal());
+//            mSeriesListResponse.getBooks().addAll(response.getBooks());
+//            mDetailAdapter.notifyDataSetChanged();
+//        }
     }
 
     @Override
@@ -194,7 +205,7 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
 
     @Override
     protected void onDestroy() {
-        eBookPresenter.cancelLoading();
+//        eBookPresenter.cancelLoading();
         if (mFab.getDrawable() instanceof Animatable) {
             ((Animatable) mFab.getDrawable()).stop();
         }
@@ -207,6 +218,13 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
             finishAfterTransition();
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        if (!TextUtils.isEmpty(bookId)) {
+            eBookPresenter.getBookDetail(bookId);
         }
     }
 }
