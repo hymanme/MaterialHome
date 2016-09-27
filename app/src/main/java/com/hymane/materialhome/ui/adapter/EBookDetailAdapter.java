@@ -1,5 +1,8 @@
 package com.hymane.materialhome.ui.adapter;
 
+import android.animation.ObjectAnimator;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.AppCompatRatingBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,10 +39,10 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
     private static final int AVATAR_SIZE_DP = 24;
     private static final int ANIMATION_DURATION = 600;
     //模拟加载时间
-    private static final int PROGRESS_DELAY_MIN_TIME = 500;
-    private static final int PROGRESS_DELAY_SIZE_TIME = 1000;
+    private static final int PROGRESS_DELAY_MIN_TIME = 300;
+    private static final int PROGRESS_DELAY_SIZE_TIME = 800;
 
-    private final BookDetail mBookInfo;
+    private BookDetail mBookInfo;
     private final BookReviewsListResponse mReviewsListResponse;
     private final BookSeriesListResponse mSeriesListResponse;
 
@@ -56,7 +59,7 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         if (viewType == TYPE_BOOK_INFO) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_book_info, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ebook_info, parent, false);
             return new BookInfoHolder(view);
         } else if (viewType == TYPE_BOOK_BRIEF) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_book_brief, parent, false);
@@ -72,65 +75,61 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-//        if (holder instanceof BookInfoHolder) {
-//            ((BookInfoHolder) holder).ratingBar_hots.setRating(Float.valueOf(mBookInfo.getRating().getAverage()) / 2);
-//            ((BookInfoHolder) holder).tv_hots_num.setText(mBookInfo.getRating().getAverage());
-//            ((BookInfoHolder) holder).tv_comment_num.setText(mBookInfo.getRating().getNumRaters() + UIUtils.getContext().getString(R.string.comment_num));
-//            ((BookInfoHolder) holder).tv_book_info.setText(mBookInfo.getInfoString());
-//            ((BookInfoHolder) holder).rl_more_info.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (flag) {
-//                        ObjectAnimator.ofFloat(((BookInfoHolder) holder).iv_more_info, "rotation", 90, 0).start();
-//                        ((BookInfoHolder) holder).progressBar.setVisibility(View.GONE);
-//                        ((BookInfoHolder) holder).ll_publish_info.setVisibility(View.GONE);
-//                        flag = false;
-//                    } else {
-//                        ObjectAnimator.ofFloat(((BookInfoHolder) holder).iv_more_info, "rotation", 0, 90).start();
-//                        ((BookInfoHolder) holder).progressBar.setVisibility(View.VISIBLE);
-//                        new Handler() {
-//                            @Override
-//                            public void handleMessage(Message msg) {
-//                                super.handleMessage(msg);
-//                                if (flag) {
-//                                    ((BookInfoHolder) holder).ll_publish_info.setVisibility(View.VISIBLE);
-//                                    ((BookInfoHolder) holder).progressBar.setVisibility(View.GONE);
-//                                }
-//                            }
-//                        }.sendEmptyMessageDelayed(0, getDelayTime());
-//                        flag = true;
-//                    }
-//                }
-//            });
-//            if (mBookInfo.getAuthor().length > 0) {
-//                ((BookInfoHolder) holder).tv_author.setText("作者:" + mBookInfo.getAuthor()[0]);
-//            }
-//            ((BookInfoHolder) holder).tv_publisher.setText("出版社:" + mBookInfo.getPublisher());
-//            if (mBookInfo.getSubtitle().isEmpty()) {
-//                ((BookInfoHolder) holder).tv_subtitle.setVisibility(View.GONE);
-//            }
-//            ((BookInfoHolder) holder).tv_subtitle.setText("副标题:" + mBookInfo.getSubtitle());
-//            if (mBookInfo.getOrigin_title().isEmpty()) {
-//                ((BookInfoHolder) holder).tv_origin_title.setVisibility(View.GONE);
-//            }
-//            ((BookInfoHolder) holder).tv_origin_title.setText("原作名:" + mBookInfo.getOrigin_title());
-//            if (mBookInfo.getTranslator().length > 0) {
-//                ((BookInfoHolder) holder).tv_translator.setText("译者:" + mBookInfo.getTranslator()[0]);
-//            } else {
-//                ((BookInfoHolder) holder).tv_translator.setVisibility(View.GONE);
-//            }
-//            ((BookInfoHolder) holder).tv_publish_date.setText("出版年:" + mBookInfo.getPubdate());
-//            ((BookInfoHolder) holder).tv_pages.setText("页数:" + mBookInfo.getPages());
-//            ((BookInfoHolder) holder).tv_price.setText("定价:" + mBookInfo.getPrice());
-//            ((BookInfoHolder) holder).tv_binding.setText("装帧:" + mBookInfo.getBinding());
-//            ((BookInfoHolder) holder).tv_isbn.setText("isbn:" + mBookInfo.getIsbn13());
-//        } else if (holder instanceof BookBriefHolder) {
-//            if (!mBookInfo.getSummary().isEmpty()) {
-//                ((BookBriefHolder) holder).etv_brief.setContent(mBookInfo.getSummary());
-//            } else {
-//                ((BookBriefHolder) holder).etv_brief.setContent(UIUtils.getContext().getString(R.string.no_brief));
-//            }
-//        } else if (holder instanceof BookCommentHolder) {
+        if (holder instanceof BookInfoHolder) {
+            float ratio = 0;
+            try {
+                ratio = Float.parseFloat(mBookInfo.getRetentionRatio()) / 20;
+                ratio = (float) (Math.round(ratio * 100)) / 100;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            ((BookInfoHolder) holder).ratingBar_hots.setRating(ratio);
+            ((BookInfoHolder) holder).tv_hots_num.setText(ratio + "");
+            ((BookInfoHolder) holder).tv_words_num.setText(mBookInfo.getWordCount() / 10000 + "万字");
+            ((BookInfoHolder) holder).tv_book_info.setText(mBookInfo.getBookInfoString());
+            ((BookInfoHolder) holder).rl_more_info.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (flag) {
+                        ObjectAnimator.ofFloat(((BookInfoHolder) holder).iv_more_info, "rotation", 90, 0).start();
+                        ((BookInfoHolder) holder).progressBar.setVisibility(View.GONE);
+                        ((BookInfoHolder) holder).ll_publish_info.setVisibility(View.GONE);
+                        flag = false;
+                    } else {
+                        ObjectAnimator.ofFloat(((BookInfoHolder) holder).iv_more_info, "rotation", 0, 90).start();
+                        ((BookInfoHolder) holder).progressBar.setVisibility(View.VISIBLE);
+                        //// TODO: 2016/9/27 may occur oom
+                        new Handler() {
+                            @Override
+                            public void handleMessage(Message msg) {
+                                super.handleMessage(msg);
+                                if (flag) {
+                                    ((BookInfoHolder) holder).ll_publish_info.setVisibility(View.VISIBLE);
+                                    ((BookInfoHolder) holder).progressBar.setVisibility(View.GONE);
+                                }
+                            }
+                        }.sendEmptyMessageDelayed(0, getDelayTime());
+                        flag = true;
+                    }
+                }
+            });
+            ((BookInfoHolder) holder).tv_author.setText("作者：" + mBookInfo.getAuthor());
+            ((BookInfoHolder) holder).tv_followers.setText("追书人数：" + mBookInfo.getLatelyFollower());
+            ((BookInfoHolder) holder).retention.setText("读者留存率：" + mBookInfo.getRetentionRatio() + "%");
+            ((BookInfoHolder) holder).tv_day_words.setText("日更新字数：" + mBookInfo.getSerializeWordCount());
+            ((BookInfoHolder) holder).tv_chapters.setText("总章节数：" + mBookInfo.getChaptersCount());
+            ((BookInfoHolder) holder).tv_publish_date.setText("更新时间：" + mBookInfo.getUpdated());
+            ((BookInfoHolder) holder).tv_last_hapter.setText("最新章节：" + mBookInfo.getLastChapter());
+            ((BookInfoHolder) holder).tv_serial.setText("是否连载：" + (mBookInfo.isSerial() ? "是" : "否"));
+            ((BookInfoHolder) holder).tv_minor_cate.setText("次级分类：" + mBookInfo.getMajorCate());
+            ((BookInfoHolder) holder).tv_creater.setText("Creater：" + mBookInfo.getCreater());
+        } else if (holder instanceof BookBriefHolder) {
+            if (mBookInfo.getLongIntro() != null) {
+                ((BookBriefHolder) holder).etv_brief.setContent(mBookInfo.getLongIntro());
+            } else if (mBookInfo.getShortIntro() != null) {
+                ((BookBriefHolder) holder).etv_brief.setContent(mBookInfo.getShortIntro());
+            }
+        } else if (holder instanceof BookCommentHolder) {
 //            List<BookReviewResponse> reviews = mReviewsListResponse.getReviews();
 //            if (reviews.isEmpty()) {
 //                ((BookCommentHolder) holder).itemView.setVisibility(View.GONE);
@@ -169,7 +168,7 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
 //            ((BookCommentHolder) holder).tv_comment_content.setText(reviews.get(position - HEADER_COUNT).getSummary());
 //            ((BookCommentHolder) holder).tv_favorite_num.setText(reviews.get(position - HEADER_COUNT).getVotes() + "");
 //            ((BookCommentHolder) holder).tv_update_time.setText(reviews.get(position - HEADER_COUNT).getUpdated().split(" ")[0]);
-//        } else if (holder instanceof BookSeriesHolder) {
+        } else if (holder instanceof BookSeriesHolder) {
 //            final List<BookInfoResponse> seriesBooks = mSeriesListResponse.getBooks();
 //            if (seriesBooks.isEmpty()) {
 //                ((BookSeriesHolder) holder).itemView.setVisibility(View.GONE);
@@ -181,7 +180,7 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
 //                    ((BookSeriesHolder) holder).ll_series_content.addView(ceilHolder.getContentView());
 //                }
 //            }
-//        }
+        }
     }
 
     @Override
@@ -209,10 +208,14 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
         return count;
     }
 
+    public void setBookInfo(BookDetail bookInfo) {
+        this.mBookInfo = bookInfo;
+    }
+
     class BookInfoHolder extends RecyclerView.ViewHolder {
         private AppCompatRatingBar ratingBar_hots;
         private TextView tv_hots_num;
-        private TextView tv_comment_num;
+        private TextView tv_words_num;
         private TextView tv_book_info;
         private ImageView iv_more_info;
         private ProgressBar progressBar;
@@ -220,22 +223,22 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
         private LinearLayout ll_publish_info;
 
         private TextView tv_author;
-        private TextView tv_publisher;
-        private TextView tv_subtitle;
-        private TextView tv_origin_title;
-        private TextView tv_translator;
+        private TextView tv_followers;
+        private TextView retention;
+        private TextView tv_day_words;
+        private TextView tv_chapters;
         private TextView tv_publish_date;
-        private TextView tv_pages;
-        private TextView tv_price;
-        private TextView tv_binding;
-        private TextView tv_isbn;
+        private TextView tv_last_hapter;
+        private TextView tv_serial;
+        private TextView tv_minor_cate;
+        private TextView tv_creater;
 
 
         public BookInfoHolder(View itemView) {
             super(itemView);
             ratingBar_hots = (AppCompatRatingBar) itemView.findViewById(R.id.ratingBar_hots);
             tv_hots_num = (TextView) itemView.findViewById(R.id.tv_hots_num);
-            tv_comment_num = (TextView) itemView.findViewById(R.id.tv_comment_num);
+            tv_words_num = (TextView) itemView.findViewById(R.id.tv_words_num);
             tv_book_info = (TextView) itemView.findViewById(R.id.tv_book_info);
             iv_more_info = (ImageView) itemView.findViewById(R.id.iv_more_info);
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
@@ -243,15 +246,15 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
             ll_publish_info = (LinearLayout) itemView.findViewById(R.id.ll_publish_info);
 
             tv_author = (TextView) itemView.findViewById(R.id.tv_author);
-            tv_publisher = (TextView) itemView.findViewById(R.id.tv_publisher);
-            tv_subtitle = (TextView) itemView.findViewById(R.id.tv_subtitle);
-            tv_origin_title = (TextView) itemView.findViewById(R.id.tv_origin_title);
-            tv_translator = (TextView) itemView.findViewById(R.id.tv_translator);
+            tv_followers = (TextView) itemView.findViewById(R.id.tv_followers);
+            retention = (TextView) itemView.findViewById(R.id.tv_retention);
+            tv_day_words = (TextView) itemView.findViewById(R.id.tv_day_words);
+            tv_chapters = (TextView) itemView.findViewById(R.id.tv_chapters);
             tv_publish_date = (TextView) itemView.findViewById(R.id.tv_publish_date);
-            tv_pages = (TextView) itemView.findViewById(R.id.tv_pages);
-            tv_price = (TextView) itemView.findViewById(R.id.tv_price);
-            tv_binding = (TextView) itemView.findViewById(R.id.tv_binding);
-            tv_isbn = (TextView) itemView.findViewById(R.id.tv_isbn);
+            tv_last_hapter = (TextView) itemView.findViewById(R.id.tv_last_hapter);
+            tv_serial = (TextView) itemView.findViewById(R.id.tv_serial);
+            tv_minor_cate = (TextView) itemView.findViewById(R.id.tv_minor_cate);
+            tv_creater = (TextView) itemView.findViewById(R.id.tv_creater);
         }
     }
 
@@ -261,6 +264,7 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
         public BookBriefHolder(View itemView) {
             super(itemView);
             etv_brief = (ExpandTextView) itemView.findViewById(R.id.etv_brief);
+            etv_brief.setMinVisibleLines(3);
         }
     }
 

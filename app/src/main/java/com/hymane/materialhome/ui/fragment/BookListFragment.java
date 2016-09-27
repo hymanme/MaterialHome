@@ -49,7 +49,6 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
     private BookListAdapter mListAdapter;
     private List<BookInfoResponse> bookInfoResponses;
     private BookListPresenterImpl bookListPresenter;
-    private int listPosition;
 
     public static BookListFragment newInstance(String tag) {
 
@@ -63,9 +62,6 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
     @Override
     protected void initRootView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.recycler_content, container, false);
-        if (savedInstanceState != null) {
-            listPosition = savedInstanceState.getInt("listPosition");
-        }
         String result = getArguments().getString("tag");
         if (!TextUtils.isEmpty(result)) {
             tag = result;
@@ -94,7 +90,6 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
         //设置adapter
         mListAdapter = new BookListAdapter(getActivity(), bookInfoResponses, spanCount);
         mRecyclerView.setAdapter(mListAdapter);
-        mRecyclerView.smoothScrollToPosition(listPosition);
 
         //设置Item增加、移除动画
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -104,7 +99,6 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putInt("listPosition", mLayoutManager.findLastVisibleItemPosition());
         super.onSaveInstanceState(outState);
     }
 

@@ -114,6 +114,7 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
         }
         mFab.setOnClickListener(v -> Toast.makeText(EBookDetailActivity.this, "click", Toast.LENGTH_SHORT).show());
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        onRefresh();
     }
 
     @Override
@@ -179,8 +180,8 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
     @Override
     public void updateView(Object result) {
         if (result instanceof BookDetail) {
-            bookInfo = (BookDetail) result;
-            mDetailAdapter.notifyItemChanged(0);
+            mDetailAdapter.setBookInfo((BookDetail) result);
+            mDetailAdapter.notifyDataSetChanged();
         }
 //        if (result instanceof BookReviewsListResponse) {
 //            final BookReviewsListResponse response = (BookReviewsListResponse) result;
