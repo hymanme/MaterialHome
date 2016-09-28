@@ -6,7 +6,6 @@ import com.hymane.materialhome.api.model.IEBookModel;
 import com.hymane.materialhome.api.model.impl.EBookModelImpl;
 import com.hymane.materialhome.api.presenter.IEBookDetailPresenter;
 import com.hymane.materialhome.api.view.IEBookDetailView;
-import com.hymane.materialhome.api.view.IEBookListView;
 import com.hymane.materialhome.bean.http.douban.BaseResponse;
 import com.hymane.materialhome.utils.NetworkUtils;
 import com.hymane.materialhome.utils.UIUtils;
@@ -36,6 +35,54 @@ public class EBookDetailPresenterImpl implements IEBookDetailPresenter, ApiCompl
         }
         mBookDetailView.showProgress();
         mEBookDetailModel.getBookDetail(bookId, this);
+    }
+
+    @Override
+    public void getBookReviewList(String bookId, String sort, int start, int limit) {
+        if (!NetworkUtils.isConnected(UIUtils.getContext())) {
+            mBookDetailView.showMessage(UIUtils.getContext().getString(R.string.poor_network));
+            mBookDetailView.hideProgress();
+            //没网络读取缓存
+//            return;
+        }
+        mBookDetailView.showProgress();
+        mEBookDetailModel.getBookReviewList(bookId, sort, start, limit, this);
+    }
+
+    @Override
+    public void getBooksByTag(String tags, int start, int limit) {
+        if (!NetworkUtils.isConnected(UIUtils.getContext())) {
+            mBookDetailView.showMessage(UIUtils.getContext().getString(R.string.poor_network));
+            mBookDetailView.hideProgress();
+            //没网络读取缓存
+//            return;
+        }
+        mBookDetailView.showProgress();
+        mEBookDetailModel.getBooksByTag(tags, start, limit, this);
+    }
+
+    @Override
+    public void getHotReview(String bookId, int limit) {
+        if (!NetworkUtils.isConnected(UIUtils.getContext())) {
+            mBookDetailView.showMessage(UIUtils.getContext().getString(R.string.poor_network));
+            mBookDetailView.hideProgress();
+            //没网络读取缓存
+//            return;
+        }
+        mBookDetailView.showProgress();
+        mEBookDetailModel.getHotReview(bookId, limit, this);
+    }
+
+    @Override
+    public void getRecommendBookList(String bookId, int limit) {
+        if (!NetworkUtils.isConnected(UIUtils.getContext())) {
+            mBookDetailView.showMessage(UIUtils.getContext().getString(R.string.poor_network));
+            mBookDetailView.hideProgress();
+            //没网络读取缓存
+//            return;
+        }
+        mBookDetailView.showProgress();
+        mEBookDetailModel.getRecommendBookList(bookId, limit, this);
     }
 
     @Override

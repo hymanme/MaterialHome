@@ -49,12 +49,19 @@ public class Constant {
     public static final int TYPE_RETAINED_RANKING = 1;
     public static final int TYPE_FINISHED_RANKING = 2;
     public static final int TYPE_POTENTIAL_RANKING = 3;
-    //图书过滤
+    //图书分类过滤
     //hot(热门)、new(新书)、reputation(好评)、over(完结)
     public static final String EBOOK_FILTER_HOT = "hot";
     public static final String EBOOK_FILTER_NEW = "new";
     public static final String EBOOK_FILTER_REPUTATION = "reputation";
     public static final String EBOOK_FILTER_OVER = "over";
+
+    //图书评论分类
+    //updated(默认排序)、created(最新发布)、helpful(最有用的)、comment-count(最多评论)
+    public static final String EBOOK_SORT_UPDATED = "updated";
+    public static final String EBOOK_SORT_CREATED = "created";
+    public static final String EBOOK_SORT_HELPFUL = "helpful";
+    public static final String EBOOK_SORT_COMMENT_COUNT = "comment-count";
 
     @StringDef({
             Gender.MALE,

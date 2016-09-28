@@ -1,8 +1,12 @@
 package com.hymane.materialhome.ui.adapter;
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.AppCompatRatingBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,13 +19,24 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.hymane.expandtextview.ExpandTextView;
 import com.hymane.materialhome.R;
-import com.hymane.materialhome.bean.http.douban.BookReviewsListResponse;
-import com.hymane.materialhome.bean.http.douban.BookSeriesListResponse;
 import com.hymane.materialhome.bean.http.ebook.BookDetail;
+import com.hymane.materialhome.bean.http.ebook.BooksByTag;
+import com.hymane.materialhome.bean.http.ebook.HotReview;
+import com.hymane.materialhome.bean.http.ebook.RecommendBookList;
+import com.hymane.materialhome.holder.EBookSeriesCeilHolder;
+import com.hymane.materialhome.ui.activity.BookReviewsActivity;
+import com.hymane.materialhome.utils.EBookUtils;
+import com.hymane.materialhome.utils.UIUtils;
 
+import java.util.List;
 import java.util.Random;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Author   :hymanme
@@ -34,25 +49,28 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
     private static final int TYPE_BOOK_BRIEF = 1;
     private static final int TYPE_BOOK_COMMENT = 2;
     private static final int TYPE_BOOK_RECOMMEND = 3;
+    private static final int TYPE_BOOK_LIST = 4;
 
     public static final int HEADER_COUNT = 2;
-    private static final int AVATAR_SIZE_DP = 24;
-    private static final int ANIMATION_DURATION = 600;
+    //    private static final int AVATAR_SIZE_DP = 24;
+//    private static final int ANIMATION_DURATION = 600;
     //模拟加载时间
     private static final int PROGRESS_DELAY_MIN_TIME = 300;
     private static final int PROGRESS_DELAY_SIZE_TIME = 800;
 
     private BookDetail mBookInfo;
-    private final BookReviewsListResponse mReviewsListResponse;
-    private final BookSeriesListResponse mSeriesListResponse;
+    private final HotReview mHotReview;
+    private final BooksByTag mBooksByTag;
+    private final RecommendBookList mBookList;
 
     //图书出版信息是否展开
     private boolean flag;
 
-    public EBookDetailAdapter(BookDetail bookInfo, BookReviewsListResponse reviewsListResponse, BookSeriesListResponse seriesListResponse) {
+    public EBookDetailAdapter(BookDetail bookInfo, HotReview hotReview, BooksByTag booksByTag, RecommendBookList bookList) {
         mBookInfo = bookInfo;
-        mReviewsListResponse = reviewsListResponse;
-        mSeriesListResponse = seriesListResponse;
+        mHotReview = hotReview;
+        mBooksByTag = booksByTag;
+        mBookList = bookList;
     }
 
     @Override
@@ -65,11 +83,14 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_book_brief, parent, false);
             return new BookBriefHolder(view);
         } else if (viewType == TYPE_BOOK_COMMENT) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_book_comment, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ebook_comment, parent, false);
             return new BookCommentHolder(view);
-        } else {
+        } else if (viewType == TYPE_BOOK_RECOMMEND) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_book_series, parent, false);
             return new BookSeriesHolder(view);
+        } else {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ebook_booklist, parent, false);
+            return new BookListHolder(view);
         }
     }
 
@@ -130,56 +151,71 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
                 ((BookBriefHolder) holder).etv_brief.setContent(mBookInfo.getShortIntro());
             }
         } else if (holder instanceof BookCommentHolder) {
-//            List<BookReviewResponse> reviews = mReviewsListResponse.getReviews();
-//            if (reviews.isEmpty()) {
-//                ((BookCommentHolder) holder).itemView.setVisibility(View.GONE);
-//            } else if (position == HEADER_COUNT) {
-//                ((BookCommentHolder) holder).tv_comment_title.setVisibility(View.VISIBLE);
-//            } else if (position == reviews.size() + 1) {
-//                ((BookCommentHolder) holder).tv_more_comment.setVisibility(View.VISIBLE);
-//                ((BookCommentHolder) holder).tv_more_comment.setText(UIUtils.getContext().getString(R.string.more_brief) + mReviewsListResponse.getTotal() + "条");
-//                ((BookCommentHolder) holder).tv_more_comment.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent intent = new Intent(UIUtils.getContext(), BookReviewsActivity.class);
-//                        intent.putExtra("bookId", mBookInfo.getId());
-//                        intent.putExtra("bookName", mBookInfo.getTitle());
-//                        UIUtils.startActivity(intent);
-//                    }
-//                });
-//            }
-//            Glide.with(UIUtils.getContext())
-//                    .load(reviews.get(position - HEADER_COUNT).getAuthor().getAvatar())
-//                    .asBitmap()
-//                    .centerCrop()
-//                    .into(new BitmapImageViewTarget(((BookCommentHolder) holder).iv_avatar) {
-//                        @Override
-//                        protected void setResource(Bitmap resource) {
-//                            RoundedBitmapDrawable circularBitmapDrawable =
-//                                    RoundedBitmapDrawableFactory.create(UIUtils.getContext().getResources(), resource);
-//                            circularBitmapDrawable.setCircular(true);
-//                            ((BookCommentHolder) holder).iv_avatar.setImageDrawable(circularBitmapDrawable);
-//                        }
-//                    });
-//            ((BookCommentHolder) holder).tv_user_name.setText(reviews.get(position - HEADER_COUNT).getAuthor().getName());
-//            if (reviews.get(position - HEADER_COUNT).getRating() != null) {
-//                ((BookCommentHolder) holder).ratingBar_hots.setRating(Float.valueOf(reviews.get(position - HEADER_COUNT).getRating().getValue()));
-//            }
-//            ((BookCommentHolder) holder).tv_comment_content.setText(reviews.get(position - HEADER_COUNT).getSummary());
-//            ((BookCommentHolder) holder).tv_favorite_num.setText(reviews.get(position - HEADER_COUNT).getVotes() + "");
-//            ((BookCommentHolder) holder).tv_update_time.setText(reviews.get(position - HEADER_COUNT).getUpdated().split(" ")[0]);
+            List<HotReview.Reviews> reviews = mHotReview.getReviews();
+            if (reviews.isEmpty()) {
+                ((BookCommentHolder) holder).itemView.setVisibility(View.GONE);
+            } else if (position == HEADER_COUNT) {
+                ((BookCommentHolder) holder).tv_comment_title.setVisibility(View.VISIBLE);
+            } else if (position == reviews.size() + 1) {
+                ((BookCommentHolder) holder).tv_more_comment.setVisibility(View.VISIBLE);
+                ((BookCommentHolder) holder).tv_more_comment.setText(UIUtils.getContext().getString(R.string.more_brief));
+                ((BookCommentHolder) holder).tv_more_comment.setOnClickListener(v -> {
+                    Intent intent = new Intent(UIUtils.getContext(), BookReviewsActivity.class);
+                    intent.putExtra("bookId", mBookInfo.getId());
+                    intent.putExtra("bookName", mBookInfo.getTitle());
+                    UIUtils.startActivity(intent);
+                });
+            }
+            Glide.with(UIUtils.getContext())
+                    .load(EBookUtils.getImageUrl(reviews.get(position - HEADER_COUNT).getAuthor().getAvatar()))
+                    .asBitmap()
+                    .centerCrop()
+                    .into(new BitmapImageViewTarget(((BookCommentHolder) holder).iv_avatar) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(UIUtils.getContext().getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            ((BookCommentHolder) holder).iv_avatar.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+            ((BookCommentHolder) holder).tv_user_name.setText(reviews.get(position - HEADER_COUNT).getAuthor().getNickname());
+            ((BookCommentHolder) holder).ratingBar_hots.setRating((float) reviews.get(position - HEADER_COUNT).getRating());
+            ((BookCommentHolder) holder).tv_comment_content.setText(reviews.get(position - HEADER_COUNT).getContent());
+            ((BookCommentHolder) holder).tv_favorite_num.setText(reviews.get(position - HEADER_COUNT).getLikeCount() + "");
+            ((BookCommentHolder) holder).tv_update_time.setText(reviews.get(position - HEADER_COUNT).getUpdated().split("T")[0]);
         } else if (holder instanceof BookSeriesHolder) {
-//            final List<BookInfoResponse> seriesBooks = mSeriesListResponse.getBooks();
-//            if (seriesBooks.isEmpty()) {
-//                ((BookSeriesHolder) holder).itemView.setVisibility(View.GONE);
-//            } else {
-//                BookSeriesCeilHolder ceilHolder;
-//                ((BookSeriesHolder) holder).ll_series_content.removeAllViews();
-//                for (int i = 0; i < seriesBooks.size(); i++) {
-//                    ceilHolder = new BookSeriesCeilHolder(seriesBooks.get(i));
-//                    ((BookSeriesHolder) holder).ll_series_content.addView(ceilHolder.getContentView());
-//                }
-//            }
+            final List<BookDetail> seriesBooks = mBooksByTag.getBooks();
+            if (seriesBooks.isEmpty()) {
+                ((BookSeriesHolder) holder).itemView.setVisibility(View.GONE);
+            } else {
+                EBookSeriesCeilHolder ceilHolder;
+                ((BookSeriesHolder) holder).ll_series_content.removeAllViews();
+                for (int i = 0; i < seriesBooks.size(); i++) {
+                    ceilHolder = new EBookSeriesCeilHolder(seriesBooks.get(i));
+                    ((BookSeriesHolder) holder).ll_series_content.addView(ceilHolder.getContentView());
+                }
+            }
+        } else if (holder instanceof BookListHolder) {
+            int index = position - (mHotReview.getReviews().size() + HEADER_COUNT) - 1;
+            RecommendBookList.RecommendBook book;
+            try {
+                book = mBookList.getBookList().get(index);
+            } catch (IndexOutOfBoundsException e) {
+                e.printStackTrace();
+                return;
+            }
+            if (index == 0) {
+                ((BookListHolder) holder).tv_booklist_title.setVisibility(View.VISIBLE);
+            } else {
+                ((BookListHolder) holder).tv_booklist_title.setVisibility(View.GONE);
+            }
+            Glide.with(UIUtils.getContext())
+                    .load(EBookUtils.getImageUrl(book.getCover()))
+                    .into(((BookListHolder) holder).iv_book_img);
+            ((BookListHolder) holder).tv_author.setText(book.getAuthor());
+            ((BookListHolder) holder).tv_book_info.setText(book.getInfo());
+            ((BookListHolder) holder).tv_book_description.setText(book.getDesc());
         }
     }
 
@@ -189,20 +225,25 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
             return TYPE_BOOK_INFO;
         } else if (position == 1) {
             return TYPE_BOOK_BRIEF;
-        } else if (position > 1 && position < (mReviewsListResponse == null ? HEADER_COUNT : (mReviewsListResponse.getReviews().size() + HEADER_COUNT))) {
+        } else if (position > 1 && position < (mHotReview == null ? HEADER_COUNT : (mHotReview.getReviews().size() + HEADER_COUNT))) {
             return TYPE_BOOK_COMMENT;
-        } else {
+        } else if (position == (mHotReview == null ? HEADER_COUNT : (mHotReview.getReviews().size() + HEADER_COUNT))) {
             return TYPE_BOOK_RECOMMEND;
+        } else {
+            return TYPE_BOOK_LIST;
         }
     }
 
     @Override
     public int getItemCount() {
         int count = HEADER_COUNT;
-        if (mReviewsListResponse != null) {
-            count += mReviewsListResponse.getReviews().size();
+        if (mHotReview != null) {
+            count += mHotReview.getReviews().size();
+            if (!mHotReview.getReviews().isEmpty() && mBookList != null) {
+                count += mBookList.getBookList().size();
+            }
         }
-        if (mSeriesListResponse != null && !mSeriesListResponse.getBooks().isEmpty()) {
+        if (mBooksByTag != null && !mBooksByTag.getBooks().isEmpty()) {
             count += 1;
         }
         return count;
@@ -301,6 +342,26 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
             super(itemView);
             hsv_series = (HorizontalScrollView) itemView.findViewById(R.id.hsv_series);
             ll_series_content = (LinearLayout) itemView.findViewById(R.id.ll_series_content);
+        }
+    }
+
+    class BookListHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.tv_book_title)
+        TextView tv_book_title;
+        @BindView(R.id.iv_book_img)
+        ImageView iv_book_img;
+        @BindView(R.id.tv_author)
+        TextView tv_author;
+        @BindView(R.id.tv_book_info)
+        TextView tv_book_info;
+        @BindView(R.id.tv_book_description)
+        TextView tv_book_description;
+        @BindView(R.id.tv_booklist_title)
+        TextView tv_booklist_title;
+
+        public BookListHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 

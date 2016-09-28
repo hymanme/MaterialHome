@@ -23,7 +23,7 @@
     <string name="share_dialog_title">分享</string>
     <string name="action_share">分享</string>
     <string name="action_sort">排序</string>
-    <string name="comment_of_book">的评论</string>
+    <string name="comment_of_book">--评论</string>
     <string name="press_twice_exit">再次按返回键退出</string>
     <string name="exit_directly">直接退出</string>
     <string name="bookshelf_name">书架名称</string>
@@ -50,4 +50,5 @@
     <string name="action_filter_reputation">好评</string>
     <string name="action_filter_over">完结</string>
     <string name="action_gender">性别</string>
+    <string name="recommend_book_list">推荐书单</string>
 </resources>

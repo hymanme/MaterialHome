@@ -24,9 +24,10 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.api.presenter.impl.EBookDetailPresenterImpl;
 import com.hymane.materialhome.api.view.IEBookDetailView;
-import com.hymane.materialhome.bean.http.douban.BookReviewsListResponse;
-import com.hymane.materialhome.bean.http.douban.BookSeriesListResponse;
 import com.hymane.materialhome.bean.http.ebook.BookDetail;
+import com.hymane.materialhome.bean.http.ebook.BooksByTag;
+import com.hymane.materialhome.bean.http.ebook.HotReview;
+import com.hymane.materialhome.bean.http.ebook.RecommendBookList;
 import com.hymane.materialhome.ui.adapter.EBookDetailAdapter;
 import com.hymane.materialhome.utils.Blur;
 import com.hymane.materialhome.utils.UIUtils;
@@ -42,7 +43,8 @@ import butterknife.ButterKnife;
  */
 public class EBookDetailActivity extends BaseActivity implements IEBookDetailView, SwipeRefreshLayout.OnRefreshListener {
     private static final int REVIEWS_COUNT = 5;
-    private static final int SERIES_COUNT = 6;
+    private static final int SERIES_COUNT = 8;
+    private static final int BOOK_LIST_COUNT = 4;
     private static final int PAGE = 0;
 
     @BindView(R.id.collapsingToolbarLayout)
@@ -53,16 +55,15 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
-    private LinearLayoutManager mLayoutManager;
     private EBookDetailAdapter mDetailAdapter;
     private ImageView iv_book_img;
     private ImageView iv_book_bg;
     private String bookId;
 
-    //    private BookDetail bookDetail;
     private BookDetail bookInfo;
-    private BookReviewsListResponse mReviewsListResponse;
-    private BookSeriesListResponse mSeriesListResponse;
+    private HotReview hotReview;
+    private BooksByTag booksByTag;
+    private RecommendBookList bookList;
 
     private EBookDetailPresenterImpl eBookPresenter;
 
@@ -77,14 +78,15 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
     @Override
     protected void initEvents() {
         eBookPresenter = new EBookDetailPresenterImpl(this);
-        mReviewsListResponse = new BookReviewsListResponse();
-        mSeriesListResponse = new BookSeriesListResponse();
+        hotReview = new HotReview();
+        booksByTag = new BooksByTag();
+        bookList = new RecommendBookList();
         bookId = getIntent().getStringExtra("bookId");
         bookInfo = getIntent().getParcelableExtra("BookDetail");
-        mLayoutManager = new LinearLayoutManager(EBookDetailActivity.this);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(EBookDetailActivity.this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mDetailAdapter = new EBookDetailAdapter(bookInfo, mReviewsListResponse, mSeriesListResponse);
+        mDetailAdapter = new EBookDetailAdapter(bookInfo, hotReview, booksByTag, bookList);
         mRecyclerView.setAdapter(mDetailAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mSwipeRefreshLayout.setColorSchemeResources(R.color.recycler_color1, R.color.recycler_color2,
@@ -180,23 +182,25 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
     @Override
     public void updateView(Object result) {
         if (result instanceof BookDetail) {
-            mDetailAdapter.setBookInfo((BookDetail) result);
-            mDetailAdapter.notifyDataSetChanged();
+            bookInfo = (BookDetail) result;
+            mDetailAdapter.setBookInfo(bookInfo);
+            mDetailAdapter.notifyItemChanged(0);
+            eBookPresenter.getBooksByTag(bookInfo.getTags().get(0), PAGE, SERIES_COUNT);
+        } else if (result instanceof HotReview) {
+            final HotReview response = (HotReview) result;
+            hotReview.getReviews().clear();
+            hotReview.getReviews().addAll(response.getReviews());
+            mDetailAdapter.notifyItemChanged(1);
+        } else if (result instanceof BooksByTag) {
+            final BooksByTag response = (BooksByTag) result;
+            booksByTag.addBooks(response.getBooks());
+            mDetailAdapter.notifyItemChanged(hotReview.getReviews().size() + 2);
+            eBookPresenter.getRecommendBookList(bookId, BOOK_LIST_COUNT);
+        } else if (result instanceof RecommendBookList) {
+            bookList.addBookList(((RecommendBookList) result).getBookList());
+            final int start = hotReview.getReviews().size() + 2;
+            mDetailAdapter.notifyItemRangeInserted(start + 1, start + bookList.getBookList().size());
         }
-//        if (result instanceof BookReviewsListResponse) {
-//            final BookReviewsListResponse response = (BookReviewsListResponse) result;
-//            mReviewsListResponse.setTotal(response.getTotal());
-//            mReviewsListResponse.getReviews().addAll(response.getReviews());
-//            mDetailAdapter.notifyDataSetChanged();
-//            if (mBookInfoResponse.getSeries() != null) {
-////                eBookPresenter.loadSeries(mBookInfoResponse.getSeries().getId(), PAGE * SERIES_COUNT, 6, SERIES_FIELDS);
-//            }
-//        } else if (result instanceof BookSeriesListResponse) {
-//            final BookSeriesListResponse response = (BookSeriesListResponse) result;
-//            mSeriesListResponse.setTotal(response.getTotal());
-//            mSeriesListResponse.getBooks().addAll(response.getBooks());
-//            mDetailAdapter.notifyDataSetChanged();
-//        }
     }
 
     @Override
@@ -226,6 +230,7 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
     public void onRefresh() {
         if (!TextUtils.isEmpty(bookId)) {
             eBookPresenter.getBookDetail(bookId);
+            eBookPresenter.getHotReview(bookId, REVIEWS_COUNT);
         }
     }
 }

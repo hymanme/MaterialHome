@@ -1,9 +1,13 @@
 package com.hymane.materialhome.api.common.service;
 
 import com.hymane.materialhome.bean.http.ebook.BookDetail;
+import com.hymane.materialhome.bean.http.ebook.BookReview;
 import com.hymane.materialhome.bean.http.ebook.BooksByCats;
+import com.hymane.materialhome.bean.http.ebook.BooksByTag;
 import com.hymane.materialhome.bean.http.ebook.CategoryList;
+import com.hymane.materialhome.bean.http.ebook.HotReview;
 import com.hymane.materialhome.bean.http.ebook.Rankings;
+import com.hymane.materialhome.bean.http.ebook.RecommendBookList;
 
 import retrofit2.Response;
 import retrofit2.http.GET;
@@ -60,6 +64,55 @@ public interface IEBooksService {
      */
     @GET("/book/by-categories")
     Observable<BooksByCats> getBooksByCats(@Query("gender") String gender, @Query("type") String type, @Query("major") String major, @Query("minor") String minor, @Query("start") int start, @Query("limit") int limit);
+
+    /**
+     * 热门评论 图书详情页
+     *
+     * @param book
+     * @param limit
+     * @return
+     */
+    @GET("/post/review/best-by-book")
+    Observable<HotReview> getHotReview(@Query("book") String book, @Query("limit") int limit);
+
+    /**
+     * 获取书籍详情书评列表 查看更多评论
+     *
+     * @param book  bookId
+     * @param sort  updated(默认排序)、created(最新发布)、helpful(最有用的)、comment-count(最多评论)
+     * @param start 0
+     * @param limit 20（默认，改不了）
+     * @return
+     */
+    @GET("/post/review/by-book")
+    Observable<HotReview> getBookReviewList(@Query("book") String book, @Query("sort") String sort, @Query("start") int start, @Query("limit") int limit);
+
+    /**
+     * 获取书评区帖子详情 书评详情页
+     *
+     * @param bookReviewId->_id
+     * @return
+     */
+    @GET("/post/review/{bookReviewId}")
+    Observable<BookReview> getBookReviewDetail(@Path("bookReviewId") String bookReviewId);
+
+    /**
+     * 图书列表通过tag查找
+     *
+     * @param tags
+     * @return
+     */
+    @GET("/book/by-tags")
+    Observable<BooksByTag> getBooksByTag(@Query("tags") String tags, @Query("start") int start, @Query("limit") int limit);
+
+    /**
+     * 含有该书的书单列表-推荐书单
+     *
+     * @param bookId
+     * @return
+     */
+    @GET("/book-list/{bookId}/recommend")
+    Observable<RecommendBookList> getRecommendBookList(@Path("bookId") String bookId, @Query("limit") int limit);
 
     /***
      * 图书推荐
@@ -150,23 +203,6 @@ public interface IEBooksService {
 //    @GET("/book/accurate-search")
 //    Observable<BooksByTag> searchBooksByAuthor(@Query("author") String author);
 
-    /**
-     * 热门评论
-     *
-     * @param book
-     * @return
-     */
-//    @GET("/post/review/best-by-book")
-//    Observable<HotReview> getHotReview(@Query("book") String book);
-//
-//    @GET("/book-list/{bookId}/recommend")
-//    Observable<RecommendBookList> getRecommendBookList(@Path("bookId") String bookId, @Query("limit") String limit);
-//
-//    @GET("/book/{bookId}")
-//    Observable<BookDetail> getBookDetail(@Path("bookId") String bookId);
-//
-//    @GET("/book/by-tags")
-//    Observable<BooksByTag> getBooksByTag(@Query("tags") String tags, @Query("start") String start, @Query("limit") String limit);
 //
 //    /**
 //     * 获取所有排行榜
@@ -175,18 +211,7 @@ public interface IEBooksService {
 //     */
 //    @GET("/ranking/gender")
 //    Observable<RankingList> getRanking();
-//
-//    /**
-//     * 获取单一排行榜
-//     * 周榜：rankingId->_id
-//     * 月榜：rankingId->monthRank
-//     * 总榜：rankingId->totalRank
-//     *
-//     * @return
-//     */
-//    @GET("/ranking/{rankingId}")
-//    Observable<Rankings> getRanking(@Path("rankingId") String rankingId);
-//
+
 //    /**
 //     * 获取主题书单列表
 //     * 本周最热：duration=last-seven-days&sort=collectorCount
@@ -216,37 +241,7 @@ public interface IEBooksService {
 //     */
 //    @GET("/book-list/{bookListId}")
 //    Observable<BookListDetail> getBookListDetail(@Path("bookListId") String bookListId);
-//
-//    /**
-//     * 获取一级分类
-//     *
-//     * @return
-//     */
-//    @GET("/cats/lv2/statistics")
-//    Observable<CategoryList> getCategoryList();
-//
-//    /**
-//     * 获取一级以及二级分类
-//     *
-//     * @return
-//     */
-//    @GET("/cats/lv2")
-//    Observable<CategoryListLv2> getCategoryListLv2();
-//
-//    /**
-//     * 按分类获取书籍列表，分类详细页面
-//     *
-//     * @param gender male、female
-//     * @param type   hot(热门)、new(新书)、reputation(好评)、over(完结)
-//     * @param major  玄幻
-//     * @param minor  东方玄幻、异界大陆、异界争霸、远古神话
-//     * @param limit  50
-//     * @return
-//     */
-//    @GET("/book/by-categories")
-//    Observable<BooksByCats> getBooksByCats(@Query("gender") String gender, @Query("type") String type, @Query("major") String major, @Query("minor") String minor, @Query("start") int start, @Query("limit") int limit);
-//
-//
+
 //    /**
 //     * 获取综合讨论区帖子列表
 //     * 全部、默认排序  http://api.zhuishushenqi.com/post/by-block?block=ramble&duration=all&sort=updated&type=all&start=0&limit=20&distillate=
@@ -379,17 +374,4 @@ public interface IEBooksService {
 //     */
 //    @GET("/post/by-book")
 //    Observable<DiscussionList> getBookDetailDisscussionList(@Query("book") String book, @Query("sort") String sort, @Query("type") String type, @Query("start") String start, @Query("limit") String limit);
-//
-//    /**
-//     * 获取书籍详情书评列表
-//     *
-//     * @param book       bookId
-//     * @param sort       updated(默认排序)、created(最新发布)、helpful(最有用的)、comment-count(最多评论)
-//     * @param start      0
-//     * @param limit      20
-//     * @return
-//     */
-//    @GET("/post/review/by-book")
-//    Observable<HotReview> getBookDetailReviewList(@Query("book") String book, @Query("sort") String sort, @Query("start") String start, @Query("limit") String limit);
-
 }

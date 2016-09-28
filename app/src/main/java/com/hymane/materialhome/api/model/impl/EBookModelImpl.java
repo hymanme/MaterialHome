@@ -7,8 +7,11 @@ import com.hymane.materialhome.api.model.IEBookModel;
 import com.hymane.materialhome.bean.http.douban.BaseResponse;
 import com.hymane.materialhome.bean.http.ebook.BookDetail;
 import com.hymane.materialhome.bean.http.ebook.BooksByCats;
+import com.hymane.materialhome.bean.http.ebook.BooksByTag;
 import com.hymane.materialhome.bean.http.ebook.CategoryList;
+import com.hymane.materialhome.bean.http.ebook.HotReview;
 import com.hymane.materialhome.bean.http.ebook.Rankings;
+import com.hymane.materialhome.bean.http.ebook.RecommendBookList;
 import com.hymane.materialhome.common.URL;
 
 import retrofit2.Response;
@@ -141,6 +144,126 @@ public class EBookModelImpl implements IEBookModel {
                             listener.onComplected(bookDetail.body());
                         } else {
                             listener.onFailed(new BaseResponse(400, bookDetail.errorBody().toString()));
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void getBookReviewList(String bookId, String sort, int start, int limit, ApiCompleteListener listener) {
+        if (eBooksService == null) {
+            eBooksService = ServiceFactory.createService(URL.HOST_URL_ZSSQ, IEBooksService.class);
+        }
+        eBooksService.getBookReviewList(bookId, sort, start, limit)
+                .subscribeOn(Schedulers.io())    //请求在io线程中执行
+                .observeOn(AndroidSchedulers.mainThread())//最后在主线程中执行
+                .subscribe(new Subscriber<HotReview>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        listener.onFailed(new BaseResponse(400, e.toString()));
+                    }
+
+                    @Override
+                    public void onNext(HotReview review) {
+                        if (review.isOk()) {
+                            listener.onComplected(review);
+                        } else {
+                            listener.onFailed(new BaseResponse(400, review.getMsg()));
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void getHotReview(String bookId, int limit, ApiCompleteListener listener) {
+        if (eBooksService == null) {
+            eBooksService = ServiceFactory.createService(URL.HOST_URL_ZSSQ, IEBooksService.class);
+        }
+        eBooksService.getHotReview(bookId, limit)
+                .subscribeOn(Schedulers.io())    //请求在io线程中执行
+                .observeOn(AndroidSchedulers.mainThread())//最后在主线程中执行
+                .subscribe(new Subscriber<HotReview>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        listener.onFailed(new BaseResponse(400, e.toString()));
+                    }
+
+                    @Override
+                    public void onNext(HotReview review) {
+                        if (review.isOk()) {
+                            listener.onComplected(review);
+                        } else {
+                            listener.onFailed(new BaseResponse(400, review.getMsg()));
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void getBooksByTag(String tags, int start, int limit, ApiCompleteListener listener) {
+        if (eBooksService == null) {
+            eBooksService = ServiceFactory.createService(URL.HOST_URL_ZSSQ, IEBooksService.class);
+        }
+        eBooksService.getBooksByTag(tags, start, limit)
+                .subscribeOn(Schedulers.io())    //请求在io线程中执行
+                .observeOn(AndroidSchedulers.mainThread())//最后在主线程中执行
+                .subscribe(new Subscriber<BooksByTag>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        listener.onFailed(new BaseResponse(400, e.toString()));
+                    }
+
+                    @Override
+                    public void onNext(BooksByTag booksByTag) {
+                        if (booksByTag.isOk()) {
+                            listener.onComplected(booksByTag);
+                        } else {
+                            listener.onFailed(new BaseResponse(400, booksByTag.getMsg()));
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void getRecommendBookList(String bookId, int limit, ApiCompleteListener listener) {
+        if (eBooksService == null) {
+            eBooksService = ServiceFactory.createService(URL.HOST_URL_ZSSQ, IEBooksService.class);
+        }
+        eBooksService.getRecommendBookList(bookId, limit)
+                .subscribeOn(Schedulers.io())    //请求在io线程中执行
+                .observeOn(AndroidSchedulers.mainThread())//最后在主线程中执行
+                .subscribe(new Subscriber<RecommendBookList>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        listener.onFailed(new BaseResponse(400, e.toString()));
+                    }
+
+                    @Override
+                    public void onNext(RecommendBookList bookList) {
+                        if (bookList.isOk()) {
+                            listener.onComplected(bookList);
+                        } else {
+                            listener.onFailed(new BaseResponse(400, bookList.getMsg()));
                         }
                     }
                 });
