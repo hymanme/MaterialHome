@@ -1,13 +1,15 @@
 package com.hymane.materialhome.api.common.service;
 
+import com.hymane.materialhome.bean.http.ebook.BookChapter;
 import com.hymane.materialhome.bean.http.ebook.BookDetail;
 import com.hymane.materialhome.bean.http.ebook.BookReview;
 import com.hymane.materialhome.bean.http.ebook.BooksByCats;
 import com.hymane.materialhome.bean.http.ebook.BooksByTag;
 import com.hymane.materialhome.bean.http.ebook.CategoryList;
+import com.hymane.materialhome.bean.http.ebook.ChapterRead;
 import com.hymane.materialhome.bean.http.ebook.HotReview;
 import com.hymane.materialhome.bean.http.ebook.Rankings;
-import com.hymane.materialhome.bean.http.ebook.RecommendBookList;
+import com.hymane.materialhome.bean.http.ebook.LikedBookList;
 
 import retrofit2.Response;
 import retrofit2.http.GET;
@@ -112,7 +114,25 @@ public interface IEBooksService {
      * @return
      */
     @GET("/book-list/{bookId}/recommend")
-    Observable<RecommendBookList> getRecommendBookList(@Path("bookId") String bookId, @Query("limit") int limit);
+    Observable<LikedBookList> getRecommendBookList(@Path("bookId") String bookId, @Query("limit") int limit);
+
+    /***
+     * 获取一本书所有章节
+     *
+     * @param bookId bookid
+     * @return
+     */
+    @GET("/mix-toc/{bookId}")
+    Observable<BookChapter> getBookChapters(@Path("bookId") String bookId);
+
+    /***
+     * 获取图书阅读内容
+     *
+     * @param url
+     * @return
+     */
+    @GET("http://chapter2.zhuishushenqi.com/chapter/{url}")
+    Observable<ChapterRead> getChapterContent(@Path("url") String url);
 
     /***
      * 图书推荐
@@ -125,15 +145,6 @@ public interface IEBooksService {
 
 //    @GET("/atoc")
 //    Observable<List<BookSource>> getBookSource(@Query("view") String view, @Query("book") String book);
-
-    /***
-     * 获取一本书所有章节
-     *
-     * @param bookId bookid
-     * @return
-     */
-//    @GET("/mix-toc/{bookId}")
-//    Observable<BookRead> getBookRead(@Path("bookId") String bookId);
 
 //    @GET("/mix-atoc/{bookId}")
 //    Observable<BookToc> getBookToc(@Path("bookId") String bookId, @Query("view") String view);

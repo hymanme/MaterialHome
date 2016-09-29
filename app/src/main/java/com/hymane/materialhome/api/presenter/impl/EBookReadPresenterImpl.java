@@ -2,9 +2,9 @@ package com.hymane.materialhome.api.presenter.impl;
 
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.api.ApiCompleteListener;
-import com.hymane.materialhome.api.model.IEBookModel;
-import com.hymane.materialhome.api.model.impl.EBookModelImpl;
-import com.hymane.materialhome.api.presenter.IEBookPresenter;
+import com.hymane.materialhome.api.model.IEBookReadModel;
+import com.hymane.materialhome.api.model.impl.EBookReadModelImpl;
+import com.hymane.materialhome.api.presenter.IEBookReadPresenter;
 import com.hymane.materialhome.api.view.IEBookListView;
 import com.hymane.materialhome.bean.http.douban.BaseResponse;
 import com.hymane.materialhome.utils.NetworkUtils;
@@ -13,21 +13,21 @@ import com.hymane.materialhome.utils.UIUtils;
 /**
  * Author   :hymanme
  * Email    :hymanme@163.com
- * Create at 2016/9/21
+ * Create at 2016/9/29
  * Description:
  */
 
-public class EBookPresenterImpl implements IEBookPresenter, ApiCompleteListener {
-    private IEBookModel mEBookModel;
+public class EBookReadPresenterImpl implements IEBookReadPresenter, ApiCompleteListener {
+    private IEBookReadModel mEBookReadModel;
     private IEBookListView mEBookListView;
 
-    public EBookPresenterImpl(IEBookListView mBookListView) {
+    public EBookReadPresenterImpl(IEBookListView mBookListView) {
         this.mEBookListView = mBookListView;
-        this.mEBookModel = new EBookModelImpl();
+        this.mEBookReadModel = new EBookReadModelImpl();
     }
 
     @Override
-    public void getRanking(String rankingId) {
+    public void getBookChapters(String bookId) {
         if (!NetworkUtils.isConnected(UIUtils.getContext())) {
             mEBookListView.showMessage(UIUtils.getContext().getString(R.string.poor_network));
             mEBookListView.hideProgress();
@@ -35,11 +35,11 @@ public class EBookPresenterImpl implements IEBookPresenter, ApiCompleteListener 
 //            return;
         }
         mEBookListView.showProgress();
-        mEBookModel.getRanking(rankingId, this);
+        mEBookReadModel.getBookChapters(bookId, this);
     }
 
     @Override
-    public void getCategoryList() {
+    public void getChapterContent(String url) {
         if (!NetworkUtils.isConnected(UIUtils.getContext())) {
             mEBookListView.showMessage(UIUtils.getContext().getString(R.string.poor_network));
             mEBookListView.hideProgress();
@@ -47,19 +47,7 @@ public class EBookPresenterImpl implements IEBookPresenter, ApiCompleteListener 
 //            return;
         }
         mEBookListView.showProgress();
-        mEBookModel.getCategoryList(this);
-    }
-
-    @Override
-    public void getCategoryListDetail(String gender, String type, String major, String minor, int start, int limit) {
-        if (!NetworkUtils.isConnected(UIUtils.getContext())) {
-            mEBookListView.showMessage(UIUtils.getContext().getString(R.string.poor_network));
-            mEBookListView.hideProgress();
-            //没网络读取缓存
-//            return;
-        }
-        mEBookListView.showProgress();
-        mEBookModel.getCategoryListDetail(gender, type, major, minor, start, limit, this);
+        mEBookReadModel.getChapterContent(url, this);
     }
 
     @Override

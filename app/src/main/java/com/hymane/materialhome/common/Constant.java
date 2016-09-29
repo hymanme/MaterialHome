@@ -63,6 +63,11 @@ public class Constant {
     public static final String EBOOK_SORT_HELPFUL = "helpful";
     public static final String EBOOK_SORT_COMMENT_COUNT = "comment-count";
 
+    //activity result code
+    public static final int BOOK_READER_RESULT = 0x0001;
+    public static final int BOOK_READER_RESULT_OK = 0;
+    public static final int BOOK_READER_RESULT_FAILED = 1;
+
     @StringDef({
             Gender.MALE,
             Gender.FEMALE

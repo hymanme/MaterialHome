@@ -136,8 +136,9 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
 
     @Override
     public void addData(Object result) {
+        final int start = bookInfoResponses.size();
         bookInfoResponses.addAll(((BookListResponse) result).getBooks());
-        mListAdapter.notifyDataSetChanged();
+        mListAdapter.notifyItemRangeInserted(start, bookInfoResponses.size());
         page++;
     }
 

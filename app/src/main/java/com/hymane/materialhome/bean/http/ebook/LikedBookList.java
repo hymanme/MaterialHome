@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 
-public class RecommendBookList extends Base {
+public class LikedBookList extends Base {
     /**
      * id : 5617c5f3e8a2065627e4cb85
      * title : 此单在手，书荒不再有！
@@ -24,7 +24,7 @@ public class RecommendBookList extends Base {
 
     private List<RecommendBook> booklists;
 
-    public RecommendBookList() {
+    public LikedBookList() {
         booklists = new ArrayList<>();
     }
 

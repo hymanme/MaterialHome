@@ -18,17 +18,21 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.github.hymanme.tagflowlayout.tags.ColorfulTagView;
+import com.github.hymanme.tagflowlayout.view.FlowLayout;
 import com.hymane.expandtextview.ExpandTextView;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.bean.http.ebook.BookDetail;
 import com.hymane.materialhome.bean.http.ebook.BooksByTag;
 import com.hymane.materialhome.bean.http.ebook.HotReview;
-import com.hymane.materialhome.bean.http.ebook.RecommendBookList;
+import com.hymane.materialhome.bean.http.ebook.LikedBookList;
 import com.hymane.materialhome.holder.EBookSeriesCeilHolder;
 import com.hymane.materialhome.ui.activity.BookReviewsActivity;
+import com.hymane.materialhome.utils.DensityUtils;
 import com.hymane.materialhome.utils.EBookUtils;
 import com.hymane.materialhome.utils.UIUtils;
 
@@ -61,12 +65,12 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
     private BookDetail mBookInfo;
     private final HotReview mHotReview;
     private final BooksByTag mBooksByTag;
-    private final RecommendBookList mBookList;
+    private final LikedBookList mBookList;
 
     //图书出版信息是否展开
     private boolean flag;
 
-    public EBookDetailAdapter(BookDetail bookInfo, HotReview hotReview, BooksByTag booksByTag, RecommendBookList bookList) {
+    public EBookDetailAdapter(BookDetail bookInfo, HotReview hotReview, BooksByTag booksByTag, LikedBookList bookList) {
         mBookInfo = bookInfo;
         mHotReview = hotReview;
         mBooksByTag = booksByTag;
@@ -134,6 +138,20 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
                     }
                 }
             });
+
+            ((BookInfoHolder) holder).flow_layout.clearAllView();
+            ((BookInfoHolder) holder).flow_layout.removeAllViews();
+            int space = DensityUtils.dp2px(UIUtils.getContext(), 20);
+            ((BookInfoHolder) holder).flow_layout.setSpace(space, space);
+            List<String> tags = mBookInfo.getTags();
+            if (tags != null) {
+                for (int i = 0; i < tags.size(); i++) {
+                    ColorfulTagView tag = new ColorfulTagView(UIUtils.getContext());
+                    tag.setText(tags.get(i));
+                    ((BookInfoHolder) holder).flow_layout.addView(tag);
+                    tag.setOnClickListener(v -> Toast.makeText(UIUtils.getContext(), "click", Toast.LENGTH_SHORT).show());
+                }
+            }
             ((BookInfoHolder) holder).tv_author.setText("作者：" + mBookInfo.getAuthor());
             ((BookInfoHolder) holder).tv_followers.setText("追书人数：" + mBookInfo.getLatelyFollower());
             ((BookInfoHolder) holder).retention.setText("读者留存率：" + mBookInfo.getRetentionRatio() + "%");
@@ -198,7 +216,7 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
             }
         } else if (holder instanceof BookListHolder) {
             int index = position - (mHotReview.getReviews().size() + HEADER_COUNT) - 1;
-            RecommendBookList.RecommendBook book;
+            LikedBookList.RecommendBook book;
             try {
                 book = mBookList.getBookList().get(index);
             } catch (IndexOutOfBoundsException e) {
@@ -274,6 +292,8 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
         private TextView tv_minor_cate;
         private TextView tv_creater;
 
+        private FlowLayout flow_layout;
+
 
         public BookInfoHolder(View itemView) {
             super(itemView);
@@ -296,6 +316,8 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
             tv_serial = (TextView) itemView.findViewById(R.id.tv_serial);
             tv_minor_cate = (TextView) itemView.findViewById(R.id.tv_minor_cate);
             tv_creater = (TextView) itemView.findViewById(R.id.tv_creater);
+
+            flow_layout = (FlowLayout) itemView.findViewById(R.id.flow_layout);
         }
     }
 

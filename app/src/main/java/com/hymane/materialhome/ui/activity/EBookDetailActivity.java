@@ -16,7 +16,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -27,7 +26,8 @@ import com.hymane.materialhome.api.view.IEBookDetailView;
 import com.hymane.materialhome.bean.http.ebook.BookDetail;
 import com.hymane.materialhome.bean.http.ebook.BooksByTag;
 import com.hymane.materialhome.bean.http.ebook.HotReview;
-import com.hymane.materialhome.bean.http.ebook.RecommendBookList;
+import com.hymane.materialhome.bean.http.ebook.LikedBookList;
+import com.hymane.materialhome.common.Constant;
 import com.hymane.materialhome.ui.adapter.EBookDetailAdapter;
 import com.hymane.materialhome.utils.Blur;
 import com.hymane.materialhome.utils.UIUtils;
@@ -63,7 +63,7 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
     private BookDetail bookInfo;
     private HotReview hotReview;
     private BooksByTag booksByTag;
-    private RecommendBookList bookList;
+    private LikedBookList bookList;
 
     private EBookDetailPresenterImpl eBookPresenter;
 
@@ -80,7 +80,7 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
         eBookPresenter = new EBookDetailPresenterImpl(this);
         hotReview = new HotReview();
         booksByTag = new BooksByTag();
-        bookList = new RecommendBookList();
+        bookList = new LikedBookList();
         bookId = getIntent().getStringExtra("bookId");
         bookInfo = getIntent().getParcelableExtra("BookDetail");
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(EBookDetailActivity.this);
@@ -114,7 +114,12 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
                         }
                     });
         }
-        mFab.setOnClickListener(v -> Toast.makeText(EBookDetailActivity.this, "click", Toast.LENGTH_SHORT).show());
+        mFab.setOnClickListener(v -> {
+            Intent intent = new Intent(EBookDetailActivity.this, EBookReaderActivity.class);
+            intent.putExtra("bookId", bookId);
+            startActivityForResult(intent, Constant.BOOK_READER_RESULT);
+
+        });
         mSwipeRefreshLayout.setOnRefreshListener(this);
         onRefresh();
     }
@@ -196,8 +201,8 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
             booksByTag.addBooks(response.getBooks());
             mDetailAdapter.notifyItemChanged(hotReview.getReviews().size() + 2);
             eBookPresenter.getRecommendBookList(bookId, BOOK_LIST_COUNT);
-        } else if (result instanceof RecommendBookList) {
-            bookList.addBookList(((RecommendBookList) result).getBookList());
+        } else if (result instanceof LikedBookList) {
+            bookList.addBookList(((LikedBookList) result).getBookList());
             final int start = hotReview.getReviews().size() + 2;
             mDetailAdapter.notifyItemRangeInserted(start + 1, start + bookList.getBookList().size());
         }

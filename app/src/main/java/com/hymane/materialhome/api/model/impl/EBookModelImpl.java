@@ -11,7 +11,7 @@ import com.hymane.materialhome.bean.http.ebook.BooksByTag;
 import com.hymane.materialhome.bean.http.ebook.CategoryList;
 import com.hymane.materialhome.bean.http.ebook.HotReview;
 import com.hymane.materialhome.bean.http.ebook.Rankings;
-import com.hymane.materialhome.bean.http.ebook.RecommendBookList;
+import com.hymane.materialhome.bean.http.ebook.LikedBookList;
 import com.hymane.materialhome.common.URL;
 
 import retrofit2.Response;
@@ -247,7 +247,7 @@ public class EBookModelImpl implements IEBookModel {
         eBooksService.getRecommendBookList(bookId, limit)
                 .subscribeOn(Schedulers.io())    //请求在io线程中执行
                 .observeOn(AndroidSchedulers.mainThread())//最后在主线程中执行
-                .subscribe(new Subscriber<RecommendBookList>() {
+                .subscribe(new Subscriber<LikedBookList>() {
                     @Override
                     public void onCompleted() {
 
@@ -259,7 +259,7 @@ public class EBookModelImpl implements IEBookModel {
                     }
 
                     @Override
-                    public void onNext(RecommendBookList bookList) {
+                    public void onNext(LikedBookList bookList) {
                         if (bookList.isOk()) {
                             listener.onComplected(bookList);
                         } else {

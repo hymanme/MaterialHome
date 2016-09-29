@@ -215,4 +215,6 @@
             android:visibility="gone" />
     </FrameLayout>
 
+    <include layout="@layout/item_ebook_tags" />
+
 </LinearLayout>
