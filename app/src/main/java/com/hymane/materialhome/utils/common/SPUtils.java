@@ -1,6 +1,5 @@
-package com.hymane.materialhome.utils;
+package com.hymane.materialhome.utils.common;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 

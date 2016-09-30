@@ -2,12 +2,9 @@ package com.hymane.materialhome;
 
 import android.app.Application;
 import android.content.Context;
-import android.os.Handler;
 import android.support.v7.app.AppCompatDelegate;
 
-import com.hymane.materialhome.common.Constant;
 import com.hymane.materialhome.ui.activity.BaseActivity;
-import com.hymane.materialhome.utils.SPUtils;
 
 import java.util.LinkedList;
 import java.util.List;

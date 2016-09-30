@@ -31,6 +31,7 @@ public class BookChapter extends Base {
 
     public static class MixToc {
         private String _id;
+        //bookId
         private String book;
         private String chaptersUpdated;
         private String updated;

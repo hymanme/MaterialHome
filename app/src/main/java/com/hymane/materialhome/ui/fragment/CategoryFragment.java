@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.ui.adapter.CategoryAdapter;
 import com.hymane.materialhome.ui.widget.RecyclerViewDecoration.SpacesItemDecoration;
-import com.hymane.materialhome.utils.DensityUtils;
 
 import butterknife.BindView;
 

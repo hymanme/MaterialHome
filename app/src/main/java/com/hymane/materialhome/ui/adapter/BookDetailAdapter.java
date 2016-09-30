@@ -29,7 +29,7 @@ import com.hymane.materialhome.bean.http.douban.BookReviewsListResponse;
 import com.hymane.materialhome.bean.http.douban.BookSeriesListResponse;
 import com.hymane.materialhome.holder.BookSeriesCeilHolder;
 import com.hymane.materialhome.ui.activity.BookReviewsActivity;
-import com.hymane.materialhome.utils.UIUtils;
+import com.hymane.materialhome.utils.common.UIUtils;
 
 import java.util.List;
 import java.util.Random;

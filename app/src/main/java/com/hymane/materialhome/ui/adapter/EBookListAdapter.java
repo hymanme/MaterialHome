@@ -21,7 +21,7 @@ import com.hymane.materialhome.bean.http.ebook.BookDetail;
 import com.hymane.materialhome.ui.activity.BaseActivity;
 import com.hymane.materialhome.ui.activity.EBookDetailActivity;
 import com.hymane.materialhome.utils.EBookUtils;
-import com.hymane.materialhome.utils.UIUtils;
+import com.hymane.materialhome.utils.common.UIUtils;
 
 import java.util.List;
 

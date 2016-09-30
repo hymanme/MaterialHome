@@ -20,7 +20,7 @@ import com.hymane.materialhome.R;
 import com.hymane.materialhome.bean.http.douban.BookInfoResponse;
 import com.hymane.materialhome.ui.activity.BaseActivity;
 import com.hymane.materialhome.ui.activity.BookDetailActivity;
-import com.hymane.materialhome.utils.UIUtils;
+import com.hymane.materialhome.utils.common.UIUtils;
 
 import java.util.List;
 

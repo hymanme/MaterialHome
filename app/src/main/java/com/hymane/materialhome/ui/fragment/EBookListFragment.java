@@ -1,6 +1,7 @@
 package com.hymane.materialhome.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -19,9 +20,9 @@ import com.hymane.materialhome.bean.http.ebook.Rankings;
 import com.hymane.materialhome.common.Constant;
 import com.hymane.materialhome.ui.activity.MainActivity;
 import com.hymane.materialhome.ui.adapter.EBookListAdapter;
-import com.hymane.materialhome.utils.DensityUtils;
 import com.hymane.materialhome.utils.EBookUtils;
 import com.hymane.materialhome.utils.RxBus;
+import com.hymane.materialhome.utils.common.DensityUtils;
 
 import java.util.ArrayList;
 import java.util.List;

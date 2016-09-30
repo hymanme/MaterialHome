@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.ui.activity.CategoryDetailActivity;
-import com.hymane.materialhome.utils.UIUtils;
+import com.hymane.materialhome.utils.common.UIUtils;
 
 /**
  * Author   :hymanme

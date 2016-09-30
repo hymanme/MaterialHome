@@ -32,9 +32,9 @@ import com.hymane.materialhome.bean.http.ebook.HotReview;
 import com.hymane.materialhome.bean.http.ebook.LikedBookList;
 import com.hymane.materialhome.holder.EBookSeriesCeilHolder;
 import com.hymane.materialhome.ui.activity.BookReviewsActivity;
-import com.hymane.materialhome.utils.DensityUtils;
+import com.hymane.materialhome.utils.common.DensityUtils;
 import com.hymane.materialhome.utils.EBookUtils;
-import com.hymane.materialhome.utils.UIUtils;
+import com.hymane.materialhome.utils.common.UIUtils;
 
 import java.util.List;
 import java.util.Random;

@@ -9,7 +9,7 @@ import com.hymane.materialhome.api.presenter.IBookListPresenter;
 import com.hymane.materialhome.api.view.IBookListView;
 import com.hymane.materialhome.bean.http.douban.BaseResponse;
 import com.hymane.materialhome.bean.http.douban.BookListResponse;
-import com.hymane.materialhome.utils.NetworkUtils;
+import com.hymane.materialhome.utils.common.NetworkUtils;
 
 /**
  * Author   :hymanme

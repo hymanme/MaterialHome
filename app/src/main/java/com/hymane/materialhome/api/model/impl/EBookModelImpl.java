@@ -141,6 +141,7 @@ public class EBookModelImpl implements IEBookModel {
                     @Override
                     public void onNext(Response<BookDetail> bookDetail) {
                         if (bookDetail.isSuccessful()) {
+                            BookDetail body = bookDetail.body();
                             listener.onComplected(bookDetail.body());
                         } else {
                             listener.onFailed(new BaseResponse(400, bookDetail.errorBody().toString()));

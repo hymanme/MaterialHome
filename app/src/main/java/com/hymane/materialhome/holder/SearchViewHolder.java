@@ -13,8 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hymane.materialhome.R;
-import com.hymane.materialhome.utils.AnimationUtils;
-import com.hymane.materialhome.utils.KeyBoardUtils;
+import com.hymane.materialhome.utils.common.AnimationUtils;
+import com.hymane.materialhome.utils.common.KeyBoardUtils;
 
 /**
  * Author   :hymanme

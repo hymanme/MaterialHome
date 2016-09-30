@@ -16,9 +16,9 @@ import android.view.WindowManager;
 import com.hymane.materialhome.BaseApplication;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.common.Constant;
-import com.hymane.materialhome.utils.SPUtils;
+import com.hymane.materialhome.utils.common.SPUtils;
 import com.hymane.materialhome.utils.SystemBarTintManager;
-import com.hymane.materialhome.utils.UIUtils;
+import com.hymane.materialhome.utils.common.UIUtils;
 
 /**
  * Author   :hymanme

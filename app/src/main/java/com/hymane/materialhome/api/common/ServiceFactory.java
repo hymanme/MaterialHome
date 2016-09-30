@@ -3,7 +3,7 @@ package com.hymane.materialhome.api.common;
 import android.util.Log;
 
 import com.hymane.materialhome.BaseApplication;
-import com.hymane.materialhome.utils.NetworkUtils;
+import com.hymane.materialhome.utils.common.NetworkUtils;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;

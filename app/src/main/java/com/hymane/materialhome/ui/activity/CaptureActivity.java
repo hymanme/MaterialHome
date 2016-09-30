@@ -26,7 +26,7 @@ import com.hymane.materialhome.module.zxing.ViewfinderView;
 import com.hymane.materialhome.module.zxing.camera.CameraManager;
 import com.hymane.materialhome.module.zxing.decoding.CaptureActivityHandler;
 import com.hymane.materialhome.module.zxing.decoding.InactivityTimer;
-import com.hymane.materialhome.utils.UIUtils;
+import com.hymane.materialhome.utils.common.UIUtils;
 import com.hymane.materialhome.utils.customtabs.CustomTabActivityHelper;
 
 import java.io.IOException;

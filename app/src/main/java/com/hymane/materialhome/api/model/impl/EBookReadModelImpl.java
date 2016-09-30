@@ -59,14 +59,14 @@ public class EBookReadModelImpl implements IEBookReadModel {
     }
 
     @Override
-    public void getChapterContent(String url, ApiCompleteListener listener) {
+    public void getChapterContent(String url, int chapter, boolean isCache, ApiCompleteListener listener) {
         if (eBooksService == null) {
             eBooksService = ServiceFactory.createService(URL.HOST_URL_ZSSQ, IEBooksService.class);
         }
         eBooksService.getChapterContent(url)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())//请求完成后在io线程中执行
-                .doOnNext(chapter -> {//缓存章节
+                .doOnNext((ChapterRead chapterRead) -> {//缓存章节
 
                 })
                 .observeOn(AndroidSchedulers.mainThread())//最后在主线程中执行

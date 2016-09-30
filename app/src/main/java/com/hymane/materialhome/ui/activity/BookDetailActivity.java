@@ -26,8 +26,8 @@ import com.hymane.materialhome.bean.http.douban.BookInfoResponse;
 import com.hymane.materialhome.bean.http.douban.BookReviewsListResponse;
 import com.hymane.materialhome.bean.http.douban.BookSeriesListResponse;
 import com.hymane.materialhome.ui.adapter.BookDetailAdapter;
-import com.hymane.materialhome.utils.Blur;
-import com.hymane.materialhome.utils.UIUtils;
+import com.hymane.materialhome.utils.common.Blur;
+import com.hymane.materialhome.utils.common.UIUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

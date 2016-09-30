@@ -1,4 +1,4 @@
-package com.hymane.materialhome.utils;
+package com.hymane.materialhome.utils.common;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -23,5 +23,9 @@ public class TimeUtils {
 
     public static long getCurrentTimeStamp() {
         return System.currentTimeMillis();
+    }
+
+    public static String parseTime(String complexTime) {
+        return complexTime;
     }
 }

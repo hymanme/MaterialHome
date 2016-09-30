@@ -25,8 +25,8 @@ import com.hymane.materialhome.api.view.IHotSearchView;
 import com.hymane.materialhome.bean.http.douban.HotSearchResponse;
 import com.hymane.materialhome.ui.activity.CaptureActivity;
 import com.hymane.materialhome.ui.activity.MainActivity;
-import com.hymane.materialhome.utils.PermissionUtils;
-import com.hymane.materialhome.utils.UIUtils;
+import com.hymane.materialhome.utils.common.PermissionUtils;
+import com.hymane.materialhome.utils.common.UIUtils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.hymane.materialhome.utils;
+package com.hymane.materialhome.utils.common;
 
 import android.Manifest;
 import android.app.Activity;

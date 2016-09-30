@@ -35,10 +35,10 @@ import com.hymane.materialhome.ui.fragment.BaseFragment;
 import com.hymane.materialhome.ui.fragment.BookshelfFragment;
 import com.hymane.materialhome.ui.fragment.EBookFragment;
 import com.hymane.materialhome.ui.fragment.HomeFragment;
-import com.hymane.materialhome.utils.KeyBoardUtils;
-import com.hymane.materialhome.utils.PermissionUtils;
-import com.hymane.materialhome.utils.SPUtils;
-import com.hymane.materialhome.utils.ScreenUtils;
+import com.hymane.materialhome.utils.common.KeyBoardUtils;
+import com.hymane.materialhome.utils.common.PermissionUtils;
+import com.hymane.materialhome.utils.common.SPUtils;
+import com.hymane.materialhome.utils.common.ScreenUtils;
 import com.hymane.materialhome.utils.customtabs.CustomTabActivityHelper;
 
 import butterknife.BindView;

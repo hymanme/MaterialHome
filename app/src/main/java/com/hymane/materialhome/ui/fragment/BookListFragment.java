@@ -1,6 +1,7 @@
 package com.hymane.materialhome.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,7 +19,7 @@ import com.hymane.materialhome.bean.http.douban.BookInfoResponse;
 import com.hymane.materialhome.bean.http.douban.BookListResponse;
 import com.hymane.materialhome.ui.activity.MainActivity;
 import com.hymane.materialhome.ui.adapter.BookListAdapter;
-import com.hymane.materialhome.utils.DensityUtils;
+import com.hymane.materialhome.utils.common.DensityUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,14 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
         BookListFragment fragment = new BookListFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        if (bookInfoResponses == null || bookInfoResponses.size() == 0) {
+            page = 0;
+        }
+        super.onCreate(savedInstanceState);
     }
 
     @Override

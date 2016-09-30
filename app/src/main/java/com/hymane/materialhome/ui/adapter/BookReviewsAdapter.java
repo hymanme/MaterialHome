@@ -16,7 +16,7 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.bean.http.ebook.HotReview;
 import com.hymane.materialhome.utils.EBookUtils;
-import com.hymane.materialhome.utils.UIUtils;
+import com.hymane.materialhome.utils.common.UIUtils;
 
 import java.util.List;
 

@@ -29,8 +29,8 @@ import com.hymane.materialhome.bean.http.ebook.HotReview;
 import com.hymane.materialhome.bean.http.ebook.LikedBookList;
 import com.hymane.materialhome.common.Constant;
 import com.hymane.materialhome.ui.adapter.EBookDetailAdapter;
-import com.hymane.materialhome.utils.Blur;
-import com.hymane.materialhome.utils.UIUtils;
+import com.hymane.materialhome.utils.common.Blur;
+import com.hymane.materialhome.utils.common.UIUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -117,6 +117,7 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
         mFab.setOnClickListener(v -> {
             Intent intent = new Intent(EBookDetailActivity.this, EBookReaderActivity.class);
             intent.putExtra("bookId", bookId);
+            intent.putExtra("bookName", bookInfo.getTitle());
             startActivityForResult(intent, Constant.BOOK_READER_RESULT);
 
         });
@@ -190,7 +191,10 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
             bookInfo = (BookDetail) result;
             mDetailAdapter.setBookInfo(bookInfo);
             mDetailAdapter.notifyItemChanged(0);
-            eBookPresenter.getBooksByTag(bookInfo.getTags().get(0), PAGE, SERIES_COUNT);
+            if (bookInfo.getTags().size() > 0) {
+                eBookPresenter.getBooksByTag(bookInfo.getTags().get(0), PAGE, SERIES_COUNT);
+            }
+            eBookPresenter.getRecommendBookList(bookId, BOOK_LIST_COUNT);
         } else if (result instanceof HotReview) {
             final HotReview response = (HotReview) result;
             hotReview.getReviews().clear();
@@ -200,7 +204,6 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
             final BooksByTag response = (BooksByTag) result;
             booksByTag.addBooks(response.getBooks());
             mDetailAdapter.notifyItemChanged(hotReview.getReviews().size() + 2);
-            eBookPresenter.getRecommendBookList(bookId, BOOK_LIST_COUNT);
         } else if (result instanceof LikedBookList) {
             bookList.addBookList(((LikedBookList) result).getBookList());
             final int start = hotReview.getReviews().size() + 2;

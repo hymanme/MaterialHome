@@ -7,8 +7,8 @@ import com.hymane.materialhome.api.model.impl.BookDetailModelImpl;
 import com.hymane.materialhome.api.presenter.IBookDetailPresenter;
 import com.hymane.materialhome.api.view.IBookDetailView;
 import com.hymane.materialhome.bean.http.douban.BaseResponse;
-import com.hymane.materialhome.utils.NetworkUtils;
-import com.hymane.materialhome.utils.UIUtils;
+import com.hymane.materialhome.utils.common.NetworkUtils;
+import com.hymane.materialhome.utils.common.UIUtils;
 
 /**
  * Author   :hymanme

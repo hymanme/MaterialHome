@@ -1,4 +1,4 @@
-package com.hymane.materialhome.utils;
+package com.hymane.materialhome.utils.common;
 
 import android.view.animation.Animation;
 import android.view.animation.CycleInterpolator;

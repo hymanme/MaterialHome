@@ -1,14 +1,8 @@
 package com.hymane.materialhome.ui.adapter;
 
-import android.content.ClipData;
-import android.content.ClipDescription;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Point;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -24,9 +18,9 @@ import com.hymane.materialhome.R;
 import com.hymane.materialhome.bean.table.Bookshelf;
 import com.hymane.materialhome.holder.BookShelfEditorHolder;
 import com.hymane.materialhome.ui.activity.BaseActivity;
-import com.hymane.materialhome.utils.DensityUtils;
-import com.hymane.materialhome.utils.KeyBoardUtils;
-import com.hymane.materialhome.utils.UIUtils;
+import com.hymane.materialhome.utils.common.DensityUtils;
+import com.hymane.materialhome.utils.common.KeyBoardUtils;
+import com.hymane.materialhome.utils.common.UIUtils;
 
 import java.util.List;
 import java.util.Random;

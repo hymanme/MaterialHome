@@ -5,10 +5,10 @@ import com.hymane.materialhome.api.ApiCompleteListener;
 import com.hymane.materialhome.api.model.IEBookReadModel;
 import com.hymane.materialhome.api.model.impl.EBookReadModelImpl;
 import com.hymane.materialhome.api.presenter.IEBookReadPresenter;
-import com.hymane.materialhome.api.view.IEBookListView;
+import com.hymane.materialhome.api.view.IEBookReadView;
 import com.hymane.materialhome.bean.http.douban.BaseResponse;
-import com.hymane.materialhome.utils.NetworkUtils;
-import com.hymane.materialhome.utils.UIUtils;
+import com.hymane.materialhome.utils.common.NetworkUtils;
+import com.hymane.materialhome.utils.common.UIUtils;
 
 /**
  * Author   :hymanme
@@ -19,35 +19,35 @@ import com.hymane.materialhome.utils.UIUtils;
 
 public class EBookReadPresenterImpl implements IEBookReadPresenter, ApiCompleteListener {
     private IEBookReadModel mEBookReadModel;
-    private IEBookListView mEBookListView;
+    private IEBookReadView mEBookReadView;
 
-    public EBookReadPresenterImpl(IEBookListView mBookListView) {
-        this.mEBookListView = mBookListView;
+    public EBookReadPresenterImpl(IEBookReadView mBookListView) {
+        this.mEBookReadView = mBookListView;
         this.mEBookReadModel = new EBookReadModelImpl();
     }
 
     @Override
     public void getBookChapters(String bookId) {
         if (!NetworkUtils.isConnected(UIUtils.getContext())) {
-            mEBookListView.showMessage(UIUtils.getContext().getString(R.string.poor_network));
-            mEBookListView.hideProgress();
+            mEBookReadView.showMessage(UIUtils.getContext().getString(R.string.poor_network));
+            mEBookReadView.hideProgress();
             //没网络读取缓存
 //            return;
         }
-        mEBookListView.showProgress();
+        mEBookReadView.showProgress();
         mEBookReadModel.getBookChapters(bookId, this);
     }
 
     @Override
-    public void getChapterContent(String url) {
+    public void getChapterContent(String url, int chapter, boolean isCache) {
         if (!NetworkUtils.isConnected(UIUtils.getContext())) {
-            mEBookListView.showMessage(UIUtils.getContext().getString(R.string.poor_network));
-            mEBookListView.hideProgress();
+            mEBookReadView.showMessage(UIUtils.getContext().getString(R.string.poor_network));
+            mEBookReadView.hideProgress();
             //没网络读取缓存
 //            return;
         }
-        mEBookListView.showProgress();
-        mEBookReadModel.getChapterContent(url, this);
+        mEBookReadView.showProgress();
+        mEBookReadModel.getChapterContent(url, chapter, isCache, this);
     }
 
     @Override
@@ -57,16 +57,16 @@ public class EBookReadPresenterImpl implements IEBookReadPresenter, ApiCompleteL
 
     @Override
     public void onComplected(Object result) {
-        mEBookListView.refreshData(result);
-        mEBookListView.hideProgress();
+        mEBookReadView.refreshData(result);
+        mEBookReadView.hideProgress();
     }
 
     @Override
     public void onFailed(BaseResponse msg) {
-        mEBookListView.hideProgress();
+        mEBookReadView.hideProgress();
         if (msg == null) {
             return;
         }
-        mEBookListView.showMessage(msg.getMsg());
+        mEBookReadView.showMessage(msg.getMsg());
     }
 }
