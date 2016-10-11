@@ -22,7 +22,7 @@ public interface IEBookReadPresenter {
      * @param url
      * @return
      */
-    void getChapterContent(String url,int chapter,boolean isCache);
+    void getChapterContent(String url, String bookId, int chapter, boolean isCache);
 
     /**
      * 取消加载数据

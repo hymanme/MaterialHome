@@ -39,7 +39,7 @@ public class EBookReadPresenterImpl implements IEBookReadPresenter, ApiCompleteL
     }
 
     @Override
-    public void getChapterContent(String url, int chapter, boolean isCache) {
+    public void getChapterContent(String url, String bookId, int chapter, boolean isCache) {
         if (!NetworkUtils.isConnected(UIUtils.getContext())) {
             mEBookReadView.showMessage(UIUtils.getContext().getString(R.string.poor_network));
             mEBookReadView.hideProgress();
@@ -47,7 +47,7 @@ public class EBookReadPresenterImpl implements IEBookReadPresenter, ApiCompleteL
 //            return;
         }
         mEBookReadView.showProgress();
-        mEBookReadModel.getChapterContent(url, chapter, isCache, this);
+        mEBookReadModel.getChapterContent(url, bookId, chapter, isCache, this);
     }
 
     @Override

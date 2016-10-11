@@ -70,6 +70,8 @@ dependencies {
     compile 'com.flyco.labelview:FlycoLabelView_Lib:1.0.2@aar'
     //ParticleView
     compile 'me.wangyuwei:ParticleView:1.0.3'
+    //align-text-view
+    compile 'me.codeboy.android:align-text-view:2.3.0'
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
     androidTestCompile 'com.android.support.test:runner:0.5'

@@ -55,7 +55,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     private void init() {
         initData();
         initEvents();
-        initSystemBar(this);
+        if (isInitSystemBar()) {
+            initSystemBar(this);
+        }
     }
 
     /***
@@ -164,6 +166,15 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected int getMenuID() {
         return R.menu.menu_empty;
+    }
+
+    /**
+     * 是否初始化状态栏
+     *
+     * @return
+     */
+    protected boolean isInitSystemBar() {
+        return true;
     }
 
     /**

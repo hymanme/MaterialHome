@@ -8,10 +8,10 @@ import com.hymane.materialhome.bean.http.douban.BaseResponse;
 import com.hymane.materialhome.bean.http.ebook.BookChapter;
 import com.hymane.materialhome.bean.http.ebook.ChapterRead;
 import com.hymane.materialhome.common.URL;
+import com.hymane.materialhome.utils.BookChapterFactory;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -32,7 +32,7 @@ public class EBookReadModelImpl implements IEBookReadModel {
         eBooksService.getBookChapters(bookId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())//请求完成后在io线程中执行
-                .doOnNext(chapter -> {//缓存章节
+                .doOnNext(chapter -> {//缓存章节列表
 
                 })
                 .observeOn(AndroidSchedulers.mainThread())//最后在主线程中执行
@@ -59,7 +59,7 @@ public class EBookReadModelImpl implements IEBookReadModel {
     }
 
     @Override
-    public void getChapterContent(String url, int chapter, boolean isCache, ApiCompleteListener listener) {
+    public void getChapterContent(String url, String bookId, int chapterId, boolean isCache, ApiCompleteListener listener) {
         if (eBooksService == null) {
             eBooksService = ServiceFactory.createService(URL.HOST_URL_ZSSQ, IEBooksService.class);
         }
@@ -67,7 +67,9 @@ public class EBookReadModelImpl implements IEBookReadModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())//请求完成后在io线程中执行
                 .doOnNext((ChapterRead chapterRead) -> {//缓存章节
-
+                    if (isCache) {
+                        BookChapterFactory.cacheChapter(chapterRead.getChapter(), bookId, chapterId);
+                    }
                 })
                 .observeOn(AndroidSchedulers.mainThread())//最后在主线程中执行
                 .subscribe(new Subscriber<ChapterRead>() {
@@ -84,6 +86,7 @@ public class EBookReadModelImpl implements IEBookReadModel {
                     @Override
                     public void onNext(ChapterRead chapter) {
                         if (chapter.isOk()) {
+                            chapter.getChapter().setChapterId(chapterId);
                             listener.onComplected(chapter.getChapter());
                         } else {
                             listener.onFailed(new BaseResponse(400, chapter.getMsg()));

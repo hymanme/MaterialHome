@@ -88,6 +88,7 @@ public class ChapterRead extends Base {
     }
 
     public static class Chapter implements Serializable {
+        private int chapterId;
         private String title;
         private String body;
         private String cpContent;
@@ -95,6 +96,14 @@ public class ChapterRead extends Base {
         public Chapter(String title, String body) {
             this.title = title;
             this.body = body;
+        }
+
+        public int getChapterId() {
+            return chapterId;
+        }
+
+        public void setChapterId(int chapterId) {
+            this.chapterId = chapterId;
         }
 
         public Chapter(String title, String body, String cpContent) {

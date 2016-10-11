@@ -1,14 +1,15 @@
 package com.hymane.materialhome.ui.activity;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.text.TextUtils;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hymane.materialhome.R;
@@ -16,15 +17,23 @@ import com.hymane.materialhome.api.presenter.impl.EBookReadPresenterImpl;
 import com.hymane.materialhome.api.view.IEBookReadView;
 import com.hymane.materialhome.bean.http.ebook.BookChapter;
 import com.hymane.materialhome.bean.http.ebook.BookChapter.MixToc.Chapters;
+import com.hymane.materialhome.bean.http.ebook.ChapterPage;
 import com.hymane.materialhome.bean.http.ebook.ChapterRead;
 import com.hymane.materialhome.common.Constant;
 import com.hymane.materialhome.ui.widget.ReaderViewPager;
+import com.hymane.materialhome.utils.BookChapterFactory;
+import com.hymane.materialhome.utils.common.UIUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Author   :hymanme
@@ -41,9 +50,13 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
     private String bookId;
     private String bookName;
     private EBookReadPresenterImpl bookReadPresenter;
+    private BookChapterFactory chapterFactory;
+    private ReaderPagerAdapter readerPagerAdapter;
 
     private List<Chapters> mBookChapterList;
-    private int chapterIndex = 1;
+    private SparseArray<ArrayList<ChapterPage>> pages;
+    private int currentChapter = 1;
+    private int currentPage = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,7 +65,7 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
         setContentView(R.layout.activity_reader);
         ButterKnife.bind(this);
         if (savedInstanceState != null) {
-            chapterIndex = savedInstanceState.getInt("chapterIndex");
+            currentChapter = savedInstanceState.getInt("currentChapter");
         }
         super.onCreate(savedInstanceState);
 
@@ -67,10 +80,16 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
             this.finish();
             return;
         }
+        setTitle(bookName);
+        pages = new SparseArray<>();
         mBookChapterList = new ArrayList<>();
         bookReadPresenter = new EBookReadPresenterImpl(this);
         bookReadPresenter.getBookChapters(bookId);
-        mReaderViewPager.setAdapter(new ReaderPagerAdapter());
+        readerPagerAdapter = new ReaderPagerAdapter();
+        mReaderViewPager.setAdapter(readerPagerAdapter);
+
+        final TextView textView = new TextView(UIUtils.getContext());
+        chapterFactory = new BookChapterFactory(bookId, textView.getLineHeight());
     }
 
     @Override
@@ -89,46 +108,103 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
     }
 
     @Override
-    public void refreshData(Object result) {
-        if (result instanceof BookChapter.MixToc) {
-            //章节
-            mBookChapterList.clear();
-            mBookChapterList.addAll(((BookChapter.MixToc) result).getChapters());
-            readCurrentChapter();
-        } else if (result instanceof ChapterRead.Chapter) {
-            //阅读内容
-
-        }
+    protected boolean isInitSystemBar() {
+        return false;
     }
 
-    //阅读当前章节图书（是否缓存章节为true时）
-    //先读缓存，无缓存就在线获取图书，然后缓存，再阅读
-    //如果有缓存就直接读缓存
-    private synchronized void readCurrentChapter() {
+    @Override
+    public void refreshData(Object result) {
+        if (result instanceof BookChapter.MixToc) {
+            //章节列表
+            mBookChapterList.clear();
+            mBookChapterList.addAll(((BookChapter.MixToc) result).getChapters());
+            for (int i = 0; i < 3; i++) {
+                final Chapters chapter = mBookChapterList.get(i);
+                bookReadPresenter.getChapterContent(chapter.getLink(), bookId, i + 1, true);
+            }
+        } else if (result instanceof ChapterRead.Chapter) {
+            final int resultId = ((ChapterRead.Chapter) result).getChapterId();
+            //阅读内容
+            //该书章节列表已经加载完毕
+            //阅读当前章节图书内容
+            Observable.create((Subscriber<? super ArrayList<ChapterPage>> subscriber) -> {
+                //异步操作相关代码
+                final ArrayList<ChapterPage> chapterContent = chapterFactory.getChapterContent(resultId);
+                if (chapterContent != null) {
+                    subscriber.onNext(chapterContent);
+                } else {
+                    subscriber.onError(new NullPointerException("null chapter content"));
+                }
+                subscriber.onCompleted();
+            })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<ArrayList<ChapterPage>>() {
+                        @Override
+                        public void onCompleted() {
 
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            showMessage(e.toString());
+                        }
+
+                        @Override
+                        public void onNext(ArrayList<ChapterPage> chapterContent) {
+                            pages.append(resultId, chapterContent);
+                            readerPagerAdapter.notifyDataSetChanged();
+                            mProgressBar.setVisibility(View.GONE);
+                        }
+                    });
+        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt("chapterIndex", chapterIndex);
+        outState.putInt("currentChapter", currentChapter);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        chapterFactory = null;
+        super.onDestroy();
     }
 
     class ReaderPagerAdapter extends PagerAdapter {
 
         @Override
         public int getCount() {
-            return 0;
+            if (pages.get(currentChapter) == null) {
+                return 0;
+            } else {
+                return pages.get(currentChapter).size();
+            }
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            return super.instantiateItem(container, position);
+            View view = View.inflate(EBookReaderActivity.this, R.layout.item_reader_page, null);
+            TextView tv_book_content = (TextView) view.findViewById(R.id.tv_book_content);
+            tv_book_content.setText(pages.get(currentChapter).get(position).getBody());
+            container.addView(view);
+            return view;
         }
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return false;
+            return view == object;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object);
+        }
+
+        @Override
+        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+            super.setPrimaryItem(container, position, object);
         }
     }
 }

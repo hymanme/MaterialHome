@@ -24,5 +24,5 @@ public interface IEBookReadModel {
      * @param url
      * @return
      */
-    void getChapterContent(String url, int chapter, boolean isCache, ApiCompleteListener listener);
+    void getChapterContent(String url, String bookId, int chapter, boolean isCache, ApiCompleteListener listener);
 }

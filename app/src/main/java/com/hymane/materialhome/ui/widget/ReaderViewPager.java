@@ -19,4 +19,9 @@ public class ReaderViewPager extends ViewPager {
     public ReaderViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
+
+    @Override
+    protected void onPageScrolled(int position, float offset, int offsetPixels) {
+        super.onPageScrolled(position, offset, offsetPixels);
+    }
 }
