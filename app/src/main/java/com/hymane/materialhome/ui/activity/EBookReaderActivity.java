@@ -187,7 +187,10 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
         public Object instantiateItem(ViewGroup container, int position) {
             View view = View.inflate(EBookReaderActivity.this, R.layout.item_reader_page, null);
             TextView tv_book_content = (TextView) view.findViewById(R.id.tv_book_content);
+            final TextView title = (TextView) view.findViewById(R.id.tv_chapter_name);
             tv_book_content.setText(pages.get(currentChapter).get(position).getBody());
+            final int chapterId = pages.get(currentChapter).get(position).getChapterId();
+            title.setText(mBookChapterList.get(chapterId).getTitle());
             container.addView(view);
             return view;
         }

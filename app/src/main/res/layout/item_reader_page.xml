@@ -2,14 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="14dp"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:paddingTop="14dp">
+
+    <TextView
+        android:id="@+id/tv_chapter_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/tv_book_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="4dp"
+        android:gravity="fill_horizontal"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="16sp" />
 </LinearLayout>

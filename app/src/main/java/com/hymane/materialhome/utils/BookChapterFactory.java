@@ -61,7 +61,10 @@ public class BookChapterFactory {
         mScreenHeight = ScreenUtils.getScreenHeight(UIUtils.getContext());
 
         mVisibleWidth = mScreenWidth - DensityUtils.dp2px(UIUtils.getContext(), mMarginWidth) * 2;
-        mVisibleHeight = mScreenHeight - DensityUtils.dp2px(UIUtils.getContext(), mMarginHeight) * 2 - ScreenUtils.getStatusHeight(UIUtils.getContext()) - ScreenUtils.getVirtualBarHeight(UIUtils.getContext());
+        mVisibleHeight = mScreenHeight - DensityUtils.dp2px(UIUtils.getContext(), mMarginHeight) * 2
+                - ScreenUtils.getStatusHeight(UIUtils.getContext())
+                - ScreenUtils.getVirtualBarHeight(UIUtils.getContext())
+                - lineHeight * 2;
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setTextAlign(Paint.Align.LEFT);
@@ -185,6 +188,7 @@ public class BookChapterFactory {
     public ArrayList<ChapterPage> split(int chapter, String text, int length, String encoding) throws UnsupportedEncodingException {
         //一章文本进行分页，每一个 ChapterPage 是一页内容
         ArrayList<ChapterPage> texts = new ArrayList();
+        final String endChar = "  ";
         String temp = "    ";
         String c;
         int lines = 0;  //行数
@@ -201,7 +205,7 @@ public class BookChapterFactory {
                 } else {
                     endInd = i;
                 }
-                temp += text.substring(startInd, endInd); // 加入一行
+                temp += text.substring(startInd, endInd) + endChar; // 加入一行
                 Log.e("CONTENT:", "lines=" + lines + "|" + text.substring(startInd, endInd));
                 lines++;
                 if (lines == mLineCount) { // 超出一页
@@ -232,13 +236,15 @@ public class BookChapterFactory {
             }
         }
         if (startInd < text.length()) {
-            temp += text.substring(startInd);
+            temp += text.substring(startInd) + endChar;
             Log.e("CONTENT:", "lines=" + lines + "|" + text.substring(startInd));
             lines++;
         }
         if (!TextUtils.isEmpty(temp)) {
             Log.d("Lines=", "startInd==" + lines);
-            texts.add(new ChapterPage(chapter, texts.size(), temp)); // 加入
+            if (!TextUtils.isEmpty(temp.trim())) {
+                texts.add(new ChapterPage(chapter, texts.size(), temp)); // 加入
+            }
         }
         return texts;
     }
