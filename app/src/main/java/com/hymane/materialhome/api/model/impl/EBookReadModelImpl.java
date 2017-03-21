@@ -10,6 +10,7 @@ import com.hymane.materialhome.bean.http.ebook.ChapterRead;
 import com.hymane.materialhome.common.URL;
 import com.hymane.materialhome.utils.BookChapterFactory;
 
+import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -44,7 +45,11 @@ public class EBookReadModelImpl implements IEBookReadModel {
 
                     @Override
                     public void onError(Throwable e) {
-                        listener.onFailed(new BaseResponse(400, e.toString()));
+                        if (e instanceof HttpException) {
+                            listener.onFailed(new BaseResponse(404, "获取章节失败"));
+                        } else {
+                            listener.onFailed(new BaseResponse(400, e.toString()));
+                        }
                     }
 
                     @Override
@@ -68,6 +73,7 @@ public class EBookReadModelImpl implements IEBookReadModel {
                 .observeOn(Schedulers.io())//请求完成后在io线程中执行
                 .doOnNext((ChapterRead chapterRead) -> {//缓存章节
                     if (isCache) {
+                        //缓存某一个章节文本
                         BookChapterFactory.cacheChapter(chapterRead.getChapter(), bookId, chapterId);
                     }
                 })

@@ -14,8 +14,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.hymane.materialhome.R;
-import com.hymane.materialhome.bean.http.douban.BookReviewResponse;
-import com.hymane.materialhome.bean.http.douban.BookReviewsListResponse;
+import com.hymane.materialhome.bean.http.ebook.HotReview;
+import com.hymane.materialhome.utils.EBookUtils;
 import com.hymane.materialhome.utils.common.UIUtils;
 
 import java.util.List;
@@ -26,21 +26,21 @@ import java.util.List;
  * Email    :hymanme@163.com
  * Create at 2016/1/9 0009
  */
-public class BookReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class EBookReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_EMPTY = 0;
     private static final int TYPE_DEFAULT = 1;
     private static final int AVATAR_SIZE_DP = 24;
-    private final BookReviewsListResponse reviewsListResponse;
+    private final HotReview mHotView;
 
-    public BookReviewsAdapter(BookReviewsListResponse responses) {
-        this.reviewsListResponse = responses;
+    public EBookReviewsAdapter(HotReview responses) {
+        this.mHotView = responses;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         if (viewType == TYPE_DEFAULT) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_book_comment, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ebook_comment, parent, false);
             return new BookCommentHolder(view);
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_empty, parent, false);
@@ -50,7 +50,7 @@ public class BookReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemViewType(int position) {
-        if (reviewsListResponse.getReviews() == null || reviewsListResponse.getReviews().isEmpty()) {
+        if (mHotView.getReviews() == null || mHotView.getReviews().isEmpty()) {
             return TYPE_EMPTY;
         } else {
             return TYPE_DEFAULT;
@@ -60,9 +60,9 @@ public class BookReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof BookCommentHolder) {
-            List<BookReviewResponse> reviews = reviewsListResponse.getReviews();
+            List<HotReview.Reviews> reviews = mHotView.getReviews();
             Glide.with(UIUtils.getContext())
-                    .load(reviews.get(position).getAuthor().getAvatar())
+                    .load(EBookUtils.getImageUrl(reviews.get(position).getAuthor().getAvatar()))
                     .asBitmap()
                     .centerCrop()
                     .into(new BitmapImageViewTarget(((BookCommentHolder) holder).iv_avatar) {
@@ -74,19 +74,17 @@ public class BookReviewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                             ((BookCommentHolder) holder).iv_avatar.setImageDrawable(circularBitmapDrawable);
                         }
                     });
-            ((BookCommentHolder) holder).tv_user_name.setText(reviews.get(position).getAuthor().getName());
-            if (reviews.get(position).getRating() != null) {
-                ((BookCommentHolder) holder).ratingBar_hots.setRating(Float.valueOf(reviews.get(position).getRating().getValue()));
-            }
-            ((BookCommentHolder) holder).tv_comment_content.setText(reviews.get(position).getSummary());
-            ((BookCommentHolder) holder).tv_favorite_num.setText(reviews.get(position).getVotes() + "");
-            ((BookCommentHolder) holder).tv_update_time.setText(reviews.get(position).getUpdated().split(" ")[0]);
+            ((BookCommentHolder) holder).tv_user_name.setText(reviews.get(position).getAuthor().getNickname());
+            ((BookCommentHolder) holder).ratingBar_hots.setRating((float) reviews.get(position).getRating());
+            ((BookCommentHolder) holder).tv_comment_content.setText(reviews.get(position).getContent());
+            ((BookCommentHolder) holder).tv_favorite_num.setText(reviews.get(position).getLikeCount() + "");
+            ((BookCommentHolder) holder).tv_update_time.setText(reviews.get(position).getUpdated().split("T")[0]);
         }
     }
 
     @Override
     public int getItemCount() {
-        return reviewsListResponse.getReviews().size();
+        return mHotView.getReviews().size();
     }
 
     class BookCommentHolder extends RecyclerView.ViewHolder {

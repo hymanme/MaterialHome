@@ -83,19 +83,6 @@ public class BookChapterFactory {
     }
 
     /**
-     * 获取章节文本缓存文件
-     *
-     * @param chapter
-     * @return
-     */
-    public static File getBookChapterFile(String bookId, int chapter) {
-        File file = new File(basePath + bookId + File.separator + chapter + CHAPTER_FILE_EXTENSION);
-        if (!file.exists())
-            FileUtils.createFile(file);
-        return file;
-    }
-
-    /**
      * 保存图书章节数据到文件
      *
      * @param chapter
@@ -135,6 +122,7 @@ public class BookChapterFactory {
             return null;
         }
         try {
+            //分页章节内容
             pages = split(chapter, temp, mLineWordCount * 2, "GBK");
             chapters.put(bookId + "-" + chapter, pages);
             return pages;
@@ -147,8 +135,9 @@ public class BookChapterFactory {
 
     /**
      * 读取文章的段落集合
+     * 返回文本单个章节内容
      */
-    public String readChapterFile(int chapter) {
+    private String readChapterFile(int chapter) {
         String temp = "";
         BufferedReader bufferedReader = null;
         File txtFile = getBookChapterFile(bookId, chapter);
@@ -176,18 +165,18 @@ public class BookChapterFactory {
         return temp;
     }
 
-    /**
+    /***
      * 分页处理
-     *
-     * @param text     一章所有文本
-     * @param length   每一行最大文本字符数
+     * @param chapter 章节
+     * @param text 章节内容
+     * @param length 长度
      * @param encoding 编码
      * @return
      * @throws UnsupportedEncodingException
      */
     public ArrayList<ChapterPage> split(int chapter, String text, int length, String encoding) throws UnsupportedEncodingException {
         //一章文本进行分页，每一个 ChapterPage 是一页内容
-        ArrayList<ChapterPage> texts = new ArrayList();
+        ArrayList<ChapterPage> texts = new ArrayList<>();
         final String endChar = "  ";
         String temp = "    ";
         String c;
@@ -247,5 +236,18 @@ public class BookChapterFactory {
             }
         }
         return texts;
+    }
+
+    /**
+     * 获取章节文本缓存文件
+     *
+     * @param chapter
+     * @return
+     */
+    private static File getBookChapterFile(String bookId, int chapter) {
+        File file = new File(basePath + bookId + File.separator + chapter + CHAPTER_FILE_EXTENSION);
+        if (!file.exists())
+            FileUtils.createFile(file);
+        return file;
     }
 }

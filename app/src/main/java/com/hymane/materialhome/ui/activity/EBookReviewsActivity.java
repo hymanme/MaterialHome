@@ -8,10 +8,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.hymane.materialhome.R;
-import com.hymane.materialhome.api.presenter.impl.BookDetailPresenterImpl;
+import com.hymane.materialhome.api.presenter.impl.EBookDetailPresenterImpl;
 import com.hymane.materialhome.api.view.IEBookDetailView;
-import com.hymane.materialhome.bean.http.douban.BookReviewsListResponse;
-import com.hymane.materialhome.ui.adapter.BookReviewsAdapter;
+import com.hymane.materialhome.bean.http.ebook.HotReview;
+import com.hymane.materialhome.common.Constant;
+import com.hymane.materialhome.ui.adapter.EBookReviewsAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,8 +23,8 @@ import butterknife.ButterKnife;
  * Create at 2016/2/26
  * Description:
  */
-public class BookReviewsActivity extends BaseActivity implements IEBookDetailView, SwipeRefreshLayout.OnRefreshListener {
-    private static final String COMMENT_FIELDS = "id,rating,author,title,updated,comments,summary,votes,useless";
+public class EBookReviewsActivity extends BaseActivity implements IEBookDetailView, SwipeRefreshLayout.OnRefreshListener {
+    private String sort = Constant.EBOOK_SORT_UPDATED;
     private static int count = 20;
     private int page = 0;
     private static String bookId;
@@ -36,9 +37,9 @@ public class BookReviewsActivity extends BaseActivity implements IEBookDetailVie
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     private LinearLayoutManager mLayoutManager;
-    private BookReviewsAdapter mReviewsAdapter;
-    private BookReviewsListResponse mReviews;
-    private BookDetailPresenterImpl bookDetailPresenter;
+    private EBookReviewsAdapter mReviewsAdapter;
+    private HotReview mHotReview;
+    private EBookDetailPresenterImpl bookDetailPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,17 +53,17 @@ public class BookReviewsActivity extends BaseActivity implements IEBookDetailVie
 
     @Override
     protected void initEvents() {
-        bookDetailPresenter = new BookDetailPresenterImpl(this);
-        mReviews = new BookReviewsListResponse();
+        bookDetailPresenter = new EBookDetailPresenterImpl(this);
+        mHotReview = new HotReview();
         mSwipeRefreshLayout.setColorSchemeResources(R.color.recycler_color1, R.color.recycler_color2,
                 R.color.recycler_color3, R.color.recycler_color4);
 
-        mLayoutManager = new LinearLayoutManager(BookReviewsActivity.this);
+        mLayoutManager = new LinearLayoutManager(EBookReviewsActivity.this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         //设置adapter
-        mReviewsAdapter = new BookReviewsAdapter(mReviews);
+        mReviewsAdapter = new EBookReviewsAdapter(mHotReview);
         mRecyclerView.setAdapter(mReviewsAdapter);
 
         //设置Item增加、移除动画
@@ -114,11 +115,11 @@ public class BookReviewsActivity extends BaseActivity implements IEBookDetailVie
 
     @Override
     public void updateView(Object result) {
-        final BookReviewsListResponse response = (BookReviewsListResponse) result;
+        final HotReview response = (HotReview) result;
         if (page == 0) {
-            mReviews.getReviews().clear();
+            mHotReview.getReviews().clear();
         }
-        mReviews.getReviews().addAll(response.getReviews());
+        mHotReview.getReviews().addAll(response.getReviews());
         mReviewsAdapter.notifyDataSetChanged();
 
         if (response.getReviews().size() < count) {
@@ -132,12 +133,12 @@ public class BookReviewsActivity extends BaseActivity implements IEBookDetailVie
     @Override
     public void onRefresh() {
         page = 0;
-        bookDetailPresenter.loadReviews(bookId, page * count, count, COMMENT_FIELDS);
+        bookDetailPresenter.getBookReviewList(bookId, sort, page * count, count);
     }
 
     private void onLoadMore() {
         if (!isLoadAll) {
-            bookDetailPresenter.loadReviews(bookId, page * count, count, COMMENT_FIELDS);
+            bookDetailPresenter.getBookReviewList(bookId, sort, page * count, count);
         } else {
             showMessage(getString(R.string.no_more));
         }

@@ -32,6 +32,7 @@ import com.hymane.materialhome.bean.http.ebook.HotReview;
 import com.hymane.materialhome.bean.http.ebook.LikedBookList;
 import com.hymane.materialhome.holder.EBookSeriesCeilHolder;
 import com.hymane.materialhome.ui.activity.BookReviewsActivity;
+import com.hymane.materialhome.ui.activity.EBookReviewsActivity;
 import com.hymane.materialhome.utils.common.DensityUtils;
 import com.hymane.materialhome.utils.EBookUtils;
 import com.hymane.materialhome.utils.common.UIUtils;
@@ -178,7 +179,7 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
                 ((BookCommentHolder) holder).tv_more_comment.setVisibility(View.VISIBLE);
                 ((BookCommentHolder) holder).tv_more_comment.setText(UIUtils.getContext().getString(R.string.more_brief));
                 ((BookCommentHolder) holder).tv_more_comment.setOnClickListener(v -> {
-                    Intent intent = new Intent(UIUtils.getContext(), BookReviewsActivity.class);
+                    Intent intent = new Intent(UIUtils.getContext(), EBookReviewsActivity.class);
                     intent.putExtra("bookId", mBookInfo.getId());
                     intent.putExtra("bookName", mBookInfo.getTitle());
                     UIUtils.startActivity(intent);

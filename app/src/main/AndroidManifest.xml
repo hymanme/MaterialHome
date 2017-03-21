@@ -49,6 +49,10 @@
             android:theme="@style/AppTheme.DayNight.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
+            android:name=".ui.activity.EBookReviewsActivity"
+            android:theme="@style/AppTheme.DayNight.NoActionBar"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity
             android:name=".ui.activity.SearchResultActivity"
             android:theme="@style/AppTheme.DayNight.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />

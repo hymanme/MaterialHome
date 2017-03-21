@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hymane.materialhome.R;
 import com.hymane.materialhome.api.presenter.impl.EBookReadPresenterImpl;
@@ -22,6 +21,7 @@ import com.hymane.materialhome.bean.http.ebook.ChapterRead;
 import com.hymane.materialhome.common.Constant;
 import com.hymane.materialhome.ui.widget.ReaderViewPager;
 import com.hymane.materialhome.utils.BookChapterFactory;
+import com.hymane.materialhome.utils.common.ToastUtils;
 import com.hymane.materialhome.utils.common.UIUtils;
 
 import java.util.ArrayList;
@@ -57,6 +57,7 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
     private SparseArray<ArrayList<ChapterPage>> pages;
     private int currentChapter = 1;
     private int currentPage = 0;
+    private int cacheChapter = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,27 +76,28 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
     protected void initEvents() {
         bookId = getIntent().getStringExtra("bookId");
         bookName = getIntent().getStringExtra("bookName");
+        setTitle(bookName);
         if (TextUtils.isEmpty(bookId)) {
             setResult(Constant.BOOK_READER_RESULT_FAILED);
+            showMessage("获取图书信息失败");
             this.finish();
             return;
         }
-        setTitle(bookName);
         pages = new SparseArray<>();
         mBookChapterList = new ArrayList<>();
         bookReadPresenter = new EBookReadPresenterImpl(this);
+        final TextView textView = new TextView(UIUtils.getContext());
+        chapterFactory = new BookChapterFactory(bookId, textView.getLineHeight());
         bookReadPresenter.getBookChapters(bookId);
         readerPagerAdapter = new ReaderPagerAdapter();
         mReaderViewPager.setAdapter(readerPagerAdapter);
-
-        final TextView textView = new TextView(UIUtils.getContext());
-        chapterFactory = new BookChapterFactory(bookId, textView.getLineHeight());
     }
 
     @Override
     public void showMessage(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        ToastUtils.showShort(msg);
     }
+
 
     @Override
     public void showProgress() {
@@ -116,13 +118,13 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
     public void refreshData(Object result) {
         if (result instanceof BookChapter.MixToc) {
             //章节列表
+            //先获取章节列表，然后获取当前章节的内容
             mBookChapterList.clear();
             mBookChapterList.addAll(((BookChapter.MixToc) result).getChapters());
-            for (int i = 0; i < 3; i++) {
-                final Chapters chapter = mBookChapterList.get(i);
-                bookReadPresenter.getChapterContent(chapter.getLink(), bookId, i + 1, true);
-            }
+            //如果当前阅读的缓存数接近缓存的章节数，开始更新
+            getFutureChapterContent(currentChapter);
         } else if (result instanceof ChapterRead.Chapter) {
+            //某一章节的id
             final int resultId = ((ChapterRead.Chapter) result).getChapterId();
             //阅读内容
             //该书章节列表已经加载完毕
@@ -157,6 +159,15 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
                             mProgressBar.setVisibility(View.GONE);
                         }
                     });
+        }
+    }
+
+    //获取章节内容，如果已经缓存则直接取缓存
+    private void getFutureChapterContent(int chapter) {
+        for (int i = cacheChapter + 1; i < Math.min(cacheChapter + 2, mBookChapterList.size()); i++) {
+            //// TODO: 2017-03-21 检查本地是否已经缓存，是则不进行网络访问
+            bookReadPresenter.getChapterContent(mBookChapterList.get(chapter).getLink(), bookId, i + 1, true);
+            cacheChapter = i;
         }
     }
 

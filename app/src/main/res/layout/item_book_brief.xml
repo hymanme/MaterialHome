@@ -10,6 +10,7 @@
     android:layout_marginTop="8dp"
     android:background="@null"
     android:orientation="vertical"
+    app:contentTextSize="12sp"
     app:expandHint="点击展开"
     app:foldHint="点击收回"
     app:indicateImage="@drawable/ic_arrow_down_light_round"
