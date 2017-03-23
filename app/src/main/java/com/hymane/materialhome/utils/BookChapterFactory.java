@@ -182,7 +182,7 @@ public class BookChapterFactory {
     public ArrayList<ChapterPage> split(int chapter, String text, int length, String encoding) throws UnsupportedEncodingException {
         //一章文本进行分页，每一个 ChapterPage 是一页内容
         ArrayList<ChapterPage> texts = new ArrayList<>();
-        final String endChar = "  ";
+        final String endChar = "";
         String temp = "    ";
         String c;
         int lines = 0;  //行数

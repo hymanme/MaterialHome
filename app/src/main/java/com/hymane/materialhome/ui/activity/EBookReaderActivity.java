@@ -6,6 +6,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.SparseArray;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -60,7 +61,6 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
     private int currentChapter = 0;
     private int currentPage = 0;
     private int cacheChapter = 0;
-    private int count = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,6 +112,17 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
             @Override
             public void onPageScrollStateChanged(int state) {
 
+            }
+        });
+        mReaderViewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        ToastUtils.showShort("x:" + event.getX() + "|y:" + event.getY());
+                        break;
+                }
+                return false;
             }
         });
     }
@@ -222,17 +233,6 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
                         }
                     }
                 });
-
-//        for (int i = cacheChapter + 1; i < Math.min(cacheChapter + 2, mBookChapterList.size()); i++) {
-//            //// TODO: 2017-03-21 检查本地是否已经缓存，是则不进行网络访问
-//            final ArrayList<ChapterPage> chapterContent = chapterFactory.getChapterContent(chapter);//从缓存读单个章节内容
-//            if (chapterContent == null) {
-//                //LRU未缓存且本地文件未缓存
-//                //需要读取网络获取呢哦荣
-//            }
-//            bookReadPresenter.getChapterContent(mBookChapterList.get(chapter).getLink(), bookId, i + 1, true);//读网络内容
-//            cacheChapter = i;
-//        }
     }
 
     @Override

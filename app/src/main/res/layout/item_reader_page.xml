@@ -15,7 +15,7 @@
         android:textColor="?android:attr/textColorSecondary"
         android:textSize="14sp" />
 
-    <TextView
+        <TextView
         android:id="@+id/tv_book_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
