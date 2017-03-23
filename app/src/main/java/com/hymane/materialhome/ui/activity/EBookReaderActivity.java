@@ -3,6 +3,7 @@ package com.hymane.materialhome.ui.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.View;
@@ -55,9 +56,11 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
 
     private List<Chapters> mBookChapterList;
     private SparseArray<ArrayList<ChapterPage>> pages;
-    private int currentChapter = 1;
+    private ArrayList<ChapterPage> viewPagerDatas;
+    private int currentChapter = 0;
     private int currentPage = 0;
     private int cacheChapter = 0;
+    private int count = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,6 +87,7 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
             return;
         }
         pages = new SparseArray<>();
+        viewPagerDatas = new ArrayList<>();
         mBookChapterList = new ArrayList<>();
         bookReadPresenter = new EBookReadPresenterImpl(this);
         final TextView textView = new TextView(UIUtils.getContext());
@@ -91,6 +95,25 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
         bookReadPresenter.getBookChapters(bookId);
         readerPagerAdapter = new ReaderPagerAdapter();
         mReaderViewPager.setAdapter(readerPagerAdapter);
+        mReaderViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (viewPagerDatas.size() - position == 3) {
+                    //最后3页了
+                    getFutureChapterContent(Math.min(++currentChapter, mBookChapterList.size()));
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override
@@ -124,6 +147,7 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
             //如果当前阅读的缓存数接近缓存的章节数，开始更新
             getFutureChapterContent(currentChapter);
         } else if (result instanceof ChapterRead.Chapter) {
+            //该请求已经将内容缓存至文件
             //某一章节的id
             final int resultId = ((ChapterRead.Chapter) result).getChapterId();
             //阅读内容
@@ -155,6 +179,7 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
                         @Override
                         public void onNext(ArrayList<ChapterPage> chapterContent) {
                             pages.append(resultId, chapterContent);
+                            viewPagerDatas.addAll(chapterContent);
                             readerPagerAdapter.notifyDataSetChanged();
                             mProgressBar.setVisibility(View.GONE);
                         }
@@ -164,11 +189,50 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
 
     //获取章节内容，如果已经缓存则直接取缓存
     private void getFutureChapterContent(int chapter) {
-        for (int i = cacheChapter + 1; i < Math.min(cacheChapter + 2, mBookChapterList.size()); i++) {
-            //// TODO: 2017-03-21 检查本地是否已经缓存，是则不进行网络访问
-            bookReadPresenter.getChapterContent(mBookChapterList.get(chapter).getLink(), bookId, i + 1, true);
-            cacheChapter = i;
-        }
+        Observable.create((Subscriber<? super ArrayList<ChapterPage>> subscriber) -> {
+            //异步操作相关代码
+            final ArrayList<ChapterPage> chapterContent = chapterFactory.getChapterContent(chapter);//从缓存读单个章节内容
+            subscriber.onNext(chapterContent);
+            subscriber.onCompleted();
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ArrayList<ChapterPage>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        showMessage(e.toString());
+                    }
+
+                    @Override
+                    public void onNext(ArrayList<ChapterPage> chapterContent) {
+                        if (chapterContent == null) {
+                            //LRU未缓存且本地文件未缓存
+                            //需要读取网络获取内容
+                            bookReadPresenter.getChapterContent(mBookChapterList.get(chapter).getLink(), bookId, chapter, true);//读网络内容
+                        } else {
+                            pages.append(chapter, chapterContent);
+                            viewPagerDatas.addAll(chapterContent);
+                            readerPagerAdapter.notifyDataSetChanged();
+                            mProgressBar.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
+//        for (int i = cacheChapter + 1; i < Math.min(cacheChapter + 2, mBookChapterList.size()); i++) {
+//            //// TODO: 2017-03-21 检查本地是否已经缓存，是则不进行网络访问
+//            final ArrayList<ChapterPage> chapterContent = chapterFactory.getChapterContent(chapter);//从缓存读单个章节内容
+//            if (chapterContent == null) {
+//                //LRU未缓存且本地文件未缓存
+//                //需要读取网络获取呢哦荣
+//            }
+//            bookReadPresenter.getChapterContent(mBookChapterList.get(chapter).getLink(), bookId, i + 1, true);//读网络内容
+//            cacheChapter = i;
+//        }
     }
 
     @Override
@@ -187,11 +251,17 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
 
         @Override
         public int getCount() {
-            if (pages.get(currentChapter) == null) {
-                return 0;
-            } else {
-                return pages.get(currentChapter).size();
-            }
+            return viewPagerDatas.size();
+//            if (pages == null || pages.get(currentChapter) == null) {
+//                return 0;
+//            } else {
+//                count = 0;
+//                for (int i = 0; i < pages.size(); i++) {
+//                    final int key = pages.keyAt(i);
+//                    count += pages.get(key).size();
+//                }
+//                return count;
+//            }
         }
 
         @Override
@@ -199,8 +269,8 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
             View view = View.inflate(EBookReaderActivity.this, R.layout.item_reader_page, null);
             TextView tv_book_content = (TextView) view.findViewById(R.id.tv_book_content);
             final TextView title = (TextView) view.findViewById(R.id.tv_chapter_name);
-            tv_book_content.setText(pages.get(currentChapter).get(position).getBody());
-            final int chapterId = pages.get(currentChapter).get(position).getChapterId();
+            tv_book_content.setText(viewPagerDatas.get(position).getBody());
+            final int chapterId = viewPagerDatas.get(position).getChapterId();
             title.setText(mBookChapterList.get(chapterId).getTitle());
             container.addView(view);
             return view;

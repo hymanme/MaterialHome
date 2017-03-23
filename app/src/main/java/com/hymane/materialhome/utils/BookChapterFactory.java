@@ -91,6 +91,7 @@ public class BookChapterFactory {
     public static void cacheChapter(final ChapterRead.Chapter chapter, String bookId, int chapterNo) {
         File file = getBookChapterFile(bookId, chapterNo);
         FileUtils.writeFile(file.getAbsolutePath(), chapter.getBody(), false);
+        Log.i("cacheChapter", "cacheChapter: " + bookId + "||" + chapterNo);
     }
 
     /**
@@ -119,6 +120,7 @@ public class BookChapterFactory {
         //内存缓存中不存在该章节，读取文件缓存，然后添加到LRU缓存
         String temp = readChapterFile(chapter);
         if (temp == null) {
+            //无本地缓存
             return null;
         }
         try {
@@ -140,7 +142,10 @@ public class BookChapterFactory {
     private String readChapterFile(int chapter) {
         String temp = "";
         BufferedReader bufferedReader = null;
-        File txtFile = getBookChapterFile(bookId, chapter);
+        File txtFile = findBookChapterFile(bookId, chapter);
+        if (txtFile == null) {
+            return null;
+        }
         try {
             bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(txtFile), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
@@ -244,10 +249,26 @@ public class BookChapterFactory {
      * @param chapter
      * @return
      */
-    private static File getBookChapterFile(String bookId, int chapter) {
+    private static File findBookChapterFile(String bookId, int chapter) {
         File file = new File(basePath + bookId + File.separator + chapter + CHAPTER_FILE_EXTENSION);
-        if (!file.exists())
-            FileUtils.createFile(file);
+        if (!file.exists()) {
+            return null;
+        }
         return file;
     }
+
+    /**
+     * 获取章节文本缓存文件
+     *
+     * @param chapter
+     * @return
+     */
+    private static File getBookChapterFile(String bookId, int chapter) {
+        File file = new File(basePath + bookId + File.separator + chapter + CHAPTER_FILE_EXTENSION);
+        if (!file.exists()) {
+            FileUtils.createFile(file);
+        }
+        return file;
+    }
+
 }
