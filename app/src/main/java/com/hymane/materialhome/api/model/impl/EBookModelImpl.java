@@ -6,12 +6,13 @@ import com.hymane.materialhome.api.common.service.IEBooksService;
 import com.hymane.materialhome.api.model.IEBookModel;
 import com.hymane.materialhome.bean.http.douban.BaseResponse;
 import com.hymane.materialhome.bean.http.ebook.BookDetail;
+import com.hymane.materialhome.bean.http.ebook.BookZoneBean;
 import com.hymane.materialhome.bean.http.ebook.BooksByCats;
 import com.hymane.materialhome.bean.http.ebook.BooksByTag;
 import com.hymane.materialhome.bean.http.ebook.CategoryList;
 import com.hymane.materialhome.bean.http.ebook.HotReview;
-import com.hymane.materialhome.bean.http.ebook.Rankings;
 import com.hymane.materialhome.bean.http.ebook.LikedBookList;
+import com.hymane.materialhome.bean.http.ebook.Rankings;
 import com.hymane.materialhome.common.URL;
 
 import retrofit2.Response;
@@ -265,6 +266,36 @@ public class EBookModelImpl implements IEBookModel {
                             listener.onComplected(bookList);
                         } else {
                             listener.onFailed(new BaseResponse(400, bookList.getMsg()));
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void getBookZoneDetail(String bookListId, ApiCompleteListener listener) {
+        if (eBooksService == null) {
+            eBooksService = ServiceFactory.createService(URL.HOST_URL_ZSSQ, IEBooksService.class);
+        }
+        eBooksService.getBookZoneDetail(bookListId)
+                .subscribeOn(Schedulers.io())    //请求在io线程中执行
+                .observeOn(AndroidSchedulers.mainThread())//最后在主线程中执行
+                .subscribe(new Subscriber<BookZoneBean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        listener.onFailed(new BaseResponse(400, e.toString()));
+                    }
+
+                    @Override
+                    public void onNext(BookZoneBean bookZone) {
+                        if (bookZone.isOk()) {
+                            listener.onComplected(bookZone);
+                        } else {
+                            listener.onFailed(new BaseResponse(400, bookZone.getMsg()));
                         }
                     }
                 });

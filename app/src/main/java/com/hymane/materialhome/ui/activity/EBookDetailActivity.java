@@ -86,7 +86,7 @@ public class EBookDetailActivity extends BaseActivity implements IEBookDetailVie
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(EBookDetailActivity.this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mDetailAdapter = new EBookDetailAdapter(bookInfo, hotReview, booksByTag, bookList);
+        mDetailAdapter = new EBookDetailAdapter(this, bookInfo, hotReview, booksByTag, bookList);
         mRecyclerView.setAdapter(mDetailAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mSwipeRefreshLayout.setColorSchemeResources(R.color.recycler_color1, R.color.recycler_color2,

@@ -78,6 +78,10 @@
             android:theme="@style/AppTheme.DayNight.NoActionBar.BookDetail"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
+            android:name=".ui.activity.EBookZoneActivity"
+            android:theme="@style/AppTheme.DayNight.NoActionBar"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity
             android:name=".ui.activity.CategoryDetailActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:theme="@style/AppTheme.DayNight.NoActionBar"

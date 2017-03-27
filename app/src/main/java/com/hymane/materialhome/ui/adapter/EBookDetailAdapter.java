@@ -1,12 +1,13 @@
 package com.hymane.materialhome.ui.adapter;
 
 import android.animation.ObjectAnimator;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatRatingBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,11 +31,12 @@ import com.hymane.materialhome.bean.http.ebook.BookDetail;
 import com.hymane.materialhome.bean.http.ebook.BooksByTag;
 import com.hymane.materialhome.bean.http.ebook.HotReview;
 import com.hymane.materialhome.bean.http.ebook.LikedBookList;
+import com.hymane.materialhome.common.Constant;
 import com.hymane.materialhome.holder.EBookSeriesCeilHolder;
-import com.hymane.materialhome.ui.activity.BookReviewsActivity;
 import com.hymane.materialhome.ui.activity.EBookReviewsActivity;
-import com.hymane.materialhome.utils.common.DensityUtils;
+import com.hymane.materialhome.ui.activity.EBookZoneActivity;
 import com.hymane.materialhome.utils.EBookUtils;
+import com.hymane.materialhome.utils.common.DensityUtils;
 import com.hymane.materialhome.utils.common.UIUtils;
 
 import java.util.List;
@@ -67,11 +69,13 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
     private final HotReview mHotReview;
     private final BooksByTag mBooksByTag;
     private final LikedBookList mBookList;
+    private Context mContext;
 
     //图书出版信息是否展开
     private boolean flag;
 
-    public EBookDetailAdapter(BookDetail bookInfo, HotReview hotReview, BooksByTag booksByTag, LikedBookList bookList) {
+    public EBookDetailAdapter(Context context, BookDetail bookInfo, HotReview hotReview, BooksByTag booksByTag, LikedBookList bookList) {
+        mContext = context;
         mBookInfo = bookInfo;
         mHotReview = hotReview;
         mBooksByTag = booksByTag;
@@ -113,28 +117,50 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
             ((BookInfoHolder) holder).tv_hots_num.setText(ratio + "");
             ((BookInfoHolder) holder).tv_words_num.setText(mBookInfo.getWordCount() / 10000 + "万字");
             ((BookInfoHolder) holder).tv_book_info.setText(mBookInfo.getBookInfoString());
+            StringBuilder sb = new StringBuilder();
+            sb.append("作者：").append(mBookInfo.getAuthor()).append("\n");
+            sb.append("追书人数：").append(mBookInfo.getLatelyFollower()).append("\n");
+            sb.append("读者留存率：").append(mBookInfo.getRetentionRatio()).append("%").append("\n");
+            sb.append("日更新字数：").append(mBookInfo.getSerializeWordCount()).append("\n");
+            sb.append("总章节数：").append(mBookInfo.getChaptersCount()).append("\n");
+            sb.append("更新时间：").append(mBookInfo.getUpdated()).append("\n");
+            sb.append("最新章节：").append(mBookInfo.getLastChapter()).append("\n");
+            sb.append("是否连载：").append(mBookInfo.isSerial() ? "是" : "否").append("\n");
+            sb.append("次级分类：").append(mBookInfo.getMajorCate()).append("\n");
+            sb.append("Creater：").append(mBookInfo.getCreater()).append("\n");
             ((BookInfoHolder) holder).rl_more_info.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (flag) {
                         ObjectAnimator.ofFloat(((BookInfoHolder) holder).iv_more_info, "rotation", 90, 0).start();
-                        ((BookInfoHolder) holder).progressBar.setVisibility(View.GONE);
-                        ((BookInfoHolder) holder).ll_publish_info.setVisibility(View.GONE);
+//                        ((BookInfoHolder) holder).progressBar.setVisibility(View.GONE);
+//                        ((BookInfoHolder) holder).ll_publish_info.setVisibility(View.GONE);
                         flag = false;
                     } else {
                         ObjectAnimator.ofFloat(((BookInfoHolder) holder).iv_more_info, "rotation", 0, 90).start();
-                        ((BookInfoHolder) holder).progressBar.setVisibility(View.VISIBLE);
+//                        ((BookInfoHolder) holder).progressBar.setVisibility(View.VISIBLE);
                         //// TODO: 2016/9/27 may occur oom
-                        new Handler() {
-                            @Override
-                            public void handleMessage(Message msg) {
-                                super.handleMessage(msg);
-                                if (flag) {
-                                    ((BookInfoHolder) holder).ll_publish_info.setVisibility(View.VISIBLE);
-                                    ((BookInfoHolder) holder).progressBar.setVisibility(View.GONE);
-                                }
-                            }
-                        }.sendEmptyMessageDelayed(0, getDelayTime());
+//                        new Handler() {
+//                            @Override
+//                            public void handleMessage(Message msg) {
+//                                super.handleMessage(msg);
+//                                if (flag) {
+//                                    ((BookInfoHolder) holder).ll_publish_info.setVisibility(View.VISIBLE);
+//                                    ((BookInfoHolder) holder).progressBar.setVisibility(View.GONE);
+//                                }
+//                            }
+//                        }.sendEmptyMessageDelayed(0, getDelayTime());
+                        new AlertDialog.Builder(mContext)
+                                .setTitle("详细信息：")
+                                .setMessage(sb)
+                                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialog) {
+                                        ObjectAnimator.ofFloat(((BookInfoHolder) holder).iv_more_info, "rotation", 90, 0).start();
+                                        flag = false;
+                                    }
+                                })
+                                .create().show();
                         flag = true;
                     }
                 }
@@ -153,16 +179,16 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
                     tag.setOnClickListener(v -> Toast.makeText(UIUtils.getContext(), "click", Toast.LENGTH_SHORT).show());
                 }
             }
-            ((BookInfoHolder) holder).tv_author.setText("作者：" + mBookInfo.getAuthor());
-            ((BookInfoHolder) holder).tv_followers.setText("追书人数：" + mBookInfo.getLatelyFollower());
-            ((BookInfoHolder) holder).retention.setText("读者留存率：" + mBookInfo.getRetentionRatio() + "%");
-            ((BookInfoHolder) holder).tv_day_words.setText("日更新字数：" + mBookInfo.getSerializeWordCount());
-            ((BookInfoHolder) holder).tv_chapters.setText("总章节数：" + mBookInfo.getChaptersCount());
-            ((BookInfoHolder) holder).tv_publish_date.setText("更新时间：" + mBookInfo.getUpdated());
-            ((BookInfoHolder) holder).tv_last_hapter.setText("最新章节：" + mBookInfo.getLastChapter());
-            ((BookInfoHolder) holder).tv_serial.setText("是否连载：" + (mBookInfo.isSerial() ? "是" : "否"));
-            ((BookInfoHolder) holder).tv_minor_cate.setText("次级分类：" + mBookInfo.getMajorCate());
-            ((BookInfoHolder) holder).tv_creater.setText("Creater：" + mBookInfo.getCreater());
+//            ((BookInfoHolder) holder).tv_author.setText("作者：" + mBookInfo.getAuthor());
+//            ((BookInfoHolder) holder).tv_followers.setText("追书人数：" + mBookInfo.getLatelyFollower());
+//            ((BookInfoHolder) holder).retention.setText("读者留存率：" + mBookInfo.getRetentionRatio() + "%");
+//            ((BookInfoHolder) holder).tv_day_words.setText("日更新字数：" + mBookInfo.getSerializeWordCount());
+//            ((BookInfoHolder) holder).tv_chapters.setText("总章节数：" + mBookInfo.getChaptersCount());
+//            ((BookInfoHolder) holder).tv_publish_date.setText("更新时间：" + mBookInfo.getUpdated());
+//            ((BookInfoHolder) holder).tv_last_hapter.setText("最新章节：" + mBookInfo.getLastChapter());
+//            ((BookInfoHolder) holder).tv_serial.setText("是否连载：" + (mBookInfo.isSerial() ? "是" : "否"));
+//            ((BookInfoHolder) holder).tv_minor_cate.setText("次级分类：" + mBookInfo.getMajorCate());
+//            ((BookInfoHolder) holder).tv_creater.setText("Creater：" + mBookInfo.getCreater());
         } else if (holder instanceof BookBriefHolder) {
             if (mBookInfo.getLongIntro() != null) {
                 ((BookBriefHolder) holder).etv_brief.setContent(mBookInfo.getLongIntro());
@@ -232,9 +258,16 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
             Glide.with(UIUtils.getContext())
                     .load(EBookUtils.getImageUrl(book.getCover()))
                     .into(((BookListHolder) holder).iv_book_img);
+            ((BookListHolder) holder).tv_book_title.setText(book.getTitle());
             ((BookListHolder) holder).tv_author.setText(book.getAuthor());
             ((BookListHolder) holder).tv_book_info.setText(book.getInfo());
             ((BookListHolder) holder).tv_book_description.setText(book.getDesc());
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mContext.startActivity(new Intent(mContext, EBookZoneActivity.class).putExtra(Constant.BOOK_ZONE_ID, book.getId()));
+                }
+            });
         }
     }
 

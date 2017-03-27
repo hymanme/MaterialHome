@@ -50,6 +50,12 @@ public interface IEBookDetailPresenter {
      */
     void getRecommendBookList(String bookId, int limit);
 
+    /***
+     * 获取书单详情
+     * @param bookListId
+     */
+    void getBookZoneDetail(String bookListId);
+
     /**
      * 取消加载数据
      */

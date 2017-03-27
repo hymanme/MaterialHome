@@ -3,13 +3,14 @@ package com.hymane.materialhome.api.common.service;
 import com.hymane.materialhome.bean.http.ebook.BookChapter;
 import com.hymane.materialhome.bean.http.ebook.BookDetail;
 import com.hymane.materialhome.bean.http.ebook.BookReview;
+import com.hymane.materialhome.bean.http.ebook.BookZoneBean;
 import com.hymane.materialhome.bean.http.ebook.BooksByCats;
 import com.hymane.materialhome.bean.http.ebook.BooksByTag;
 import com.hymane.materialhome.bean.http.ebook.CategoryList;
 import com.hymane.materialhome.bean.http.ebook.ChapterRead;
 import com.hymane.materialhome.bean.http.ebook.HotReview;
-import com.hymane.materialhome.bean.http.ebook.Rankings;
 import com.hymane.materialhome.bean.http.ebook.LikedBookList;
+import com.hymane.materialhome.bean.http.ebook.Rankings;
 
 import retrofit2.Response;
 import retrofit2.http.GET;
@@ -245,13 +246,14 @@ public interface IEBooksService {
 //    @GET("/book-list/tagType")
 //    Observable<BookListTags> getBookListTags();
 //
-//    /**
-//     * 获取书单详情
-//     *
-//     * @return
-//     */
-//    @GET("/book-list/{bookListId}")
-//    Observable<BookListDetail> getBookListDetail(@Path("bookListId") String bookListId);
+
+    /**
+     * 获取书单详情
+     *
+     * @return
+     */
+    @GET("/book-list/{bookListId}")
+    Observable<BookZoneBean> getBookZoneDetail(@Path("bookListId") String bookListId);
 
 //    /**
 //     * 获取综合讨论区帖子列表

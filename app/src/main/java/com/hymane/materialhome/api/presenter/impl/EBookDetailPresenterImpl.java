@@ -86,6 +86,19 @@ public class EBookDetailPresenterImpl implements IEBookDetailPresenter, ApiCompl
     }
 
     @Override
+    public void getBookZoneDetail(String bookListId) {
+        if (!NetworkUtils.isConnected(UIUtils.getContext())) {
+            mBookDetailView.showMessage(UIUtils.getContext().getString(R.string.poor_network));
+            mBookDetailView.hideProgress();
+            //没网络读取缓存
+//            return;
+        }
+        mBookDetailView.showProgress();
+        mEBookDetailModel.getBookZoneDetail(bookListId, this);
+    }
+
+
+    @Override
     public void cancelLoading() {
         mEBookDetailModel.cancelLoading();
     }

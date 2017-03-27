@@ -1,12 +1,12 @@
 package com.hymane.materialhome.ui.adapter;
 
 import android.animation.ObjectAnimator;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatRatingBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,6 +28,7 @@ import com.hymane.materialhome.bean.http.douban.BookReviewResponse;
 import com.hymane.materialhome.bean.http.douban.BookReviewsListResponse;
 import com.hymane.materialhome.bean.http.douban.BookSeriesListResponse;
 import com.hymane.materialhome.holder.BookSeriesCeilHolder;
+import com.hymane.materialhome.ui.activity.BaseActivity;
 import com.hymane.materialhome.ui.activity.BookReviewsActivity;
 import com.hymane.materialhome.utils.common.UIUtils;
 
@@ -91,53 +92,88 @@ public class BookDetailAdapter extends RecyclerView.Adapter {
             ((BookInfoHolder) holder).tv_hots_num.setText(mBookInfo.getRating().getAverage());
             ((BookInfoHolder) holder).tv_comment_num.setText(mBookInfo.getRating().getNumRaters() + UIUtils.getContext().getString(R.string.comment_num));
             ((BookInfoHolder) holder).tv_book_info.setText(mBookInfo.getInfoString());
+            //详细信息
+            StringBuilder sb = new StringBuilder();
+            if (mBookInfo.getAuthor().length > 0) {
+//                ((BookInfoHolder) holder).tv_author.setText("作者:" + mBookInfo.getAuthor()[0]);
+                sb.append("作者:").append(mBookInfo.getAuthor()[0]).append("\n");
+            }
+//            ((BookInfoHolder) holder).tv_publisher.setText("出版社:" + mBookInfo.getPublisher());
+            sb.append("出版社:").append(mBookInfo.getPublisher()).append("\n");
+            if (mBookInfo.getSubtitle().isEmpty()) {
+                ((BookInfoHolder) holder).tv_subtitle.setVisibility(View.GONE);
+            }
+//            ((BookInfoHolder) holder).tv_subtitle.setText("副标题:" + mBookInfo.getSubtitle());
+            sb.append("副标题:").append(mBookInfo.getSubtitle()).append("\n");
+            if (mBookInfo.getOrigin_title().isEmpty()) {
+                ((BookInfoHolder) holder).tv_origin_title.setVisibility(View.GONE);
+            }
+//            ((BookInfoHolder) holder).tv_origin_title.setText("原作名:" + mBookInfo.getOrigin_title());
+            sb.append("原作名:").append(mBookInfo.getOrigin_title()).append("\n");
+            if (mBookInfo.getTranslator().length > 0) {
+//                ((BookInfoHolder) holder).tv_translator.setText("译者:" + mBookInfo.getTranslator()[0]);
+                sb.append("译者:").append(mBookInfo.getTranslator()[0]).append("\n");
+            } else {
+                ((BookInfoHolder) holder).tv_translator.setVisibility(View.GONE);
+            }
+            sb.append("出版年:").append(mBookInfo.getPubdate()).append("\n");
+            sb.append("页数:").append(mBookInfo.getPages()).append("\n");
+            sb.append("定价:").append(mBookInfo.getPrice()).append("\n");
+            sb.append("装帧:").append(mBookInfo.getBinding()).append("\n");
+            sb.append("isbn:").append(mBookInfo.getIsbn13()).append("\n");
+//            ((BookInfoHolder) holder).tv_publish_date.setText("出版年:" + mBookInfo.getPubdate());
+//            ((BookInfoHolder) holder).tv_pages.setText("页数:" + mBookInfo.getPages());
+//            ((BookInfoHolder) holder).tv_price.setText("定价:" + mBookInfo.getPrice());
+//            ((BookInfoHolder) holder).tv_binding.setText("装帧:" + mBookInfo.getBinding());
+//            ((BookInfoHolder) holder).tv_isbn.setText("isbn:" + mBookInfo.getIsbn13());
+
+
             ((BookInfoHolder) holder).rl_more_info.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (flag) {
                         ObjectAnimator.ofFloat(((BookInfoHolder) holder).iv_more_info, "rotation", 90, 0).start();
-                        ((BookInfoHolder) holder).progressBar.setVisibility(View.GONE);
-                        ((BookInfoHolder) holder).ll_publish_info.setVisibility(View.GONE);
+//                        ((BookInfoHolder) holder).progressBar.setVisibility(View.GONE);
+//                        ((BookInfoHolder) holder).ll_publish_info.setVisibility(View.GONE);
                         flag = false;
                     } else {
                         ObjectAnimator.ofFloat(((BookInfoHolder) holder).iv_more_info, "rotation", 0, 90).start();
-                        ((BookInfoHolder) holder).progressBar.setVisibility(View.VISIBLE);
-                        new Handler() {
-                            @Override
-                            public void handleMessage(Message msg) {
-                                super.handleMessage(msg);
-                                if (flag) {
-                                    ((BookInfoHolder) holder).ll_publish_info.setVisibility(View.VISIBLE);
-                                    ((BookInfoHolder) holder).progressBar.setVisibility(View.GONE);
-                                }
-                            }
-                        }.sendEmptyMessageDelayed(0, getDelayTime());
+//                        ((BookInfoHolder) holder).progressBar.setVisibility(View.VISIBLE);
+//                        new Handler(new Handler.Callback() {
+//                            @Override
+//                            public boolean handleMessage(Message msg) {
+//                                if (flag) {
+////                                    ((BookInfoHolder) holder).ll_publish_info.setVisibility(View.VISIBLE);
+////                                    ((BookInfoHolder) holder).progressBar.setVisibility(View.GONE);
+//                                    new AlertDialog.Builder(BaseActivity.activity)
+//                                            .setTitle("详细信息：")
+//                                            .setMessage(mBookInfo.getInfoString())
+//                                            .setOnDismissListener(new DialogInterface.OnDismissListener() {
+//                                                @Override
+//                                                public void onDismiss(DialogInterface dialog) {
+//                                                    ObjectAnimator.ofFloat(((BookInfoHolder) holder).iv_more_info, "rotation", 90, 0).start();
+//                                                }
+//                                            })
+//                                            .create().show();
+//                                }
+//                                return true;
+//                            }
+//                        }).sendEmptyMessageDelayed(0, getDelayTime());
+                        new AlertDialog.Builder(BaseActivity.activity)
+                                .setTitle("详细信息：")
+                                .setMessage(sb)
+                                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialog) {
+                                        ObjectAnimator.ofFloat(((BookInfoHolder) holder).iv_more_info, "rotation", 90, 0).start();
+                                        flag = false;
+                                    }
+                                })
+                                .create().show();
                         flag = true;
                     }
                 }
             });
-            if (mBookInfo.getAuthor().length > 0) {
-                ((BookInfoHolder) holder).tv_author.setText("作者:" + mBookInfo.getAuthor()[0]);
-            }
-            ((BookInfoHolder) holder).tv_publisher.setText("出版社:" + mBookInfo.getPublisher());
-            if (mBookInfo.getSubtitle().isEmpty()) {
-                ((BookInfoHolder) holder).tv_subtitle.setVisibility(View.GONE);
-            }
-            ((BookInfoHolder) holder).tv_subtitle.setText("副标题:" + mBookInfo.getSubtitle());
-            if (mBookInfo.getOrigin_title().isEmpty()) {
-                ((BookInfoHolder) holder).tv_origin_title.setVisibility(View.GONE);
-            }
-            ((BookInfoHolder) holder).tv_origin_title.setText("原作名:" + mBookInfo.getOrigin_title());
-            if (mBookInfo.getTranslator().length > 0) {
-                ((BookInfoHolder) holder).tv_translator.setText("译者:" + mBookInfo.getTranslator()[0]);
-            } else {
-                ((BookInfoHolder) holder).tv_translator.setVisibility(View.GONE);
-            }
-            ((BookInfoHolder) holder).tv_publish_date.setText("出版年:" + mBookInfo.getPubdate());
-            ((BookInfoHolder) holder).tv_pages.setText("页数:" + mBookInfo.getPages());
-            ((BookInfoHolder) holder).tv_price.setText("定价:" + mBookInfo.getPrice());
-            ((BookInfoHolder) holder).tv_binding.setText("装帧:" + mBookInfo.getBinding());
-            ((BookInfoHolder) holder).tv_isbn.setText("isbn:" + mBookInfo.getIsbn13());
         } else if (holder instanceof BookBriefHolder) {
             if (!mBookInfo.getSummary().isEmpty()) {
                 ((BookBriefHolder) holder).etv_brief.setContent(mBookInfo.getSummary());

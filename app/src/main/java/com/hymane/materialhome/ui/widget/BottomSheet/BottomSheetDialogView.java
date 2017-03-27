@@ -38,6 +38,8 @@ public class BottomSheetDialogView {
         tv_title = (TextView) view.findViewById(R.id.tv_title);
         recyclerView = (RecyclerView) view.findViewById(R.id.bottom_sheet_recycler_view);
         dialog.setContentView(view);
+        this.dialog.dismiss();
+
     }
 
     public BottomSheetDialogView sheet(String title) {

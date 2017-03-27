@@ -78,6 +78,12 @@ public interface IEBookModel {
      */
     void getRecommendBookList(String bookId, int limit, ApiCompleteListener listener);
 
+    /***
+     * 获取书单详情
+     * @param bookListId
+     */
+    void getBookZoneDetail(String bookListId, ApiCompleteListener listener);
+
     /**
      * 取消加载数据
      */

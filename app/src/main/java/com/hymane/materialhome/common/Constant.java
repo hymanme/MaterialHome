@@ -15,6 +15,9 @@ public class Constant {
     public static final String THEME_MODEL = "theme_model";
     public static final String USER_GENDER = "user_gender";
 
+    public static final String BOOK_ZONE_ID = "book_zone_id";
+
+
     /**
      * category index
      */
