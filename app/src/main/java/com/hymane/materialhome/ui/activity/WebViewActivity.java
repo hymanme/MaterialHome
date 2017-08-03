@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.DownloadListener;
@@ -55,6 +56,7 @@ public class WebViewActivity extends BaseActivity {
         //设置缓存模式
         webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
         webView.setWebChromeClient(new WebChromeClient() {
+                                       @Override
                                        public void onProgressChanged(WebView view, int progress) {
                                            if (progress >= 100) {
                                                progressBar.setVisibility(View.GONE);
@@ -65,6 +67,12 @@ public class WebViewActivity extends BaseActivity {
                                                progressBar.setProgress(progress);
                                            }
                                            super.onProgressChanged(view, progress);
+                                       }
+
+                                       @Override
+                                       public void onReceivedTitle(WebView view, String title) {
+                                           super.onReceivedTitle(view, title);
+                                           setTitle(title);
                                        }
                                    }
         );

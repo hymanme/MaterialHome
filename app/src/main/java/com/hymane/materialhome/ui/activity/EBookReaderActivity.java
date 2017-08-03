@@ -119,7 +119,7 @@ public class EBookReaderActivity extends BaseActivity implements IEBookReadView 
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_UP:
-                        ToastUtils.showShort("x:" + event.getX() + "|y:" + event.getY());
+//                        ToastUtils.showShort("x:" + event.getX() + "|y:" + event.getY());
                         break;
                 }
                 return false;

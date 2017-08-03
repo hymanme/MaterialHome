@@ -37,7 +37,7 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
     //接口调用参数 tag：标签，q：搜索关键词，fields：过滤词，count：一次返回数据数，
     // page：当前已经加载的页数，PS:tag,q只存在其中一个，另一个置空
     private String tag = "hot";
-    private static final String fields = "id,title,subtitle,origin_title,rating,author,translator,publisher,pubdate,summary,images,pages,price,binding,isbn13,series";
+    private static final String fields = "id,title,subtitle,origin_title,rating,author,translator,publisher,pubdate,summary,images,pages,price,binding,isbn13,series,alt";
     private static int count = 20;
     private static int page = 0;
     private static final int group = 2;
@@ -159,6 +159,14 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
     public void onLoadMore() {
         if (!mSwipeRefreshLayout.isRefreshing()) {
             bookListPresenter.loadBooks(null, tag, page * count, count, fields);
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && !mSwipeRefreshLayout.isRefreshing() && bookInfoResponses != null && bookInfoResponses.isEmpty()) {
+            onRefresh();
         }
     }
 

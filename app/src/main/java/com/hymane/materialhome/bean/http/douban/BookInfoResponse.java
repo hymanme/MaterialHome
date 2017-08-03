@@ -38,6 +38,7 @@ public class BookInfoResponse implements Serializable {
     private String ebook_price;
     private String price;
     private SeriesBean series;
+    private String alt;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -213,6 +214,14 @@ public class BookInfoResponse implements Serializable {
 
     public void setSeries(SeriesBean series) {
         this.series = series;
+    }
+
+    public String getUrl() {
+        return alt;
+    }
+
+    public void setUrl(String url) {
+        this.alt = url;
     }
 
     public String getInfoString() {

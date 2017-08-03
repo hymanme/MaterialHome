@@ -14,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -106,7 +105,11 @@ public class BookDetailActivity extends BaseActivity implements IBookDetailView 
                         }
                     });
         }
-        mFab.setOnClickListener(v -> Toast.makeText(BookDetailActivity.this, "click", Toast.LENGTH_SHORT).show());
+        mFab.setOnClickListener(v -> {
+            Intent intent = new Intent(BookDetailActivity.this, WebViewActivity.class);
+            intent.putExtra("url", mBookInfoResponse.getUrl());
+            startActivity(intent);
+        });
         bookDetailPresenter.loadReviews(mBookInfoResponse.getId(), PAGE * REVIEWS_COUNT, REVIEWS_COUNT, COMMENT_FIELDS);
     }
 
