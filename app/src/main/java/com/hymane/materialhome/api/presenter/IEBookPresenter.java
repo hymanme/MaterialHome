@@ -32,6 +32,19 @@ public interface IEBookPresenter {
      */
     void getCategoryListDetail(String gender, String type, String major, String minor, int start, int limit);
 
+    /***
+     * 获取热门标签
+     */
+    void getHotWord();
+
+    /***
+     * 搜索图书
+     * @param query
+     * @param start
+     * @param limit
+     */
+    void searchBooks(String query, int start,  int limit);
+
     /**
      * 取消加载数据
      */

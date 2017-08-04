@@ -9,6 +9,7 @@ import com.hymane.materialhome.bean.http.ebook.BooksByTag;
 import com.hymane.materialhome.bean.http.ebook.CategoryList;
 import com.hymane.materialhome.bean.http.ebook.ChapterRead;
 import com.hymane.materialhome.bean.http.ebook.HotReview;
+import com.hymane.materialhome.bean.http.ebook.HotWords;
 import com.hymane.materialhome.bean.http.ebook.LikedBookList;
 import com.hymane.materialhome.bean.http.ebook.Rankings;
 
@@ -185,8 +186,8 @@ public interface IEBooksService {
      *
      * @return
      */
-//    @GET("/book/hot-word")
-//    Observable<HotWord> getHotWord();
+    @GET("/book/hot-word")
+    Observable<HotWords> getHotWord();
 
     /**
      * 关键字自动补全
@@ -203,8 +204,8 @@ public interface IEBooksService {
      * @param query
      * @return
      */
-//    @GET("/book/fuzzy-search")
-//    Observable<SearchDetail> searchBooks(@Query("query") String query);
+    @GET("/book/fuzzy-search")
+    Observable<BooksByCats> searchBooks(@Query("query") String query, @Query("start") int start, @Query("limit") int limit);
 
     /**
      * 通过作者查询书名

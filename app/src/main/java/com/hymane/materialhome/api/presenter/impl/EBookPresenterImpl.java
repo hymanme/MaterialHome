@@ -63,6 +63,30 @@ public class EBookPresenterImpl implements IEBookPresenter, ApiCompleteListener 
     }
 
     @Override
+    public void getHotWord() {
+        if (!NetworkUtils.isConnected(UIUtils.getContext())) {
+            mEBookListView.showMessage(UIUtils.getContext().getString(R.string.poor_network));
+            mEBookListView.hideProgress();
+            //没网络读取缓存
+//            return;
+        }
+        mEBookListView.showProgress();
+        mEBookModel.getHotWord(this);
+    }
+
+    @Override
+    public void searchBooks(String query, int start, int limit) {
+        if (!NetworkUtils.isConnected(UIUtils.getContext())) {
+            mEBookListView.showMessage(UIUtils.getContext().getString(R.string.poor_network));
+            mEBookListView.hideProgress();
+            //没网络读取缓存
+//            return;
+        }
+        mEBookListView.showProgress();
+        mEBookModel.searchBooks(query, start, limit, this);
+    }
+
+    @Override
     public void cancelLoading() {
 
     }

@@ -11,6 +11,7 @@ import com.hymane.materialhome.bean.http.ebook.BooksByCats;
 import com.hymane.materialhome.bean.http.ebook.BooksByTag;
 import com.hymane.materialhome.bean.http.ebook.CategoryList;
 import com.hymane.materialhome.bean.http.ebook.HotReview;
+import com.hymane.materialhome.bean.http.ebook.HotWords;
 import com.hymane.materialhome.bean.http.ebook.LikedBookList;
 import com.hymane.materialhome.bean.http.ebook.Rankings;
 import com.hymane.materialhome.common.URL;
@@ -296,6 +297,66 @@ public class EBookModelImpl implements IEBookModel {
                             listener.onComplected(bookZone);
                         } else {
                             listener.onFailed(new BaseResponse(400, bookZone.getMsg()));
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void getHotWord(ApiCompleteListener listener) {
+        if (eBooksService == null) {
+            eBooksService = ServiceFactory.createService(URL.HOST_URL_ZSSQ, IEBooksService.class);
+        }
+        eBooksService.getHotWord()
+                .subscribeOn(Schedulers.io())    //请求在io线程中执行
+                .observeOn(AndroidSchedulers.mainThread())//最后在主线程中执行
+                .subscribe(new Subscriber<HotWords>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        listener.onFailed(new BaseResponse(400, e.toString()));
+                    }
+
+                    @Override
+                    public void onNext(HotWords response) {
+                        if (response.isOk()) {
+                            listener.onComplected(response);
+                        } else {
+                            listener.onFailed(new BaseResponse(400, response.getMsg()));
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void searchBooks(String query, int start, int limit, ApiCompleteListener listener) {
+        if (eBooksService == null) {
+            eBooksService = ServiceFactory.createService(URL.HOST_URL_ZSSQ, IEBooksService.class);
+        }
+        eBooksService.searchBooks(query,  start,  limit)
+                .subscribeOn(Schedulers.io())    //请求在io线程中执行
+                .observeOn(AndroidSchedulers.mainThread())//最后在主线程中执行
+                .subscribe(new Subscriber<BooksByCats>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        listener.onFailed(new BaseResponse(400, e.toString()));
+                    }
+
+                    @Override
+                    public void onNext(BooksByCats response) {
+                        if (response.isOk()) {
+                            listener.onComplected(response);
+                        } else {
+                            listener.onFailed(new BaseResponse(400, response.getMsg()));
                         }
                     }
                 });

@@ -165,7 +165,7 @@ public class BookListFragment extends BaseFragment implements IBookListView, Swi
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && !mSwipeRefreshLayout.isRefreshing() && bookInfoResponses != null && bookInfoResponses.isEmpty()) {
+        if (isVisibleToUser && bookInfoResponses != null && bookInfoResponses.isEmpty()) {
             onRefresh();
         }
     }

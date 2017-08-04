@@ -1,7 +1,6 @@
 package com.hymane.materialhome.ui.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -51,7 +50,7 @@ public class EBookListFragment extends BaseFragment implements IEBookListView, S
 
     private EBookListAdapter mListAdapter;
     private List<BookDetail> bookInfoResponses;
-    private EBookPresenterImpl eBookRankPresenter;
+    private EBookPresenterImpl eBookPresenter;
 
     public static EBookListFragment newInstance(int type, String gender) {
 
@@ -74,7 +73,7 @@ public class EBookListFragment extends BaseFragment implements IEBookListView, S
     @Override
     protected void initEvents() {
         int spanCount = getResources().getInteger(R.integer.home_span_count);
-        eBookRankPresenter = new EBookPresenterImpl(this);
+        eBookPresenter = new EBookPresenterImpl(this);
         bookInfoResponses = new ArrayList<>();
         mSwipeRefreshLayout.setColorSchemeResources(R.color.recycler_color1, R.color.recycler_color2,
                 R.color.recycler_color3, R.color.recycler_color4);
@@ -148,7 +147,7 @@ public class EBookListFragment extends BaseFragment implements IEBookListView, S
 
     @Override
     public void onRefresh() {
-        eBookRankPresenter.getRanking(categoryId);
+        eBookPresenter.getRanking(categoryId);
     }
 
     public void onLoadMore() {

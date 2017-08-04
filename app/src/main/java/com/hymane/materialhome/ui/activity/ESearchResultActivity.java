@@ -9,11 +9,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.hymane.materialhome.R;
-import com.hymane.materialhome.api.presenter.impl.BookListPresenterImpl;
-import com.hymane.materialhome.api.view.IBookListView;
-import com.hymane.materialhome.bean.http.douban.BookInfoResponse;
-import com.hymane.materialhome.bean.http.douban.BookListResponse;
-import com.hymane.materialhome.ui.adapter.BookListAdapter;
+import com.hymane.materialhome.api.presenter.IEBookDetailPresenter;
+import com.hymane.materialhome.api.presenter.IEBookPresenter;
+import com.hymane.materialhome.api.presenter.impl.EBookDetailPresenterImpl;
+import com.hymane.materialhome.api.presenter.impl.EBookPresenterImpl;
+import com.hymane.materialhome.api.view.IEBookDetailView;
+import com.hymane.materialhome.api.view.IEBookListView;
+import com.hymane.materialhome.bean.http.ebook.BookDetail;
+import com.hymane.materialhome.bean.http.ebook.BooksByCats;
+import com.hymane.materialhome.bean.http.ebook.BooksByTag;
+import com.hymane.materialhome.ui.adapter.EBookListAdapter;
+import com.hymane.materialhome.utils.common.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +33,11 @@ import butterknife.ButterKnife;
  * Create at 2016/1/14 0014
  * Description:
  */
-public class SearchResultActivity extends BaseActivity implements IBookListView, SwipeRefreshLayout.OnRefreshListener {
+public class ESearchResultActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, IEBookDetailView, IEBookListView {
     //接口调用参数 tag：标签，q：搜索关键词，fields：过滤词，count：一次返回数据数，
     // page：当前已经加载的页数，PS:tag,q只存在其中一个，另一个置空
     private static final int PRO_LOADING_SIZE = 2;//上滑加载提前N个item开始加载更多数据(暂时有bug)
-    private static final String fields = "id,title,subtitle,origin_title,rating,author,translator,publisher,pubdate,summary,images,pages,price,binding,isbn13,alt";
-    private int count = 20;
+    private static int PAGE_SIZE = 20;
     private int page = 0;
     private String q;
 
@@ -44,10 +49,13 @@ public class SearchResultActivity extends BaseActivity implements IBookListView,
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     private GridLayoutManager mLayoutManager;
-    private BookListAdapter mListAdapter;
-    private List<BookInfoResponse> bookInfoResponses;
-    private BookListPresenterImpl bookListPresenter;
+    private EBookListAdapter mListAdapter;
+    private List<BookDetail> bookInfoResponses;
+    private IEBookDetailPresenter eBookDetailPresenter;
+    private IEBookPresenter eBookPresenter;
+
     private int spanCount = 1;
+    private int type;//0:查书，1：查分类
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +70,16 @@ public class SearchResultActivity extends BaseActivity implements IBookListView,
     @Override
     protected void initEvents() {
         q = getIntent().getStringExtra("q");
+        type = getIntent().getIntExtra("type", 0);
         setTitle(q);
         spanCount = (int) getResources().getInteger(R.integer.home_span_count);
-        bookListPresenter = new BookListPresenterImpl(this);
+        eBookDetailPresenter = new EBookDetailPresenterImpl(this);
+        eBookPresenter = new EBookPresenterImpl(this);
         bookInfoResponses = new ArrayList<>();
         mSwipeRefreshLayout.setColorSchemeResources(R.color.recycler_color1, R.color.recycler_color2,
                 R.color.recycler_color3, R.color.recycler_color4);
 
-        mLayoutManager = new GridLayoutManager(SearchResultActivity.this, spanCount);
+        mLayoutManager = new GridLayoutManager(ESearchResultActivity.this, spanCount);
         mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -79,8 +89,9 @@ public class SearchResultActivity extends BaseActivity implements IBookListView,
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+
         //设置adapter
-        mListAdapter = new BookListAdapter(this, bookInfoResponses, spanCount);
+        mListAdapter = new EBookListAdapter(this, bookInfoResponses, spanCount);
         mRecyclerView.setAdapter(mListAdapter);
 
         //设置Item增加、移除动画
@@ -133,39 +144,59 @@ public class SearchResultActivity extends BaseActivity implements IBookListView,
 
     @Override
     public void refreshData(Object result) {
-        bookInfoResponses.clear();
-        bookInfoResponses.addAll(((BookListResponse) result).getBooks());
-        mListAdapter.notifyDataSetChanged();
-        if (((BookListResponse) result).getTotal() > page * count) {
-            isLoadAll = false;
-        } else {
-            isLoadAll = true;
+        if (result instanceof BooksByCats) {
+            final List<BookDetail> books = ((BooksByCats) result).getBooks();
+            if (books == null) {
+                ToastUtils.showShort("搜索失败，请重试");
+                return;
+            }
+            isLoadAll = books.size() < PAGE_SIZE;
+            if (page == 0) {
+                bookInfoResponses.clear();
+            }
+            bookInfoResponses.addAll(books);
+            mListAdapter.notifyDataSetChanged();
+            page++;
         }
-        page++;
     }
 
+
     @Override
-    public void addData(Object result) {
-        bookInfoResponses.addAll(((BookListResponse) result).getBooks());
-        mListAdapter.notifyDataSetChanged();
-        if (((BookListResponse) result).getTotal() > page * count) {
+    public void updateView(Object result) {
+        if (result instanceof BooksByTag) {
+            final List<BookDetail> books = ((BooksByTag) result).getBooks();
+            if (books == null) {
+                ToastUtils.showShort("搜索失败，请重试");
+                return;
+            }
+            isLoadAll = books.size() < PAGE_SIZE;
+            if (page == 0) {
+                bookInfoResponses.clear();
+            }
+            bookInfoResponses.addAll(books);
+            mListAdapter.notifyDataSetChanged();
             page++;
-            isLoadAll = false;
-        } else {
-            isLoadAll = true;
         }
     }
 
     @Override
     public void onRefresh() {
-        page = 1;
-        bookListPresenter.loadBooks(q, null, 0, count, fields);
+        page = 0;
+        if (type == 0) {
+            eBookPresenter.searchBooks(q, page * PAGE_SIZE, PAGE_SIZE);
+        } else {
+            eBookDetailPresenter.getBooksByTag(q, page * PAGE_SIZE, PAGE_SIZE);
+        }
     }
 
     private void onLoadMore() {
         if (!isLoadAll) {
             if (!mSwipeRefreshLayout.isRefreshing()) {
-                bookListPresenter.loadBooks(q, null, page * count, count, fields);
+                if (type == 0) {
+                    eBookPresenter.searchBooks(q, page * PAGE_SIZE, PAGE_SIZE);
+                } else {
+                    eBookDetailPresenter.getBooksByTag(q, page * PAGE_SIZE, PAGE_SIZE);
+                }
             }
         } else {
             showMessage(getResources().getString(R.string.no_more));
@@ -180,7 +211,7 @@ public class SearchResultActivity extends BaseActivity implements IBookListView,
 
     @Override
     protected void onDestroy() {
-        bookListPresenter.cancelLoading();
+        eBookDetailPresenter.cancelLoading();
         super.onDestroy();
     }
 }

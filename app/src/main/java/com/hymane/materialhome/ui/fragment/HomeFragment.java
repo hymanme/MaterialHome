@@ -76,7 +76,7 @@ public class HomeFragment extends BaseFragment {
         fragments.add(BookListFragment.newInstance("推荐"));
         fragments.add(CategoryFragment.newInstance());
         fragments.add(BookListFragment.newInstance("小说"));
-        fragments.add(DiscoverFragment.newInstance());
+        fragments.add(DiscoverFragment.newInstance(0));
 
         mViewPager.setAdapter(new MainAdapter(getChildFragmentManager(), fragments));
         mViewPager.setOffscreenPageLimit(5);

@@ -204,7 +204,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                             .build(),
                                     Uri.parse(q.replace("@", "")));
                         } else {
-                            Intent intent = new Intent(this, SearchResultActivity.class);
+                            Intent intent;
+                            if (currentFragment instanceof EBookFragment) {
+                                intent = new Intent(this, ESearchResultActivity.class);
+                                intent.putExtra("type", 0);
+                            } else {
+                                intent = new Intent(this, SearchResultActivity.class);
+                            }
                             intent.putExtra("q", q);
                             startActivity(intent);
                         }
@@ -357,7 +363,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 
         } else if (id == R.id.nav_send) {
-
+            Intent data = new Intent(Intent.ACTION_SENDTO);
+            data.setData(Uri.parse("mailto:hymanme@163.com"));
+            startActivity(data);
         }
 
         drawer.closeDrawer(GravityCompat.START);

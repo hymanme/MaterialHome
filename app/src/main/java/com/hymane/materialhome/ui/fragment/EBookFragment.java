@@ -112,7 +112,7 @@ public class EBookFragment extends BaseFragment {
         fragments.add(EBookListFragment.newInstance(Constant.TYPE_FINISHED_RANKING, gender));
         fragments.add(EBookListFragment.newInstance(Constant.TYPE_POTENTIAL_RANKING, gender));
         fragments.add(EBookCategoryFragment.newInstance());
-        fragments.add(DiscoverFragment.newInstance());
+        fragments.add(DiscoverFragment.newInstance(1));
 
         mViewPager.setAdapter(new EBookFragment.MainAdapter(getChildFragmentManager(), fragments));
         mViewPager.setOffscreenPageLimit(5);

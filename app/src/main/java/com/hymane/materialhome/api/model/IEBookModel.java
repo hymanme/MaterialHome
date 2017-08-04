@@ -84,6 +84,20 @@ public interface IEBookModel {
      */
     void getBookZoneDetail(String bookListId, ApiCompleteListener listener);
 
+    /***
+     * 获取热门标签
+     * @param listener
+     */
+    void getHotWord(ApiCompleteListener listener);
+
+    /***
+     * 搜索图书
+     * @param query
+     * @param start
+     * @param limit
+     */
+    void searchBooks(String query, int start, int limit, ApiCompleteListener listener);
+
     /**
      * 取消加载数据
      */

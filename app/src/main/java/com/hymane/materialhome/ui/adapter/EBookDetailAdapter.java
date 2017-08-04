@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -35,6 +34,7 @@ import com.hymane.materialhome.common.Constant;
 import com.hymane.materialhome.holder.EBookSeriesCeilHolder;
 import com.hymane.materialhome.ui.activity.EBookReviewsActivity;
 import com.hymane.materialhome.ui.activity.EBookZoneActivity;
+import com.hymane.materialhome.ui.activity.ESearchResultActivity;
 import com.hymane.materialhome.utils.EBookUtils;
 import com.hymane.materialhome.utils.common.DensityUtils;
 import com.hymane.materialhome.utils.common.UIUtils;
@@ -176,7 +176,12 @@ public class EBookDetailAdapter extends RecyclerView.Adapter {
                     ColorfulTagView tag = new ColorfulTagView(UIUtils.getContext());
                     tag.setText(tags.get(i));
                     ((BookInfoHolder) holder).flow_layout.addView(tag);
-                    tag.setOnClickListener(v -> Toast.makeText(UIUtils.getContext(), "click", Toast.LENGTH_SHORT).show());
+                    tag.setOnClickListener(v -> {
+                        Intent intent = new Intent(mContext, ESearchResultActivity.class);
+                        intent.putExtra("q", tag.getText());
+                        intent.putExtra("type", 1);
+                        mContext.startActivity(intent);
+                    });
                 }
             }
 //            ((BookInfoHolder) holder).tv_author.setText("作者：" + mBookInfo.getAuthor());
