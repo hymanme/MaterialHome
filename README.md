@@ -1,11 +1,12 @@
 # MaterialHome
 一款基于 Material Design 的图书展示类 app。
 
-##简介
+## 简介
 虽然叫 Material Home，但是实质是一款图书展示类 app，目前正处于逐步完善阶段，也期望感兴趣的朋友一起来完善“她”。目前图书接口来源于[豆瓣图书 api](https://developers.douban.com/wiki/?title=api_v2),特此感谢豆瓣提供的免费接口。本 app 采用的是 MD 设计风格以及一些友好的交互动画，使用了一些最新的热门技术。
->开源让编程更加快乐
 
-##更新日志
+> 开源让编程更加快乐
+
+## 更新日志
 v1.4(请卸载老版本app)
 - 电子书分类bug优化
 - 数据库修改
@@ -34,10 +35,7 @@ v1.0
 - 我的书架
 - 图书分享
 
-##下载地址
-wait...
-
-##TODO
+## TODO
 1. ~~图书搜索~~
 2. ~~扫码搜书~~
 3. 添加图书到书架
@@ -45,7 +43,7 @@ wait...
 5. 我的标签
 6. ...
 
-##开源技术
+## 开源技术
 1. [Rxjava](https://github.com/ReactiveX/RxJava)
 2. [RxAndroid](https://github.com/ReactiveX/RxAndroid)
 3. [Retrofit](https://github.com/square/retrofit)
@@ -55,7 +53,7 @@ wait...
 7. [ParticleView](https://github.com/JeasonWong/Particle)
 8. [okhttp3](https://github.com/square/okhttp)
 
-##效果图：
+## 效果图：
 
 ![book item](http://ww3.sinaimg.cn/mw690/005X6W83gw1f6p032la2tj30dw04vq4g.jpg)
 
@@ -71,7 +69,7 @@ wait...
 
 ![bookshelf](http://ww2.sinaimg.cn/mw690/005X6W83gw1f7f0m87oqyj30c00lcta0.jpg)
 
-##关于作者
+## 关于作者
 ![hymane](https://avatars0.githubusercontent.com/u/10279568?v=3&s=460)
 
 - 微博：[hymanme](http://weibo.com/hymane)
